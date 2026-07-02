@@ -1,3 +1,4 @@
+import { useId } from 'react';
 import { cn } from '@/lib/utils';
 
 /**
@@ -57,8 +58,15 @@ function sweepDelayFor(pathData: string): number {
  * hover effect: the solid letterforms hollow out while an ink outline traces
  * each letter left to right, and terracotta corner brackets draw themselves
  * around the mark. Reverses on mouse-out. No movement or scaling.
+ *
+ * Perf: each glyph is defined once in <defs> and referenced by two <use>
+ * layers. The solid layer fades as one group `opacity` (compositable) instead
+ * of 22 per-path `fill` interpolations, and strokes use plain user-unit
+ * widths rather than `non-scaling-stroke`, so hover animates without jank.
  */
 export default function BrandFooterLogo({ className }: { className?: string }) {
+    const glyphIdPrefix = useId();
+
     return (
         <svg
             viewBox={`${-framePadding} ${-framePadding} ${viewBoxWidth + framePadding * 2} ${293.63 + framePadding * 2}`}
@@ -66,29 +74,44 @@ export default function BrandFooterLogo({ className }: { className?: string }) {
             aria-label="Home Fashion Jamaleddine"
             className={cn('group h-auto w-full', className)}
         >
+            <defs>
+                {letterPaths.map((pathData, index) => (
+                    <path
+                        key={pathData}
+                        id={`${glyphIdPrefix}-${index}`}
+                        d={pathData}
+                        pathLength={1}
+                    />
+                ))}
+            </defs>
             {cornerBrackets.map((pathData, index) => (
                 <path
                     key={pathData}
                     d={pathData}
                     pathLength={1}
                     fill="none"
-                    strokeWidth={1.5}
-                    vectorEffect="non-scaling-stroke"
+                    strokeWidth={7}
                     style={{ transitionDelay: `${index * 70}ms` }}
                     className="stroke-brand transition-[stroke-dashoffset] duration-400 ease-out [stroke-dasharray:1] [stroke-dashoffset:1] group-hover:[stroke-dashoffset:0] motion-reduce:transition-none"
                 />
             ))}
-            {letterPaths.map((pathData) => (
-                <path
-                    key={pathData}
-                    d={pathData}
-                    pathLength={1}
-                    strokeWidth={1}
-                    vectorEffect="non-scaling-stroke"
-                    style={{ transitionDelay: `${sweepDelayFor(pathData)}ms` }}
-                    className="fill-[#ab6744] stroke-ink transition-[fill,stroke-dashoffset] duration-500 ease-out [stroke-dasharray:1] [stroke-dashoffset:1] group-hover:fill-transparent group-hover:[stroke-dashoffset:0] motion-reduce:transition-none"
-                />
-            ))}
+            <g className="fill-[#ab6744] opacity-100 transition-opacity duration-400 ease-out will-change-[opacity] group-hover:opacity-0 motion-reduce:transition-none">
+                {letterPaths.map((pathData, index) => (
+                    <use key={pathData} href={`#${glyphIdPrefix}-${index}`} />
+                ))}
+            </g>
+            <g fill="none" strokeWidth={4.5} className="stroke-ink">
+                {letterPaths.map((pathData, index) => (
+                    <use
+                        key={pathData}
+                        href={`#${glyphIdPrefix}-${index}`}
+                        style={{
+                            transitionDelay: `${sweepDelayFor(pathData)}ms`,
+                        }}
+                        className="transition-[stroke-dashoffset] duration-500 ease-out [stroke-dasharray:1] [stroke-dashoffset:1] group-hover:[stroke-dashoffset:0] motion-reduce:transition-none"
+                    />
+                ))}
+            </g>
         </svg>
     );
 }
