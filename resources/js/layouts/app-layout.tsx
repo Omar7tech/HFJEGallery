@@ -14,7 +14,7 @@ import type { ReactNode } from 'react';
  */
 export default function AppLayout({ children }: { children: ReactNode }) {
     return (
-        <div className="flex min-h-dvh flex-col bg-white text-ink max-w-[1920px] mx-auto">
+        <div className="flex min-h-dvh flex-col bg-white text-ink max-w-[1600px] mx-auto">
             {/* Mobile / tablet brand bar */}
             <NavBar className="sticky top-0 z-40 lg:hidden" />
 
