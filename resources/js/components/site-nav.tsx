@@ -1,7 +1,8 @@
-import Logo from '@/components/logo';
-import { cn } from '@/lib/utils';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import BrandFooterLogo from '@/components/brand-footer-logo';
+import Logo from '@/components/logo';
+import { cn } from '@/lib/utils';
 
 type NavItem = {
     label: string;
@@ -22,7 +23,13 @@ function isActive(currentUrl: string, href: string): boolean {
     return href === '/' ? currentUrl === '/' : currentUrl.startsWith(href);
 }
 
-function NavLinks({ currentUrl, onNavigate }: { currentUrl: string; onNavigate?: () => void }) {
+function NavLinks({
+    currentUrl,
+    onNavigate,
+}: {
+    currentUrl: string;
+    onNavigate?: () => void;
+}) {
     return (
         <nav className="flex flex-col gap-3">
             {navItems.map((item) => (
@@ -31,7 +38,7 @@ function NavLinks({ currentUrl, onNavigate }: { currentUrl: string; onNavigate?:
                     href={item.href}
                     onClick={onNavigate}
                     className={cn(
-                        'w-fit border-b border-ink/30 pt-3 pb-1 text-3xl tracking-tight transition-colors font-display',
+                        'w-fit border-b border-ink/30 pt-3 pb-1 font-display text-3xl tracking-tight transition-colors',
                         item.accent || isActive(currentUrl, item.href)
                             ? 'text-brand'
                             : 'text-ink hover:text-brand',
@@ -45,13 +52,7 @@ function NavLinks({ currentUrl, onNavigate }: { currentUrl: string; onNavigate?:
 }
 
 function BrandFooter() {
-    return (
-        <img
-            src="/logos/brandfooter.svg"
-            alt="Home Fashion Jamaleddine"
-            className="max-w-full"
-        />
-    );
+    return <BrandFooterLogo className="max-w-full" />;
 }
 
 /**
@@ -62,7 +63,12 @@ export function NavSidebar({ className }: { className?: string }) {
     const { url } = usePage();
 
     return (
-        <div className={cn('flex h-full flex-col justify-between px-8 py-10', className)}>
+        <div
+            className={cn(
+                'flex h-full flex-col justify-between px-8 py-10',
+                className,
+            )}
+        >
             <div className="flex flex-col gap-40">
                 <Link href="/" className="w-fit">
                     <Logo size={56} />
@@ -107,11 +113,17 @@ export function NavBar({ className }: { className?: string }) {
 
             {open && (
                 <div className="fixed inset-0 z-50">
-                    <div className="absolute inset-0 bg-ink/40" onClick={() => setOpen(false)} />
+                    <div
+                        className="absolute inset-0 bg-ink/40"
+                        onClick={() => setOpen(false)}
+                    />
                     <div className="absolute inset-y-0 left-0 flex w-72 max-w-[80%] flex-col justify-between bg-white px-8 py-10 shadow-xl">
                         <div className="flex flex-col gap-14">
                             <Logo size={56} />
-                            <NavLinks currentUrl={url} onNavigate={() => setOpen(false)} />
+                            <NavLinks
+                                currentUrl={url}
+                                onNavigate={() => setOpen(false)}
+                            />
                         </div>
                         <BrandFooter />
                     </div>
