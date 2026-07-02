@@ -8,4 +8,11 @@
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+
+    /* Brand palette (HFJE UI) */
+    --color-brand: #a65e3c; /* terracotta — buttons, links, accents */
+    --color-brand-hover: #8c4e31; /* darker terracotta — hover/active */
+    --color-brand-foreground: #ffffff; /* text on solid brand button */
+    --color-cream: #e7d8c4; /* warm hero / section background */
+    --color-ink: #1a1614; /* near-black headings & body text */
 }
