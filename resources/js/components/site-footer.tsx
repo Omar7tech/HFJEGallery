@@ -59,7 +59,7 @@ export default function SiteFooter({ className }: { className?: string }) {
     const year = new Date().getFullYear();
 
     return (
-        <footer className={cn('bg-ink text-white', className)}>
+        <footer className={cn('bg-brand text-white', className)}>
             <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:px-10 md:grid-cols-[1.5fr_repeat(3,1fr)]">
                 <div className="max-w-xs">
                     <Logo invert size={48} />
@@ -70,7 +70,7 @@ export default function SiteFooter({ className }: { className?: string }) {
 
                 {columns.map((column) => (
                     <div key={column.title}>
-                        <h3 className="font-display text-xs uppercase tracking-[0.2em] text-brand">
+                        <h3 className="font-display text-xs uppercase tracking-[0.2em] text-white">
                             {column.title}
                         </h3>
                         <ul className="mt-4 flex flex-col gap-3">
@@ -84,8 +84,8 @@ export default function SiteFooter({ className }: { className?: string }) {
                 ))}
             </div>
 
-            <div className="border-t border-white/10">
-                <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-white/40 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+            <div className="border-t border-white/20">
+                <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-white/70 sm:flex-row sm:items-center sm:justify-between sm:px-10">
                     <p>© {year} Home Fashion Jamaleddine. All rights reserved.</p>
                     <div className="flex gap-5">
                         <Link href="/privacy" className="transition-colors hover:text-white">
