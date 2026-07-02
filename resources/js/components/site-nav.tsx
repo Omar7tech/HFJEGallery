@@ -14,7 +14,7 @@ type NavItem = {
 const navItems: NavItem[] = [
     { label: 'Home', href: '/' },
     { label: 'Work', href: '/work' },
-    { label: 'BAYTÉ', href: '/bayte', accent: true },
+    { label: 'BAYTÉ', href: '/bayte' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
 ];
