@@ -46,13 +46,11 @@ function NavLinks({ currentUrl, onNavigate }: { currentUrl: string; onNavigate?:
 
 function BrandFooter() {
     return (
-        <div className="font-display text-[0.7rem] leading-relaxed tracking-[0.25em] text-brand">
-            <span className="border-b border-brand/50 pb-0.5">HOME</span>
-            <br />
-            FASHION
-            <br />
-            JAMALEDDINE
-        </div>
+        <img
+            src="/logos/brandfooter.svg"
+            alt="Home Fashion Jamaleddine"
+            className="w-40 max-w-full"
+        />
     );
 }
 
