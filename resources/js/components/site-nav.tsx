@@ -63,7 +63,7 @@ export function NavSidebar({ className }: { className?: string }) {
 
     return (
         <div className={cn('flex h-full flex-col justify-between px-8 py-10', className)}>
-            <div className="flex flex-col gap-14">
+            <div className="flex flex-col gap-40">
                 <Link href="/" className="w-fit">
                     <Logo size={56} />
                 </Link>
