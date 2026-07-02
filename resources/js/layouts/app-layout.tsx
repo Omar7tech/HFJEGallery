@@ -26,7 +26,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 </aside>
 
                 {/* Page content */}
-                <main className="min-w-0 flex-1">{children}</main>
+                <main className="min-w-0 flex-1 mb-8">{children}</main>
             </div>
 
             {/* Normal footer — full width, reached at the end of the scroll */}
