@@ -4,20 +4,27 @@ type LogoProps = {
     className?: string;
     /** Render in white for use on the brand-colored bar / dark footer. */
     invert?: boolean;
+    /**
+     * Logo height. A number is treated as pixels; a string is used as-is
+     * (e.g. '3rem', '48px'). Defaults to '1em' so it scales with font-size.
+     */
+    size?: number | string;
 };
 
 /**
  * HFJE wordmark. Inlined so it inherits the current text color (`fill-current`)
- * and scales with font-size (`height: 1em`) — the same way the previous text
- * wordmark did, so existing `text-*` sizing keeps working.
+ * and its size can be controlled via the `size` prop (or font-size when `size`
+ * is omitted).
  */
-export default function Logo({ className, invert = false }: LogoProps) {
+export default function Logo({ className, invert = false, size = '1em' }: LogoProps) {
+    const height = typeof size === 'number' ? `${size}px` : size;
+
     return (
         <svg
             viewBox="0 0 1077.96 314.14"
             role="img"
             aria-label="HFJE"
-            style={{ height: '1em' }}
+            style={{ height }}
             className={cn('w-auto fill-current', invert ? 'text-white' : 'text-ink', className)}
         >
             <path d="M1042.32,0c5.26,0,9.78,1.9,13.55,5.71,3.78,3.81,5.67,8.38,5.67,13.73s-1.88,9.93-5.64,13.74c-3.76,3.81-8.29,5.72-13.58,5.72s-9.85-1.9-13.63-5.71c-3.78-3.81-5.67-8.39-5.67-13.75s1.89-9.94,5.68-13.74c3.79-3.8,8.32-5.7,13.62-5.7ZM1042.27,35.7c4.41,0,8.19-1.59,11.34-4.78,3.16-3.19,4.73-7.02,4.73-11.49s-1.57-8.29-4.72-11.46c-3.15-3.17-6.93-4.76-11.36-4.76s-8.2,1.59-11.34,4.76-4.71,6.99-4.71,11.46,1.57,8.3,4.71,11.49c3.14,3.19,6.92,4.78,11.34,4.78ZM1050.94,30.21h-3.83l-1.61-4.56c-.97-2.73-2.8-4.1-5.49-4.1h-2.63v8.66h-3.34V9.31h7.78c5.48,0,8.22,1.92,8.22,5.75s-1.79,5.68-5.38,5.95c1.84.57,3.2,1.89,4.08,3.97l2.19,5.23ZM1037.39,18.64h4.19c3.28,0,4.93-1.09,4.93-3.27s-1.69-3.22-5.08-3.22h-4.03v6.5Z" />

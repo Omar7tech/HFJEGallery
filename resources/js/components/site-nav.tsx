@@ -65,7 +65,7 @@ export function NavSidebar({ className }: { className?: string }) {
         <div className={cn('flex h-full flex-col justify-between px-8 py-10', className)}>
             <div className="flex flex-col gap-14">
                 <Link href="/" className="w-fit">
-                    <Logo className="text-3xl" />
+                    <Logo size={56} />
                 </Link>
                 <NavLinks currentUrl={url} />
             </div>
@@ -90,7 +90,7 @@ export function NavBar({ className }: { className?: string }) {
                 )}
             >
                 <Link href="/">
-                    <Logo invert className="text-2xl" />
+                    <Logo invert size={32} />
                 </Link>
                 <button
                     type="button"
@@ -110,7 +110,7 @@ export function NavBar({ className }: { className?: string }) {
                     <div className="absolute inset-0 bg-ink/40" onClick={() => setOpen(false)} />
                     <div className="absolute inset-y-0 left-0 flex w-72 max-w-[80%] flex-col justify-between bg-white px-8 py-10 shadow-xl">
                         <div className="flex flex-col gap-14">
-                            <Logo className="text-3xl" />
+                            <Logo size={56} />
                             <NavLinks currentUrl={url} onNavigate={() => setOpen(false)} />
                         </div>
                         <BrandFooter />

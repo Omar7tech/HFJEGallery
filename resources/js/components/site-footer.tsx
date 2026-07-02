@@ -62,7 +62,7 @@ export default function SiteFooter({ className }: { className?: string }) {
         <footer className={cn('bg-ink text-white', className)}>
             <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:px-10 md:grid-cols-[1.5fr_repeat(3,1fr)]">
                 <div className="max-w-xs">
-                    <Logo invert className="text-3xl" />
+                    <Logo invert size={48} />
                     <p className="mt-5 text-sm leading-relaxed text-white/60">
                         Crafting homes designed around the people who live in them.
                     </p>
