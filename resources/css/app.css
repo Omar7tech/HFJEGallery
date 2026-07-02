@@ -5,9 +5,12 @@
 
 @theme {
     --font-sans:
-        'Michroma', ui-sans-serif, system-ui, sans-serif,
+        'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
         'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
         'Noto Color Emoji';
+
+    /* Michroma — display/heading font (400 only) */
+    --font-display: 'Michroma', ui-sans-serif, system-ui, sans-serif;
 
     /* Brand palette (HFJE UI) */
     --color-brand: #a65e3c; /* terracotta — buttons, links, accents */
