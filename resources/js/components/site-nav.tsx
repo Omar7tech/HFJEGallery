@@ -31,7 +31,7 @@ function NavLinks({ currentUrl, onNavigate }: { currentUrl: string; onNavigate?:
                     href={item.href}
                     onClick={onNavigate}
                     className={cn(
-                        'w-fit border-b border-ink/10 py-2.5 text-lg tracking-tight transition-colors font-display',
+                        'w-fit border-b border-ink/10 py-2.5 text-3xl tracking-tight transition-colors font-display',
                         item.accent || isActive(currentUrl, item.href)
                             ? 'text-brand'
                             : 'text-ink hover:text-brand',
