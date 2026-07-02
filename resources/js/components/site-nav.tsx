@@ -24,14 +24,14 @@ function isActive(currentUrl: string, href: string): boolean {
 
 function NavLinks({ currentUrl, onNavigate }: { currentUrl: string; onNavigate?: () => void }) {
     return (
-        <nav className="flex flex-col">
+        <nav className="flex flex-col gap-3">
             {navItems.map((item) => (
                 <Link
                     key={item.label}
                     href={item.href}
                     onClick={onNavigate}
                     className={cn(
-                        'w-fit border-b border-ink/10 py-2.5 text-3xl tracking-tight transition-colors font-display',
+                        'w-fit border-b border-ink/30 pt-3 pb-1 text-3xl tracking-tight transition-colors font-display',
                         item.accent || isActive(currentUrl, item.href)
                             ? 'text-brand'
                             : 'text-ink hover:text-brand',
@@ -49,7 +49,7 @@ function BrandFooter() {
         <img
             src="/logos/brandfooter.svg"
             alt="Home Fashion Jamaleddine"
-            className="w-40 max-w-full"
+            className="max-w-full"
         />
     );
 }
