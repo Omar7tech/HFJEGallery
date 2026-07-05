@@ -19,7 +19,7 @@ function Experience() {
   ]
 
   return (
-    <section className="@container w-full pr-6 py-16 font-display md:px-12 md:py-24 lg:pl-0 lg:pr-16">
+    <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pl-0 lg:pr-16">
       {/* Image + intro */}
       <div className="grid gap-10 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
         <img

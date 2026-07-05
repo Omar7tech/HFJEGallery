@@ -64,11 +64,11 @@ function Hero() {
       />
 
         {/* Overlay content */}
-        <div className="relative z-10 flex h-full flex-col items-end justify-between px-6 py-10 text-right md:px-12 md:py-16 lg:px-16">
+        <div className="relative z-10 flex h-full flex-col items-end justify-end gap-8 px-6 py-12 text-right md:justify-between md:gap-0 md:px-12 md:py-16 lg:px-16">
           {/* Headline */}
           <motion.h1
             style={{ color: headlineColor }}
-            className="leading-[1.15] text-3xl sm:text-5xl md:text-6xl"
+            className="leading-[1.15] text-4xl sm:text-5xl md:text-6xl"
           >
             <span className="block">Crafted</span>
             <span className="block">
@@ -105,7 +105,7 @@ function Hero() {
           {/* Subtext */}
           <motion.p
             style={{ color: subtextColor }}
-            className="-translate-y-8 font-medium text-lg sm:text-xl md:-translate-y-14 md:text-2xl"
+            className="font-medium text-lg sm:text-xl md:-translate-y-14 md:text-2xl"
           >
             {yearsOfExperience()} of craftsmanship,
             <br />
