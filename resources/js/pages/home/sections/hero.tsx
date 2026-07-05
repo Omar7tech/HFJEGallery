@@ -37,9 +37,12 @@ function Hero() {
         </h1>
 
         {/* Subtext */}
-        <p className="max-w-[30rem] font-medium text-brand text-lg sm:text-xl md:text-2xl">
-          27 of craftsmanship, creating homes designed around the people who live
-          in them.
+        <p className="font-medium text-brand text-lg sm:text-xl md:text-2xl">
+          27 of craftsmanship,
+          <br />
+          creating homes designed around
+          <br />
+          the people who live in them.
         </p>
 
         {/* CTA */}
