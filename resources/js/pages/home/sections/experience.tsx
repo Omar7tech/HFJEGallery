@@ -7,17 +7,17 @@ function Experience() {
   ]
 
   return (
-    <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:px-16">
+    <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pl-8 lg:pr-16">
       {/* Image + intro */}
-      <div className="grid gap-10 @3xl:grid-cols-2 @3xl:items-center @3xl:gap-16">
+      <div className="grid gap-10 @3xl:grid-cols-5 @3xl:items-center @3xl:gap-16">
         <img
-          className="aspect-[3/2] w-full min-w-0 rounded-lg object-cover @3xl:aspect-[4/3]"
+          className="aspect-3/2 w-full min-w-0 rounded-lg object-cover @3xl:col-span-3 @3xl:aspect-4/3"
           src="/images/contemporary-house-interior-design.webp"
           alt="Sunlit contemporary living room with a large sectional sofa and floor-to-ceiling windows"
         />
 
         {/* nested container so the heading scales to THIS column, not the viewport */}
-        <div className="@container min-w-0">
+        <div className="@container min-w-0 @3xl:col-span-2">
           <h2 className="font-display leading-[1.15] text-ink text-[clamp(1.75rem,8cqi,3.25rem)]">
             27 Years of Craftsmanship
           </h2>
