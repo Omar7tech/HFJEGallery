@@ -1,8 +1,56 @@
 function Hero() {
   return (
-    <div>
-      <img className="w-full min-h-[80dvh] object-cover" src="/images/potted-plant-table.webp" alt="" />
-    </div>
+    <section className="font-display relative w-full overflow-hidden">
+      <img
+        className="absolute inset-0 h-full w-full object-cover"
+        src="/images/potted-plant-table.webp"
+        alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
+      />
+
+      <div className="relative z-10 flex min-h-[80dvh] flex-col items-end justify-between px-6 py-10 text-right md:px-12 md:py-16 lg:px-16">
+        {/* Headline */}
+        <h1 className="leading-[1.15] text-ink text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
+          <span className="block">Crafted</span>
+          <span className="block">
+            <span className="relative inline-block">
+              <span className="relative z-10">Around</span>
+              <svg
+                className="pointer-events-none absolute left-1/2 top-1/2 h-[165%] w-[122%] -translate-x-1/2 -translate-y-1/2 -rotate-6 text-ink"
+                viewBox="0 0 300 120"
+                fill="none"
+                preserveAspectRatio="none"
+                aria-hidden="true"
+              >
+                <ellipse
+                  cx="150"
+                  cy="60"
+                  rx="146"
+                  ry="52"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  vectorEffect="non-scaling-stroke"
+                />
+              </svg>
+            </span>{' '}
+            Living.
+          </span>
+        </h1>
+
+        {/* Subtext */}
+        <p className="max-w-[30rem] font-medium text-brand leading-relaxed text-lg sm:text-xl md:text-2xl">
+          27 of craftsmanship, creating homes designed around the people who live
+          in them.
+        </p>
+
+        {/* CTA */}
+        <button
+          type="button"
+          className="bg-brand px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-colors hover:bg-brand-hover sm:text-base"
+        >
+          EXPLORE&nbsp;&nbsp;OUR WORK
+        </button>
+      </div>
+    </section>
   )
 }
 
