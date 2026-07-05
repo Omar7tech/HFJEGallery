@@ -70,7 +70,7 @@ function Hero() {
                   preserveAspectRatio="none"
                   aria-hidden="true"
                 >
-                  <ellipse
+                  <motion.ellipse
                     cx="150"
                     cy="60"
                     rx="146"
@@ -78,6 +78,12 @@ function Hero() {
                     stroke="currentColor"
                     strokeWidth="1.25"
                     vectorEffect="non-scaling-stroke"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{
+                      opacity: { duration: 0.2, delay: 0.5 },
+                      pathLength: { duration: 1.1, ease: 'easeInOut', delay: 0.5 },
+                    }}
                   />
                 </svg>
               </span>{' '}
