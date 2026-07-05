@@ -7,7 +7,7 @@ function Hero() {
         alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
       />
 
-      <div className="relative z-10 flex min-h-[85dvh] flex-col items-end justify-between px-6 py-10 text-right md:px-12 md:py-16 lg:px-16">
+      <div className="relative z-10 flex min-h-[85dvh] flex-col items-end justify-between px-6 pt-10 pb-20 text-right md:px-12 md:pt-16 md:pb-28 lg:px-16">
         {/* Headline */}
         <h1 className="leading-[1.15] text-ink text-3xl sm:text-5xl md:text-6xl">
           <span className="block">Crafted</span>
