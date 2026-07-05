@@ -1,13 +1,21 @@
+import CountUp from '@/components/count-up'
 import { yearsOfExperience } from '@/lib/experience'
+
+interface Stat {
+  count?: number
+  prefix?: string
+  text?: string
+  lines: [string, string]
+}
 
 function Experience() {
   const years = yearsOfExperience()
 
-  const stats = [
-    { value: `+${years}`, lines: ['Years', 'of Experience'] },
-    { value: '+1000', lines: ['Completed', 'Projects'] },
-    { value: 'Premium', lines: ['Materials', '& Fabrics'] },
-    { value: 'Custom', lines: ['Furniture', '& Interiors'] },
+  const stats: Stat[] = [
+    { prefix: '+', count: years, lines: ['Years', 'of Experience'] },
+    { prefix: '+', count: 1000, lines: ['Completed', 'Projects'] },
+    { text: 'Premium', lines: ['Materials', '& Fabrics'] },
+    { text: 'Custom', lines: ['Furniture', '& Interiors'] },
   ]
 
   return (
@@ -44,9 +52,14 @@ function Experience() {
       {/* Stats */}
       <div className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 @2xl:grid-cols-4 md:mt-24">
         {stats.map((stat) => (
-          <div key={stat.value} className="@container min-w-0">
+          <div key={stat.lines[0]} className="@container min-w-0">
             <p className="font-display leading-none text-ink text-[clamp(1.5rem,15cqi,2.75rem)]">
-              {stat.value}
+              {stat.text ?? (
+                <>
+                  {stat.prefix}
+                  <CountUp to={stat.count!} duration={2} />
+                </>
+              )}
             </p>
             <p className="mt-3 leading-tight text-ink text-[clamp(0.9rem,6cqi,1.125rem)]">
               {stat.lines[0]}
