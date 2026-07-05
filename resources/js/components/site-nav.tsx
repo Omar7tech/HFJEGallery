@@ -52,7 +52,7 @@ function NavLinks({
 }
 
 function BrandFooter() {
-    return <BrandFooterLogo className="max-w-full" />;
+    return <BrandFooterLogo className="max-w-[90%]" />;
 }
 
 /**
