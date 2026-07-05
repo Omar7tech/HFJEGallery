@@ -15,7 +15,7 @@ type LogoProps = {
  * HFJE letterform paths with their hover stagger delay, so the color flip
  * ripples left to right: H, FJ, E, then the ® mark.
  */
-const glyphs: { d: string; delayMs: number }[] = [
+export const glyphs: { d: string; delayMs: number }[] = [
     {
         d: 'M363.16,0v314.14h-37.13v-89.02c0-30.82-24.81-55.88-55.28-55.88H37.13v144.9H0V0h37.13v78.05c0,33.22,26.79,60.28,59.68,60.28h229.21V0h37.13Z',
         delayMs: 0,

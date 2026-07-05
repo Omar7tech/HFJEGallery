@@ -1,4 +1,4 @@
-import Logo from '@/components/logo';
+import FooterMonogram from '@/components/footer-monogram';
 import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
@@ -61,14 +61,19 @@ export default function SiteFooter({ className }: { className?: string }) {
     const year = new Date().getFullYear();
 
     return (
-        <footer className={cn('bg-[#f4ede3] text-ink', className)}>
+        <footer
+            className={cn(
+                'flex min-h-dvh flex-col overflow-hidden bg-[#f4ede3] text-ink',
+                className,
+            )}
+        >
             {/* Brand-tinted hairline marks the top edge of the footer. */}
             <div
                 aria-hidden
                 className="h-0.5 w-full bg-gradient-to-r from-brand/0 via-brand/50 to-brand/0"
             />
 
-            <div className="mx-auto grid max-w-7xl gap-12 px-6 py-16 sm:px-10 md:grid-cols-2 md:gap-16">
+            <div className="mx-auto grid w-full max-w-7xl gap-12 px-6 pt-16 pb-12 sm:px-10 md:grid-cols-2 md:gap-16">
                 {/* CTA */}
                 <div className="max-w-md">
                     <p className="font-display text-2xl leading-snug text-ink sm:text-3xl">
@@ -108,6 +113,10 @@ export default function SiteFooter({ className }: { className?: string }) {
                 </div>
             </div>
 
+            {/* Flexible spacer pushes the legal bar + monogram to the bottom of
+                the full-height footer. */}
+            <div className="grow" />
+
             <div className="border-t border-ink/10">
                 <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-ink/60 sm:flex-row sm:items-center sm:justify-between sm:px-10">
                     <p>© {year} Home Fashion Jamaleddine. All rights reserved.</p>
@@ -122,9 +131,9 @@ export default function SiteFooter({ className }: { className?: string }) {
                 </div>
             </div>
 
-            {/* Oversized HFJE monogram spanning the full width — the grand finish. */}
-            <div className="overflow-hidden px-6 pb-8 pt-6 sm:px-10 sm:pb-10">
-                <Logo size="auto" className="w-full" />
+            {/* Oversized HFJE monogram — draws itself in as the footer appears. */}
+            <div className="px-6 pb-8 pt-8 sm:px-10 sm:pb-10">
+                <FooterMonogram />
             </div>
         </footer>
     );
