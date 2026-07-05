@@ -1,11 +1,9 @@
-import React from 'react'
-
-function hero() {
+function Hero() {
   return (
     <div>
-      <img src="" alt="" />
+      <img className="w-full h-[80dvh] object-cover" src="/images/potted-plant-table.webp" alt="" />
     </div>
   )
 }
 
-export default hero
+export default Hero
