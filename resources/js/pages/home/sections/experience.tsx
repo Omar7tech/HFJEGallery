@@ -9,9 +9,9 @@ function Experience() {
   return (
     <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pl-8 lg:pr-16">
       {/* Image + intro */}
-      <div className="grid gap-10 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-16">
+      <div className="grid gap-10 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
         <img
-          className="aspect-3/2 w-full min-w-0 rounded-lg object-cover @3xl:col-span-3 @3xl:aspect-4/3"
+          className="aspect-3/2 w-full min-w-0 object-cover @3xl:col-span-3 @3xl:aspect-4/3"
           src="/images/contemporary-house-interior-design.webp"
           alt="Sunlit contemporary living room with a large sectional sofa and floor-to-ceiling windows"
         />
