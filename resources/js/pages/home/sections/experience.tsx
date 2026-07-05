@@ -1,9 +1,9 @@
 function Experience() {
   const stats = [
-    { value: '+27', lines: ['Years', 'of Experience'], accent: false },
-    { value: '+1000', lines: ['Completed', 'Projects'], accent: true },
-    { value: 'Premium', lines: ['Materials', '& Fabrics'], accent: false },
-    { value: 'Custom', lines: ['Furniture', '& Interiors'], accent: true },
+    { value: '+27', lines: ['Years', 'of Experience'] },
+    { value: '+1000', lines: ['Completed', 'Projects'] },
+    { value: 'Premium', lines: ['Materials', '& Fabrics'] },
+    { value: 'Custom', lines: ['Furniture', '& Interiors'] },
   ]
 
   return (
@@ -44,11 +44,7 @@ function Experience() {
             <p className="font-display leading-none text-ink text-[clamp(1.5rem,15cqi,2.75rem)]">
               {stat.value}
             </p>
-            <p
-              className={`mt-3 leading-tight text-[clamp(0.9rem,6cqi,1.125rem)] ${
-                stat.accent ? 'text-brand' : 'text-ink'
-              }`}
-            >
+            <p className="mt-3 leading-tight text-ink text-[clamp(0.9rem,6cqi,1.125rem)]">
               {stat.lines[0]}
               <br />
               {stat.lines[1]}
