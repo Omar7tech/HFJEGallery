@@ -1,4 +1,5 @@
 import { yearsOfExperience } from '@/lib/experience'
+import { ArrowRight } from 'lucide-react'
 
 function Hero() {
   return (
@@ -50,9 +51,15 @@ function Hero() {
         {/* CTA */}
         <button
           type="button"
-          className="-mr-6 bg-brand py-4 pl-8 pr-12 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-colors hover:bg-brand-hover sm:text-base md:-mr-12 lg:-mr-16 lg:pr-20"
+          className="group -mr-6 inline-flex items-center bg-brand py-4 pl-8 pr-12 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-[background-color,letter-spacing] duration-300 ease-out hover:bg-brand-hover hover:tracking-[0.26em] motion-reduce:transition-none sm:text-base md:-mr-12 lg:-mr-16 lg:pr-20"
         >
           EXPLORE OUR WORK
+          <span
+            aria-hidden="true"
+            className="inline-flex max-w-0 -translate-x-2 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:ml-3 group-hover:max-w-[1.5rem] group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none"
+          >
+            <ArrowRight className="size-5" strokeWidth={2.5} />
+          </span>
         </button>
       </div>
     </section>
