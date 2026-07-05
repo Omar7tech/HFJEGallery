@@ -15,7 +15,7 @@ function Hero() {
             <span className="relative inline-block">
               <span className="relative z-10">Around</span>
               <svg
-                className="pointer-events-none absolute left-1/2 top-1/2 h-[165%] w-[122%] -translate-x-1/2 -translate-y-1/2 -rotate-6 text-ink"
+                className="pointer-events-none absolute left-1/2 top-1/2 h-[138%] w-[108%] -translate-x-1/2 -translate-y-1/2 -rotate-6 text-ink"
                 viewBox="0 0 300 120"
                 fill="none"
                 preserveAspectRatio="none"
@@ -27,7 +27,7 @@ function Hero() {
                   rx="146"
                   ry="52"
                   stroke="currentColor"
-                  strokeWidth="2"
+                  strokeWidth="1.25"
                   vectorEffect="non-scaling-stroke"
                 />
               </svg>
@@ -37,7 +37,7 @@ function Hero() {
         </h1>
 
         {/* Subtext */}
-        <p className="max-w-[30rem] font-medium text-brand leading-relaxed text-lg sm:text-xl md:text-2xl">
+        <p className="max-w-[30rem] font-medium text-brand text-lg sm:text-xl md:text-2xl">
           27 of craftsmanship, creating homes designed around the people who live
           in them.
         </p>
@@ -45,9 +45,9 @@ function Hero() {
         {/* CTA */}
         <button
           type="button"
-          className="bg-brand px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-colors hover:bg-brand-hover sm:text-base"
+          className="-mr-6 bg-brand px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-colors hover:bg-brand-hover sm:text-base md:-mr-12 lg:-mr-5"
         >
-          EXPLORE&nbsp;&nbsp;OUR WORK
+          EXPLORE OUR WORK
         </button>
       </div>
     </section>
