@@ -1,3 +1,5 @@
+import { yearsOfExperience } from '@/lib/experience'
+
 function Hero() {
   return (
     <section className="font-display relative w-full overflow-hidden">
@@ -38,7 +40,7 @@ function Hero() {
 
         {/* Subtext */}
         <p className="-translate-y-8 font-medium text-brand text-lg sm:text-xl md:-translate-y-14 md:text-2xl">
-          27 of craftsmanship,
+          {yearsOfExperience()} of craftsmanship,
           <br />
           creating homes designed around
           <br />

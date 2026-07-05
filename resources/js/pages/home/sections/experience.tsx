@@ -1,6 +1,10 @@
+import { yearsOfExperience } from '@/lib/experience'
+
 function Experience() {
+  const years = yearsOfExperience()
+
   const stats = [
-    { value: '+27', lines: ['Years', 'of Experience'] },
+    { value: `+${years}`, lines: ['Years', 'of Experience'] },
     { value: '+1000', lines: ['Completed', 'Projects'] },
     { value: 'Premium', lines: ['Materials', '& Fabrics'] },
     { value: 'Custom', lines: ['Furniture', '& Interiors'] },
@@ -19,7 +23,7 @@ function Experience() {
         {/* nested container so the heading scales to THIS column, not the viewport */}
         <div className="@container min-w-0 @3xl:col-span-2">
           <h2 className="font-display leading-[1.15] text-ink text-[clamp(1.75rem,8cqi,3.25rem)]">
-            27 Years of Craftsmanship
+            {years} Years of Craftsmanship
           </h2>
 
           <p className="mt-6 max-w-xl font-bold leading-relaxed text-ink text-base @lg:text-lg">
