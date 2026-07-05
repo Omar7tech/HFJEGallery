@@ -1,7 +1,7 @@
 import { yearsOfExperience } from '@/lib/experience'
 import { ArrowRight } from 'lucide-react'
 import { motion, useScroll, useTransform } from 'motion/react'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 
 // How far through the hero's own scroll-out the day→night swap completes
 // (1 = hero fully scrolled past). No pinning — it plays during normal scroll.
@@ -12,6 +12,7 @@ const TEXT_START = 0.15
 
 function Hero() {
   const ref = useRef<HTMLElement>(null)
+  const [dayLoaded, setDayLoaded] = useState(false)
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start start', 'end start'],
@@ -35,22 +36,32 @@ function Hero() {
   return (
     <section
       ref={ref}
-      className="font-display relative h-[85dvh] w-full overflow-hidden lg:h-dvh"
+      className="font-display relative h-[85dvh] w-full overflow-hidden bg-cream lg:h-dvh"
     >
-      {/* Day (base) */}
+      {/* Day (base) — LCP image: eager, high priority, fades in once decoded */}
       <img
-          className="absolute inset-0 h-full w-full object-cover"
-          src="/images/potted-plant-table.webp"
-          alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
-        />
-        {/* Night — crossfades in on scroll */}
-        <motion.img
-          style={{ opacity: nightOpacity }}
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-          src="/images/potted-plant-table-night.png"
-          alt=""
-          aria-hidden="true"
-        />
+        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${
+          dayLoaded ? 'opacity-100' : 'opacity-0'
+        }`}
+        src="/images/potted-plant-table.webp"
+        alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
+        loading="eager"
+        decoding="async"
+        fetchPriority="high"
+        onLoad={() => setDayLoaded(true)}
+      />
+      {/* Night — crossfades in on scroll. Fetched early at low priority so it's
+          ready by the time the user scrolls, without stealing from the LCP. */}
+      <motion.img
+        style={{ opacity: nightOpacity }}
+        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        src="/images/potted-plant-table-night.png"
+        alt=""
+        aria-hidden="true"
+        loading="eager"
+        decoding="async"
+        fetchPriority="low"
+      />
 
         {/* Overlay content */}
         <div className="relative z-10 flex h-full flex-col items-end justify-between px-6 py-10 text-right md:px-12 md:py-16 lg:px-16">
