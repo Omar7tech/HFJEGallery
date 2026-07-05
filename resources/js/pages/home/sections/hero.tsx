@@ -7,9 +7,9 @@ function Hero() {
         alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
       />
 
-      <div className="relative z-10 flex min-h-[80dvh] flex-col items-end justify-between px-6 py-10 text-right md:px-12 md:py-16 lg:px-16">
+      <div className="relative z-10 flex min-h-[85dvh] flex-col items-end justify-between px-6 py-10 text-right md:px-12 md:py-16 lg:px-16">
         {/* Headline */}
-        <h1 className="leading-[1.15] text-ink text-3xl sm:text-5xl md:text-6xl lg:text-7xl">
+        <h1 className="leading-[1.15] text-ink text-3xl sm:text-5xl md:text-6xl">
           <span className="block">Crafted</span>
           <span className="block">
             <span className="relative inline-block">
@@ -45,7 +45,7 @@ function Hero() {
         {/* CTA */}
         <button
           type="button"
-          className="-mr-6 bg-brand px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-colors hover:bg-brand-hover sm:text-base md:-mr-12 lg:-mr-5"
+          className="-mr-6 bg-brand py-4 pl-8 pr-12 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-colors hover:bg-brand-hover sm:text-base md:-mr-12 lg:-mr-16 lg:pr-20"
         >
           EXPLORE OUR WORK
         </button>
