@@ -30,7 +30,7 @@ function Experience() {
 
           <button
             type="button"
-            className="mt-8 rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground"
+            className="mt-8 rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground lg:pr-20"
           >
             Contact Us
           </button>
