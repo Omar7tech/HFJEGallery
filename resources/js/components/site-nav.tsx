@@ -298,11 +298,11 @@ export function NavBar({ className }: { className?: string }) {
                 </div>
             </header>
 
-            {/* Full-screen cream sheet */}
+            {/* Full-screen terracotta sheet */}
             <div
                 ref={panelRef}
                 aria-hidden={!open}
-                className="invisible fixed inset-0 z-[60] flex flex-col overflow-y-auto overscroll-contain bg-cream pt-24 lg:hidden"
+                className="invisible fixed inset-0 z-[60] flex flex-col overflow-y-auto overscroll-contain bg-brand pt-24 lg:hidden"
             >
                 {/* my-auto centers the list when it fits and top-aligns it when
                     a long dynamic Work list makes the sheet scroll. */}
@@ -315,8 +315,8 @@ export function NavBar({ className }: { className?: string }) {
                                 className={cn(
                                     'block w-fit py-2.5 font-display text-4xl tracking-tight',
                                     item.accent || isActive(url, item.href)
-                                        ? 'text-brand'
-                                        : 'text-ink',
+                                        ? 'text-white'
+                                        : 'text-cream/70',
                                 )}
                             >
                                 {item.label}
@@ -327,7 +327,7 @@ export function NavBar({ className }: { className?: string }) {
                                         'mt-1 mb-4 flex flex-wrap gap-2',
                                         item.children.length >
                                             SUBLINKS_SCROLL_THRESHOLD &&
-                                            'nav-scroll max-h-[20vh] overflow-y-auto overscroll-contain pr-1',
+                                            'nav-scroll-invert max-h-[20vh] overflow-y-auto overscroll-contain pr-1',
                                     )}
                                 >
                                     {item.children.map((child, index) => (
@@ -338,8 +338,8 @@ export function NavBar({ className }: { className?: string }) {
                                             className={cn(
                                                 'border px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.15em]',
                                                 isActive(url, child.href)
-                                                    ? 'border-brand bg-brand text-brand-foreground'
-                                                    : 'border-ink/25 text-ink/80',
+                                                    ? 'border-cream bg-cream text-brand'
+                                                    : 'border-cream/40 text-cream/80',
                                             )}
                                         >
                                             {child.label}
@@ -352,10 +352,10 @@ export function NavBar({ className }: { className?: string }) {
                 </nav>
 
                 <div className="menu-foot px-6 pb-[max(2.5rem,env(safe-area-inset-bottom))]">
-                    <p className="font-display text-xl text-brand">
+                    <p className="font-display text-xl text-cream">
                         Crafted Around Living.
                     </p>
-                    <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-ink/50">
+                    <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-cream/60">
                         Home Fashion Jamaleddine
                     </p>
                 </div>

@@ -25,6 +25,20 @@
     background-color: color-mix(in srgb, var(--color-brand) 45%, transparent);
 }
 
+/* Same slim scrollbar, cream thumb — for use on the terracotta mobile menu. */
+.nav-scroll-invert {
+    scrollbar-width: thin;
+    scrollbar-color: color-mix(in srgb, var(--color-cream) 55%, transparent)
+        transparent;
+}
+.nav-scroll-invert::-webkit-scrollbar {
+    width: 4px;
+}
+.nav-scroll-invert::-webkit-scrollbar-thumb {
+    border-radius: 9999px;
+    background-color: color-mix(in srgb, var(--color-cream) 55%, transparent);
+}
+
 @theme {
     --font-sans:
         'Instrument Sans', ui-sans-serif, system-ui, sans-serif,
