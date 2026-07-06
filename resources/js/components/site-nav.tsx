@@ -125,16 +125,12 @@ export function NavSidebar({ className }: { className?: string }) {
     const { url } = usePage();
 
     return (
-        <div
-            className={cn(
-                'flex h-full flex-col justify-between px-8 py-10',
-                className,
-            )}
-        >
-            <div className="flex flex-col gap-40">
-                <Link href="/" className="w-fit">
-                    <Logo size={56} />
-                </Link>
+        <div className={cn('flex h-full flex-col px-8 py-10', className)}>
+            <Link href="/" className="w-fit shrink-0">
+                <Logo size={56} />
+            </Link>
+            {/* Nav sits centered in the space between the logo and footer */}
+            <div className="flex min-h-0 flex-1 items-center py-10">
                 <NavLinks currentUrl={url} />
             </div>
             <BrandFooter />
@@ -331,7 +327,7 @@ export function NavBar({ className }: { className?: string }) {
                                         'mt-1 mb-4 flex flex-wrap gap-2',
                                         item.children.length >
                                             SUBLINKS_SCROLL_THRESHOLD &&
-                                            'nav-scroll max-h-[30vh] overflow-y-auto overscroll-contain pr-1',
+                                            'nav-scroll max-h-[20vh] overflow-y-auto overscroll-contain pr-1',
                                     )}
                                 >
                                     {item.children.map((child, index) => (
