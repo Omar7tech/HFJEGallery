@@ -269,6 +269,23 @@ export function NavBar({ className }: { className?: string }) {
         return () => window.removeEventListener('keydown', onKeyDown);
     }, [open]);
 
+    // Crossing into desktop hides the panel via `lg:hidden` without ever
+    // flipping `open`, so its scroll-lock would linger and freeze the page.
+    // Force-close and clear the lock at the lg breakpoint.
+    useEffect(() => {
+        const desktop = window.matchMedia('(min-width: 1024px)');
+        const handleChange = () => {
+            if (desktop.matches) {
+                setOpen(false);
+                document.documentElement.style.overflow = '';
+                document.body.style.overflow = '';
+            }
+        };
+        desktop.addEventListener('change', handleChange);
+
+        return () => desktop.removeEventListener('change', handleChange);
+    }, []);
+
     return (
         <>
             {/* Floating brand bar — stays on top; the sheet lives underneath. */}
