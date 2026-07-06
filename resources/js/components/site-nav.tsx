@@ -154,6 +154,7 @@ export function NavBar({ className }: { className?: string }) {
     const hasOpened = useRef(false);
     const barRef = useRef<HTMLElement>(null);
     const panelRef = useRef<HTMLDivElement>(null);
+    const progressRef = useRef<HTMLSpanElement>(null);
 
     const closeMenu = () => setOpen(false);
 
@@ -288,6 +289,36 @@ export function NavBar({ className }: { className?: string }) {
         return () => window.removeEventListener('keydown', onKeyDown);
     }, [open]);
 
+    // Fill the connector line to match page scroll progress (top → bottom).
+    useGSAP(
+        (_, contextSafe) => {
+            const fill = progressRef.current;
+
+            if (!fill) {
+                return;
+            }
+
+            gsap.set(fill, { transformOrigin: 'left center' });
+            const setScaleX = gsap.quickSetter(fill, 'scaleX');
+            const update = contextSafe!(() => {
+                const doc = document.documentElement;
+                const max = doc.scrollHeight - doc.clientHeight;
+                const progress = max > 0 ? doc.scrollTop / max : 0;
+                setScaleX(gsap.utils.clamp(0, 1, progress));
+            });
+
+            update();
+            window.addEventListener('scroll', update, { passive: true });
+            window.addEventListener('resize', update);
+
+            return () => {
+                window.removeEventListener('scroll', update);
+                window.removeEventListener('resize', update);
+            };
+        },
+        { scope: barRef, dependencies: [url] },
+    );
+
     // Force-close and clear the lock at the lg breakpoint.
     useEffect(() => {
         const desktop = window.matchMedia('(min-width: 1024px)');
@@ -334,9 +365,16 @@ export function NavBar({ className }: { className?: string }) {
                         className="flex flex-1 items-center px-2"
                         aria-hidden="true"
                     >
-                        <span className="nav-cap h-3 w-[2px] shrink-0 bg-brand" />
-                        <span className="nav-line h-[3px] flex-1 origin-center bg-brand" />
-                        <span className="nav-cap h-3 w-[2px] shrink-0 bg-brand" />
+                        <span className="nav-cap h-3 w-[2.5px] shrink-0 bg-brand" />
+                        <span className="nav-line relative h-[3px] flex-1 origin-center overflow-hidden bg-brand/45">
+                            {/* Fills left→right with page scroll progress */}
+                            <span
+                                ref={progressRef}
+                                className="absolute inset-0 bg-brand"
+                                style={{ transform: 'scaleX(0)' }}
+                            />
+                        </span>
+                        <span className="nav-cap h-3 w-[2.5px] shrink-0 bg-brand" />
                     </div>
 
                     {/* Burger module — square, same height as the logo module */}
