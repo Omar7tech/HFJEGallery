@@ -152,7 +152,7 @@ function Hero() {
           text laid over it. */}
       <section
         ref={ref}
-        className="font-display relative hidden w-full overflow-hidden bg-cream lg:block lg:h-dvh"
+        className="font-display relative hidden w-full overflow-hidden bg-cream lg:block lg:h-dvh lg:min-h-[640px]"
       >
         {/* Day (base) — LCP image: eager, high priority, fades in once decoded */}
         <img

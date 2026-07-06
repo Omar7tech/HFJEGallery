@@ -129,11 +129,17 @@ export function NavSidebar({ className }: { className?: string }) {
             <Link href="/" className="w-fit shrink-0">
                 <Logo size={56} />
             </Link>
-            {/* Nav sits centered in the space between the logo and footer */}
-            <div className="flex min-h-0 flex-1 items-center py-10">
-                <NavLinks currentUrl={url} />
+            {/* Nav centers between logo and footer, but scrolls on its own when
+                the viewport is too short to fit it — `my-auto` centers while
+                still allowing scroll to the top (unlike justify/items-center). */}
+            <div className="nav-scroll flex min-h-0 flex-1 flex-col overflow-y-auto py-6">
+                <div className="my-auto">
+                    <NavLinks currentUrl={url} />
+                </div>
             </div>
-            <BrandFooter />
+            <div className="shrink-0">
+                <BrandFooter />
+            </div>
         </div>
     );
 }
