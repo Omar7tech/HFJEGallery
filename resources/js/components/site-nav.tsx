@@ -179,9 +179,9 @@ export function NavBar({ className }: { className?: string }) {
                         '-=0.25',
                     )
                     .from(
-                        '.nav-node',
+                        '.nav-cap',
                         {
-                            scale: 0,
+                            scaleY: 0,
                             autoAlpha: 0,
                             duration: 0.35,
                             stagger: 0.1,
@@ -328,14 +328,15 @@ export function NavBar({ className }: { className?: string }) {
                         </Link>
                     </div>
 
-                    {/* Connector line with joint nodes at each end */}
+                    {/* Connector — a dimension line with a vertical tick flush
+                        against each module */}
                     <div
-                        className="relative flex flex-1 items-center"
+                        className="flex flex-1 items-center"
                         aria-hidden="true"
                     >
-                        <span className="nav-line h-[2px] w-full origin-center bg-brand" />
-                        <span className="nav-node absolute left-1.5 top-1/2 size-[7px] -translate-y-1/2 rotate-45 bg-brand" />
-                        <span className="nav-node absolute right-1.5 top-1/2 size-[7px] -translate-y-1/2 rotate-45 bg-brand" />
+                        <span className="nav-cap h-3 w-[2px] shrink-0 bg-brand" />
+                        <span className="nav-line h-[3px] w-full origin-center bg-brand" />
+                        <span className="nav-cap h-3 w-[2px] shrink-0 bg-brand" />
                     </div>
 
                     {/* Burger module — square, same height as the logo module */}
