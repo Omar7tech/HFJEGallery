@@ -52,7 +52,7 @@ const navItems: NavItem[] = [
 ];
 
 /** Above this many sub-links, the group becomes a capped scroll area instead
- *  of pushing the rest of the nav around. Dynamic counts stay contained. */
+ * of pushing the rest of the nav around. Dynamic counts stay contained. */
 const SUBLINKS_SCROLL_THRESHOLD = 4;
 
 function isActive(currentUrl: string, href: string): boolean {
@@ -145,10 +145,8 @@ export function NavSidebar({ className }: { className?: string }) {
 }
 
 /**
- * Floating terracotta brand bar for small screens: drops in on load and stays
- * pinned while scrolling. The burger opens a clean cream sheet — links rise
- * in with a soft stagger, and Work's categories flow as wrapping tags so any
- * number of them lays out cleanly.
+ * Terracotta brand layout for small screens.
+ * Setup: Box (Logo) => Line => Box (Burger Button)
  */
 export function NavBar({ className }: { className?: string }) {
     const { url } = usePage();
@@ -169,12 +167,28 @@ export function NavBar({ className }: { className?: string }) {
             gsap.set(panelRef.current, { autoAlpha: 0 });
 
             if (!reduced) {
-                gsap.from(barRef.current, {
-                    yPercent: -130,
-                    duration: 0.7,
-                    ease: 'power3.out',
-                    delay: 0.15,
-                });
+                gsap.timeline({ delay: 0.15 })
+                    .from(barRef.current, {
+                        yPercent: -130,
+                        duration: 0.7,
+                        ease: 'power3.out',
+                    })
+                    .from(
+                        '.nav-line',
+                        { scaleX: 0, duration: 0.6, ease: 'power3.out' },
+                        '-=0.25',
+                    )
+                    .from(
+                        '.nav-node',
+                        {
+                            scale: 0,
+                            autoAlpha: 0,
+                            duration: 0.35,
+                            stagger: 0.1,
+                            ease: 'back.out(2)',
+                        },
+                        '-=0.25',
+                    );
             }
 
             return () => {
@@ -237,7 +251,6 @@ export function NavBar({ className }: { className?: string }) {
                     ease: 'power3.inOut',
                 });
             } else if (hasOpened.current) {
-                // Exit is a single quick fade — faster than the enter.
                 gsap.to(panel, {
                     autoAlpha: 0,
                     duration: d(0.25),
@@ -275,8 +288,6 @@ export function NavBar({ className }: { className?: string }) {
         return () => window.removeEventListener('keydown', onKeyDown);
     }, [open]);
 
-    // Crossing into desktop hides the panel via `lg:hidden` without ever
-    // flipping `open`, so its scroll-lock would linger and freeze the page.
     // Force-close and clear the lock at the lg breakpoint.
     useEffect(() => {
         const desktop = window.matchMedia('(min-width: 1024px)');
@@ -294,30 +305,54 @@ export function NavBar({ className }: { className?: string }) {
 
     return (
         <>
-            {/* Floating brand bar — stays on top; the sheet lives underneath. */}
+            {/* Main structural wrapper is clear/transparent */}
             <header
                 ref={barRef}
                 className={cn(
-                    'px-3 pt-[max(0.75rem,env(safe-area-inset-top))]',
+                    'px-3 pt-[max(0.75rem,env(safe-area-inset-top))] fixed top-0 left-0 right-0 z-[70] lg:hidden',
                     className,
                 )}
             >
-                <div className="flex items-center justify-between bg-brand py-2.5 pl-5 pr-2 shadow-[0_10px_30px_rgba(166,94,60,0.3)]">
-                    <Link href="/" aria-label="HFJE home" onClick={closeMenu}>
-                        <Logo invert size={28} />
-                    </Link>
-                    <button
-                        type="button"
-                        aria-label={open ? 'Close menu' : 'Open menu'}
-                        aria-expanded={open}
-                        onClick={() => setOpen((value) => !value)}
-                        className="flex h-11 w-11 touch-manipulation items-center justify-center transition-transform duration-300 active:scale-90 motion-reduce:transition-none"
+                {/* Two equal-height terracotta modules joined by a connector:
+                    [ Logo ]——●——[ Burger ] */}
+                <div className="flex items-stretch py-1">
+                    {/* Logo module */}
+                    <div className="relative z-10 flex h-12 shrink-0 items-center bg-brand px-5 shadow-[0_10px_30px_rgba(166,94,60,0.18)]">
+                        <Link
+                            href="/"
+                            aria-label="HFJE home"
+                            onClick={closeMenu}
+                            className="block"
+                        >
+                            <Logo invert size={26} />
+                        </Link>
+                    </div>
+
+                    {/* Connector line with joint nodes at each end */}
+                    <div
+                        className="relative flex flex-1 items-center"
+                        aria-hidden="true"
                     >
-                        <span className="flex flex-col gap-[5px]">
-                            <span className="burger-line h-[1.5px] w-6 bg-white" />
-                            <span className="burger-line h-[1.5px] w-6 bg-white" />
-                        </span>
-                    </button>
+                        <span className="nav-line h-[2px] w-full origin-center bg-brand" />
+                        <span className="nav-node absolute left-1.5 top-1/2 size-[7px] -translate-y-1/2 rotate-45 bg-brand" />
+                        <span className="nav-node absolute right-1.5 top-1/2 size-[7px] -translate-y-1/2 rotate-45 bg-brand" />
+                    </div>
+
+                    {/* Burger module — square, same height as the logo module */}
+                    <div className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center bg-brand shadow-[0_10px_30px_rgba(166,94,60,0.18)]">
+                        <button
+                            type="button"
+                            aria-label={open ? 'Close menu' : 'Open menu'}
+                            aria-expanded={open}
+                            onClick={() => setOpen((value) => !value)}
+                            className="flex h-full w-full touch-manipulation items-center justify-center transition-transform duration-300 active:scale-90 motion-reduce:transition-none"
+                        >
+                            <span className="flex flex-col gap-[5px]">
+                                <span className="burger-line h-[2px] w-5 rounded-full bg-white" />
+                                <span className="burger-line h-[2px] w-5 rounded-full bg-white" />
+                            </span>
+                        </button>
+                    </div>
                 </div>
             </header>
 
@@ -327,8 +362,6 @@ export function NavBar({ className }: { className?: string }) {
                 aria-hidden={!open}
                 className="invisible fixed inset-0 z-[60] flex flex-col overflow-y-auto overscroll-contain bg-brand pt-24 lg:hidden"
             >
-                {/* my-auto centers the list when it fits and top-aligns it when
-                    a long dynamic Work list makes the sheet scroll. */}
                 <nav className="my-auto flex flex-col px-6 py-8">
                     {navItems.map((item) => (
                         <div key={item.label} className="menu-item">
