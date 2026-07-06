@@ -36,12 +36,24 @@ const navItems: NavItem[] = [
             { label: 'Renovation', href: '/work/renovation' },
             { label: 'Renovation', href: '/work/renovation' },
             { label: 'Renovation', href: '/work/renovation' },
+            { label: 'Renovation', href: '/work/renovation' },
+            { label: 'Renovation', href: '/work/renovation' },
+            { label: 'Renovation', href: '/work/renovation' },
+            { label: 'Renovation', href: '/work/renovation' },
+            { label: 'Renovation', href: '/work/renovation' },
+            { label: 'Renovation', href: '/work/renovation' },
+            { label: 'Renovation', href: '/work/renovation' },
+            { label: 'Renovation', href: '/work/renovation' },
         ],
     },
     { label: 'BAYTÉ', href: '/bayte' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
 ];
+
+/** Above this many sub-links, the group becomes a capped scroll area instead
+ *  of pushing the rest of the nav around. Dynamic counts stay contained. */
+const SUBLINKS_SCROLL_THRESHOLD = 4;
 
 function isActive(currentUrl: string, href: string): boolean {
     return href === '/' ? currentUrl === '/' : currentUrl.startsWith(href);
@@ -71,14 +83,20 @@ function NavLinks({
                         {item.label}
                     </Link>
                     {item.children && (
-                        <div className="mt-2 flex flex-col gap-1 border-l border-brand/30 pl-4">
-                            {item.children.map((child) => (
+                        <div
+                            className={cn(
+                                'mt-2 flex flex-col gap-1 border-l border-brand/30 pl-4',
+                                item.children.length > SUBLINKS_SCROLL_THRESHOLD &&
+                                    'nav-scroll max-h-44 overflow-y-auto pr-2',
+                            )}
+                        >
+                            {item.children.map((child, index) => (
                                 <Link
-                                    key={child.label}
+                                    key={`${child.href}-${index}`}
                                     href={child.href}
                                     onClick={onNavigate}
                                     className={cn(
-                                        'w-fit font-display text-lg tracking-tight transition-colors',
+                                        'w-fit shrink-0 font-display text-lg tracking-tight transition-colors',
                                         isActive(currentUrl, child.href)
                                             ? 'text-brand'
                                             : 'text-ink/70 hover:text-brand',
@@ -308,10 +326,17 @@ export function NavBar({ className }: { className?: string }) {
                                 {item.label}
                             </Link>
                             {item.children && (
-                                <div className="mt-1 mb-4 flex flex-wrap gap-2">
-                                    {item.children.map((child) => (
+                                <div
+                                    className={cn(
+                                        'mt-1 mb-4 flex flex-wrap gap-2',
+                                        item.children.length >
+                                            SUBLINKS_SCROLL_THRESHOLD &&
+                                            'nav-scroll max-h-[30vh] overflow-y-auto overscroll-contain pr-1',
+                                    )}
+                                >
+                                    {item.children.map((child, index) => (
                                         <Link
-                                            key={child.label}
+                                            key={`${child.href}-${index}`}
                                             href={child.href}
                                             onClick={closeMenu}
                                             className={cn(
