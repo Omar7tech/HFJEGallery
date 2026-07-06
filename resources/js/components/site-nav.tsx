@@ -147,8 +147,18 @@ export function NavSidebar({ className }: { className?: string }) {
 /**
  * Terracotta brand layout for small screens.
  * Setup: Box (Logo) => Line => Box (Burger Button)
+ *
+ * @param scrollProgress When true (default), the connector line fills left→
+ * right to track page scroll. When false, it stays a plain solid terracotta
+ * line with no scroll animation.
  */
-export function NavBar({ className }: { className?: string }) {
+export function NavBar({
+    className,
+    scrollProgress = true,
+}: {
+    className?: string;
+    scrollProgress?: boolean;
+}) {
     const { url } = usePage();
     const [open, setOpen] = useState(false);
     const hasOpened = useRef(false);
@@ -294,7 +304,7 @@ export function NavBar({ className }: { className?: string }) {
         (_, contextSafe) => {
             const fill = progressRef.current;
 
-            if (!fill) {
+            if (!scrollProgress || !fill) {
                 return;
             }
 
@@ -316,7 +326,7 @@ export function NavBar({ className }: { className?: string }) {
                 window.removeEventListener('resize', update);
             };
         },
-        { scope: barRef, dependencies: [url] },
+        { scope: barRef, dependencies: [url, scrollProgress] },
     );
 
     // Force-close and clear the lock at the lg breakpoint.
@@ -366,13 +376,20 @@ export function NavBar({ className }: { className?: string }) {
                         aria-hidden="true"
                     >
                         <span className="nav-cap h-3 w-[2.5px] shrink-0 bg-brand" />
-                        <span className="nav-line relative h-[3px] flex-1 origin-center overflow-hidden bg-brand/45">
+                        <span
+                            className={cn(
+                                'nav-line relative h-[3px] flex-1 origin-center overflow-hidden',
+                                scrollProgress ? 'bg-brand/45' : 'bg-brand',
+                            )}
+                        >
                             {/* Fills left→right with page scroll progress */}
-                            <span
-                                ref={progressRef}
-                                className="absolute inset-0 bg-brand"
-                                style={{ transform: 'scaleX(0)' }}
-                            />
+                            {scrollProgress && (
+                                <span
+                                    ref={progressRef}
+                                    className="absolute inset-0 bg-brand"
+                                    style={{ transform: 'scaleX(0)' }}
+                                />
+                            )}
                         </span>
                         <span className="nav-cap h-3 w-[2.5px] shrink-0 bg-brand" />
                     </div>
