@@ -331,7 +331,7 @@ export function NavBar({ className }: { className?: string }) {
                     {/* Connector — a dimension line with a vertical tick near
                         each end, spaced away from the modules */}
                     <div
-                        className="flex flex-1 items-center gap-[3px] px-2"
+                        className="flex flex-1 items-center px-2"
                         aria-hidden="true"
                     >
                         <span className="nav-cap h-3 w-[2px] shrink-0 bg-brand" />
