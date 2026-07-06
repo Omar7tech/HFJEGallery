@@ -328,14 +328,14 @@ export function NavBar({ className }: { className?: string }) {
                         </Link>
                     </div>
 
-                    {/* Connector — a dimension line with a vertical tick flush
-                        against each module */}
+                    {/* Connector — a dimension line with a vertical tick near
+                        each end, spaced away from the modules */}
                     <div
-                        className="flex flex-1 items-center"
+                        className="flex flex-1 items-center gap-[3px] px-2"
                         aria-hidden="true"
                     >
                         <span className="nav-cap h-3 w-[2px] shrink-0 bg-brand" />
-                        <span className="nav-line h-[3px] w-full origin-center bg-brand" />
+                        <span className="nav-line h-[3px] flex-1 origin-center bg-brand" />
                         <span className="nav-cap h-3 w-[2px] shrink-0 bg-brand" />
                     </div>
 
