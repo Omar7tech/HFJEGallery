@@ -112,7 +112,7 @@ function Hero() {
       {/* Mobile / tablet: clean editorial stack — headline, image, copy, CTA.
           Nothing overlaps the photo; it reads top-to-bottom. */}
       <section className="font-display px-6 pb-14 pt-10 lg:hidden">
-        <Headline className="leading-[1.1] text-ink text-5xl sm:text-6xl" />
+        <Headline className="leading-[1.1] text-ink text-4xl sm:text-5xl" />
 
         {/* Landscape photo with the same day → night crossfade, driven by the
             image's own scroll position. */}
