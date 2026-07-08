@@ -24,7 +24,7 @@ const projects: Project[] = [
 
 function FeaturedProjects() {
   return (
-    <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pl-0 lg:pr-16">
+    <section className="@container w-full px-6 py-10 font-display md:px-12 md:py-15 lg:pl-0 lg:pr-16">
       <div className="grid gap-10 @3xl:grid-cols-12 @3xl:items-end @3xl:gap-10">
         <div className="@container min-w-0 @3xl:col-span-3">
           <h2 className="font-display leading-[1.15] text-ink text-[clamp(1.75rem,8cqi,3.25rem)]">

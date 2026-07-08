@@ -50,7 +50,7 @@ function Experience() {
       </div>
 
       {/* Stats */}
-      <div className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 @2xl:grid-cols-4 md:mt-24">
+      <div className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 @2xl:grid-cols-4 md:mt-20">
         {stats.map((stat) => (
           <div key={stat.lines[0]} className="@container min-w-0">
             <p className="font-display leading-none text-ink text-[clamp(1.5rem,15cqi,2.75rem)]">
