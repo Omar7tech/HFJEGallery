@@ -8,7 +8,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             {/* Mobile / tablet fixed brand bar — above the menu panel (z-60).
                 Fixed (not sticky) so scroll-locking the body when the menu
                 opens can't disable it and drop it off-screen. */}
-            <NavBar scrollProgress={false} className="fixed inset-x-0 top-0 z-70 lg:hidden" />
+            <NavBar className="fixed inset-x-0 top-0 z-70 lg:hidden" />
 
             {/* Sidebar + content row */}
             <div className="flex flex-1">
