@@ -1,3 +1,5 @@
+import { SmartImage } from '@/components/smart-image'
+
 interface Project {
   src: string
   alt: string
@@ -41,19 +43,15 @@ function FeaturedProjects() {
         <div className="min-w-0 @3xl:col-span-9">
           <div className="group/collage grid grid-cols-2 gap-3 @3xl:flex @3xl:items-start @3xl:justify-end @3xl:gap-2">
             {projects.map((project) => (
-              <div
+              <SmartImage
                 key={project.src}
-                className={`group relative min-w-0 overflow-hidden ${project.className} @3xl:transition @3xl:duration-500 @3xl:ease-out @3xl:group-hover/collage:opacity-40 @3xl:group-hover/collage:saturate-50 @3xl:hover:!opacity-100 @3xl:hover:-translate-y-1.5 @3xl:hover:!saturate-100 @3xl:hover:shadow-2xl @3xl:hover:shadow-ink/25 motion-reduce:transition-none`}
+                src={project.src}
+                alt={project.alt}
+                className={`group min-w-0 ${project.className} @3xl:transition @3xl:duration-500 @3xl:ease-out @3xl:group-hover/collage:opacity-40 @3xl:group-hover/collage:saturate-50 @3xl:hover:!opacity-100 @3xl:hover:-translate-y-1.5 @3xl:hover:!saturate-100 @3xl:hover:shadow-2xl @3xl:hover:shadow-ink/25 motion-reduce:transition-none`}
+                imgClassName="object-cover transition-transform duration-[600ms] ease-out @3xl:group-hover:scale-[1.06] motion-reduce:transition-none"
               >
-                <img
-                  className="h-full w-full object-cover transition-transform duration-[600ms] ease-out @3xl:group-hover:scale-[1.06] motion-reduce:transition-none"
-                  src={project.src}
-                  alt={project.alt}
-                  loading="lazy"
-                  decoding="async"
-                />
                 <span className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/40 to-transparent opacity-0 transition-opacity duration-500 @3xl:group-hover:opacity-100 motion-reduce:transition-none" />
-              </div>
+              </SmartImage>
             ))}
           </div>
         </div>
