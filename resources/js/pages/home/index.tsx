@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 import Hero from "./sections/hero";
 import Experience from "./sections/experience";
+import FeaturedProjects from "./sections/featured-projects";
 
 export default function Home() {
     return (
@@ -15,6 +16,7 @@ export default function Home() {
             </Head>
             <Hero />
             <Experience />
+            <FeaturedProjects />
         </>
     );
 }
