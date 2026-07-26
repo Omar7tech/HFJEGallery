@@ -73,7 +73,7 @@ function FeaturedProjects() {
     <section className="@container relative w-full overflow-hidden px-6 py-10 font-display md:px-12 md:py-15 lg:pl-0 lg:pr-16">
       {/* Faded architectural background — content sits on top. Fades out toward
           the left so the text side stays clean. */}
-      <SpacesPattern className="pointer-events-none absolute inset-0 -z-0 text-brand/50 [mask-image:linear-gradient(to_left,black,transparent_70%)] [-webkit-mask-image:linear-gradient(to_left,black,transparent_70%)] opacity-[0.12]" />
+      <SpacesPattern className="pointer-events-none absolute inset-0 z-0 text-brand/50 mask-[linear-gradient(to_left,black,transparent_70%)] [-webkit-mask-image:linear-gradient(to_left,black,transparent_70%)] opacity-[0.18]" />
 
       <div className="relative z-10">
         <h2 className="max-w-4xl font-display leading-[1.05] text-ink text-[clamp(2.25rem,9cqi,4.75rem)]">
