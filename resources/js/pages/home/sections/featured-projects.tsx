@@ -1,4 +1,5 @@
 import { SmartImage } from '@/components/smart-image'
+import { motion, useReducedMotion } from 'motion/react'
 
 interface Project {
   src: string
@@ -25,6 +26,8 @@ const projects: Project[] = [
 ]
 
 function FeaturedProjects() {
+  const reduceMotion = useReducedMotion()
+
   return (
     <section className="@container w-full px-6 py-10 font-display md:px-12 md:py-15 lg:pl-0 lg:pr-16">
       <div className="grid gap-10 @3xl:grid-cols-12 @3xl:items-end @3xl:gap-10">
@@ -42,7 +45,7 @@ function FeaturedProjects() {
 
         <div className="min-w-0 @3xl:col-span-9">
           <div className="group/collage grid grid-cols-2 gap-3 @3xl:flex @3xl:items-start @3xl:justify-end @3xl:gap-2">
-            {projects.map((project) => (
+            {projects.map((project, index) => (
               <SmartImage
                 key={project.src}
                 src={project.src}
@@ -51,6 +54,18 @@ function FeaturedProjects() {
                 imgClassName="object-cover transition-transform duration-[600ms] ease-out @3xl:group-hover:scale-[1.06] motion-reduce:transition-none"
               >
                 <span className="pointer-events-none absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-ink/40 to-transparent opacity-0 transition-opacity duration-500 @3xl:group-hover:opacity-100 motion-reduce:transition-none" />
+                <motion.span
+                  aria-hidden
+                  initial={{ scaleY: reduceMotion ? 0 : 1 }}
+                  whileInView={{ scaleY: 0 }}
+                  viewport={{ once: true, margin: '-80px' }}
+                  transition={{
+                    duration: 0.9,
+                    delay: index * 0.12,
+                    ease: [0.76, 0, 0.24, 1],
+                  }}
+                  className="pointer-events-none absolute inset-0 origin-top bg-cream"
+                />
               </SmartImage>
             ))}
           </div>

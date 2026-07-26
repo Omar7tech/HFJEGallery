@@ -1,10 +1,12 @@
 import type { ReactNode } from 'react';
+import Preloader from '@/components/preloader';
 import SiteFooter from '@/components/site-footer';
 import { NavBar, NavSidebar } from '@/components/site-nav';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
     return (
         <div className="flex min-h-dvh flex-col bg-white text-ink max-w-[1600px] mx-auto">
+            <Preloader />
             {/* Mobile / tablet fixed brand bar — above the menu panel (z-60).
                 Fixed (not sticky) so scroll-locking the body when the menu
                 opens can't disable it and drop it off-screen. */}
