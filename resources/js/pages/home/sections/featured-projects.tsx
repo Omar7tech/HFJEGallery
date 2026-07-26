@@ -51,7 +51,7 @@ function FeaturedProjects() {
 
       {/* Collage: one tall image on the left, two stacked on the right.
           Stacks vertically below the @3xl container width. */}
-      <div className="mt-10 flex flex-col gap-4 @3xl:grid @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:grid-rows-[1fr_1fr_1fr_1fr] @3xl:gap-[28px] @3xl:h-[40rem]">
+      <div className="mt-10 flex flex-col gap-4 @3xl:grid @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:grid-rows-[1fr_1fr_1fr_1fr] @3xl:gap-[28px] @3xl:h-[30rem]">
         {projects.map((project) => (
           <SmartImage
             key={project.src}
