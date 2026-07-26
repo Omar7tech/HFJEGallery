@@ -11,6 +11,13 @@
     color-scheme: light;
 }
 
+/* Tailwind v4 preflight sets buttons to cursor:default — restore the pointer
+   for all interactive buttons/links so they read as clickable. */
+button:not(:disabled),
+[role='button']:not([aria-disabled='true']) {
+    cursor: pointer;
+}
+
 /* Slim terracotta scrollbar for capped nav sub-lists (dynamic sub-page counts). */
 .nav-scroll {
     scrollbar-width: thin;
