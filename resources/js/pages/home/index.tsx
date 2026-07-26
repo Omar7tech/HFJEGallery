@@ -16,7 +16,6 @@ export default function Home() {
             </Head>
             <Hero />
             <Experience />
-            {/* <FeaturedProjects /> */}
         </>
     );
 }
