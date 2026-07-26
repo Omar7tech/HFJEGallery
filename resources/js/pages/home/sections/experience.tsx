@@ -24,7 +24,7 @@ function Experience() {
       {/* Image + intro */}
       <div className="grid gap-10 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
         <SmartImage
-          className="aspect-3/2 w-full min-w-0 @3xl:col-span-3 @3xl:aspect-4/3"
+          className="aspect-3/2 w-full min-w-0 rounded-3xl @3xl:col-span-3 @3xl:aspect-4/3"
           imgClassName="object-cover"
           src="/images/contemporary-house-interior-design.webp"
           alt="Sunlit contemporary living room with a large sectional sofa and floor-to-ceiling windows"
