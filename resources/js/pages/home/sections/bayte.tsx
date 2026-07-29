@@ -1,5 +1,5 @@
-import { ArrowRight, Plus } from 'lucide-react'
-import { SmartImage } from '@/components/smart-image'
+import { ArrowRight } from 'lucide-react'
+import BayteProductCard from '@/components/bayte-product-card'
 
 interface Product {
   name: string
@@ -28,19 +28,6 @@ const products: Product[] = [
     alt: 'Round wooden lounge chair with white cushions',
   },
 ]
-
-/**
- * The BAYTÉ wordmark rendered as a mask, so it takes its color from the
- * `bg-*` utility instead of the two fixed fills inside the SVG file.
- */
-function BayteWordmark({ className }: { className?: string }) {
-  return (
-    <span
-      aria-hidden="true"
-      className={`block aspect-[1920/518] bg-brand mask-[url(/logos/bayte.svg)] mask-contain mask-center mask-no-repeat ${className ?? ''}`}
-    />
-  )
-}
 
 function Bayte() {
   return (
@@ -74,37 +61,15 @@ function Bayte() {
         </p>
       </div>
 
-      {/* Product cards */}
       <div className="mt-8 grid gap-4 @xl:grid-cols-3 @2xl:gap-5">
         {products.map((product) => (
-          <article
+          <BayteProductCard
             key={product.src}
-            className="flex flex-col rounded-2xl bg-[#f2f1ef] p-5"
-          >
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <h3 className="leading-none text-ink text-xl">
-                  {product.name}
-                </h3>
-                <p className="mt-2 leading-none text-ink/70 text-xs">
-                  {product.description}
-                </p>
-              </div>
-
-              <span className="grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground">
-                <Plus className="size-4" strokeWidth={2.5} />
-              </span>
-            </div>
-
-            <SmartImage
-              src={product.src}
-              alt={product.alt}
-              className="mt-5 aspect-4/3 w-full"
-              imgClassName="object-contain"
-            />
-
-            <BayteWordmark className="mx-auto mt-5 w-24" />
-          </article>
+            name={product.name}
+            description={product.description}
+            src={product.src}
+            alt={product.alt}
+          />
         ))}
       </div>
 
