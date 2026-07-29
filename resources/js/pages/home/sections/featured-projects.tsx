@@ -1,3 +1,4 @@
+import { ArrowUpRight } from 'lucide-react'
 import { SmartImage } from '@/components/smart-image'
 
 interface Project {
@@ -68,6 +69,41 @@ function SpacesPattern({ className }: { className?: string }) {
   )
 }
 
+/**
+ * Full-width CTA. On hover an ink curtain wipes up from the bottom edge while
+ * the label rolls out of the way and a cream copy — with an arrow — rolls in
+ * behind it. Everything is transform-only, so it stays cheap to animate.
+ */
+function ViewPortfolioButton() {
+  return (
+    <button
+      type="button"
+      className="group relative mt-3 block w-full overflow-hidden rounded-3xl bg-brand py-6 font-medium uppercase tracking-[0.15em] text-brand-foreground text-lg transition-[letter-spacing] duration-500 ease-out hover:tracking-[0.26em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-xl"
+    >
+      {/* Ink curtain — grows from the bottom edge to fill the pill. */}
+      <span
+        aria-hidden="true"
+        className="absolute inset-0 origin-bottom scale-y-0 bg-ink transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-y-100 group-focus-visible:scale-y-100 motion-reduce:transition-none"
+      />
+
+      {/* Two stacked copies of the label; the pair slides up by one line. */}
+      <span className="relative block overflow-hidden">
+        <span className="block text-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full motion-reduce:transition-none">
+          View Portfolio
+        </span>
+
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 flex translate-y-full items-center justify-center gap-3 text-cream transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-focus-visible:translate-y-0 motion-reduce:transition-none"
+        >
+          View Portfolio
+          <ArrowUpRight className="size-[1.1em]" strokeWidth={1.75} />
+        </span>
+      </span>
+    </button>
+  )
+}
+
 function FeaturedProjects() {
   return (
     <section className="@container relative w-full overflow-hidden px-6 py-10 font-display md:px-12 md:py-15 lg:pl-0 lg:pr-16">
@@ -103,12 +139,7 @@ function FeaturedProjects() {
           ))}
         </div>
 
-        <button
-          type="button"
-          className="mt-3 block w-full rounded-3xl bg-brand py-6 text-center font-medium uppercase tracking-[0.15em] text-brand-foreground text-lg @lg:text-xl"
-        >
-          View Portfolio
-        </button>
+        <ViewPortfolioButton />
       </div>
     </section>
   )
