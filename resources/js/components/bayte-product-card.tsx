@@ -60,11 +60,11 @@ export default function BayteProductCard({
       <SmartImage
         src={src}
         alt={alt}
-        className="mt-5 aspect-4/3 w-full"
+        className="mt-4 aspect-3/2 w-full"
         imgClassName="object-contain"
       />
 
-      <BayteWordmark className="mx-auto mt-5 w-24" />
+      <BayteWordmark className="mx-auto mt-4 w-24" />
     </article>
   )
 }
