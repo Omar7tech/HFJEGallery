@@ -91,7 +91,7 @@ function FeaturedProjects() {
             Hovering the tall image widens the first column, so it borrows
             space from the two images on the right; hovering the top banner
             swaps heights with the large image below it (1:3 becomes 3:1). */}
-        <div className="mt-10 flex flex-col gap-4 @3xl:grid @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:grid-rows-[1fr_1fr_1fr_1fr] @3xl:gap-[28px] @3xl:h-[30rem] @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr] @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] motion-reduce:transition-none">
+        <div className="mt-10 flex flex-col gap-4 @3xl:grid @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:grid-rows-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:h-120 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr] @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] motion-reduce:transition-none">
           {projects.map((project) => (
             <SmartImage
               key={project.src}
