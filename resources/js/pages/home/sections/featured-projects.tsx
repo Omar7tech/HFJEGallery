@@ -70,35 +70,21 @@ function SpacesPattern({ className }: { className?: string }) {
 }
 
 /**
- * Full-width CTA. On hover an ink curtain wipes up from the bottom edge while
- * the label rolls out of the way and a cream copy — with an arrow — rolls in
- * behind it. Everything is transform-only, so it stays cheap to animate.
+ * Full-width CTA. Hover just deepens the terracotta and slides an arrow out
+ * from behind the label — the same restrained language as the hero button.
  */
 function ViewPortfolioButton() {
   return (
     <button
       type="button"
-      className="group relative mt-3 block w-full overflow-hidden rounded-3xl bg-brand py-6 font-medium uppercase tracking-[0.15em] text-brand-foreground text-lg transition-[letter-spacing] duration-500 ease-out hover:tracking-[0.26em] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-xl"
+      className="group mt-3 flex w-full items-center justify-center rounded-3xl bg-brand py-6 font-medium uppercase tracking-[0.15em] text-brand-foreground text-lg transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-xl"
     >
-      {/* Ink curtain — grows from the bottom edge to fill the pill. */}
+      View Portfolio
       <span
         aria-hidden="true"
-        className="absolute inset-0 origin-bottom scale-y-0 bg-ink transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-y-100 group-focus-visible:scale-y-100 motion-reduce:transition-none"
-      />
-
-      {/* Two stacked copies of the label; the pair slides up by one line. */}
-      <span className="relative block overflow-hidden">
-        <span className="block text-center transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:-translate-y-full group-focus-visible:-translate-y-full motion-reduce:transition-none">
-          View Portfolio
-        </span>
-
-        <span
-          aria-hidden="true"
-          className="absolute inset-0 flex translate-y-full items-center justify-center gap-3 text-cream transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:translate-y-0 group-focus-visible:translate-y-0 motion-reduce:transition-none"
-        >
-          View Portfolio
-          <ArrowUpRight className="size-[1.1em]" strokeWidth={1.75} />
-        </span>
+        className="inline-flex max-w-0 -translate-x-2 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:ml-3 group-hover:max-w-[1.4em] group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none"
+      >
+        <ArrowUpRight className="size-[1.1em]" strokeWidth={2} />
       </span>
     </button>
   )
