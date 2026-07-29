@@ -15,7 +15,7 @@ const projects: Project[] = [
     src: '/images/gray-stylish-modular-sofa-brick-marble-background-rustic-living-room.webp',
     alt: 'Rustic living room with a low modular sofa, arched mosaic niches and warm textiles',
     className:
-      '@3xl:col-start-1 @3xl:col-end-2 @3xl:row-start-1 @3xl:row-end-5 @3xl:aspect-auto @3xl:h-full',
+      'project-tall @3xl:col-start-1 @3xl:col-end-2 @3xl:row-start-1 @3xl:row-end-5 @3xl:aspect-auto @3xl:h-full',
     mobileClassName: 'aspect-4/5',
   },
   {
@@ -87,8 +87,10 @@ function FeaturedProjects() {
         </p>
 
         {/* Collage: one tall image on the left, two stacked on the right.
-            Stacks vertically below the @3xl container width. */}
-        <div className="mt-10 flex flex-col gap-4 @3xl:grid @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:grid-rows-[1fr_1fr_1fr_1fr] @3xl:gap-[28px] @3xl:h-[30rem]">
+            Stacks vertically below the @3xl container width.
+            Hovering the tall image widens the first column, so it borrows
+            space from the two images on the right. */}
+        <div className="mt-10 flex flex-col gap-4 @3xl:grid @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:grid-rows-[1fr_1fr_1fr_1fr] @3xl:gap-[28px] @3xl:h-[30rem] @3xl:transition-[grid-template-columns] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr] motion-reduce:transition-none">
           {projects.map((project) => (
             <SmartImage
               key={project.src}
