@@ -53,6 +53,7 @@ export function SmartImage({
         alt={alt}
         loading={loading}
         decoding="async"
+        draggable={false}
         fetchPriority={fetchPriority}
         onLoad={() => setLoaded(true)}
         onError={() => setLoaded(true)}

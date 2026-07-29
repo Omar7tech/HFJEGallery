@@ -126,6 +126,7 @@ function Hero() {
             alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
             loading="eager"
             decoding="async"
+            draggable={false}
             fetchPriority="high"
           />
           <motion.img
@@ -163,6 +164,7 @@ function Hero() {
           alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
           loading="eager"
           decoding="async"
+          draggable={false}
           fetchPriority="high"
           onLoad={() => setDayLoaded(true)}
         />
@@ -176,6 +178,7 @@ function Hero() {
           aria-hidden="true"
           loading="eager"
           decoding="async"
+          draggable={false}
           fetchPriority="low"
         />
 

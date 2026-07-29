@@ -40,6 +40,7 @@ function Bayte() {
           className="block w-full"
           loading="lazy"
           decoding="async"
+          draggable={false}
         />
         <p className="mt-3 text-right uppercase tracking-[0.08em] text-ink text-xs @lg:text-sm">
           By HFJE

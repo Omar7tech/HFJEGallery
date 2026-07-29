@@ -18,6 +18,15 @@ button:not(:disabled),
     cursor: pointer;
 }
 
+/* Images are part of the layout, not files to drag out of the page. WebKit and
+   Blink honor this; Firefox needs the `draggable={false}` attribute, which the
+   image components set as well. */
+img,
+svg {
+    -webkit-user-drag: none;
+    user-drag: none;
+}
+
 /* Slim terracotta scrollbar for capped nav sub-lists (dynamic sub-page counts). */
 .nav-scroll {
     scrollbar-width: thin;
