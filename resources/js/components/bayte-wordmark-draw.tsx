@@ -1,0 +1,188 @@
+import { useGSAP } from '@gsap/react'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { useRef } from 'react'
+
+gsap.registerPlugin(useGSAP, ScrollTrigger)
+
+/** Seconds between one letter starting its trace and the next. */
+const LETTER_STAGGER = 0.16
+
+/**
+ * The BAYTÉ wordmark as inline SVG so it can animate on scroll: each letterform
+ * is traced in terracotta outline, then flooded with ink from below, and the
+ * accent over the É snaps in last. Reveals once, and holds its final state for
+ * `prefers-reduced-motion`.
+ *
+ * Kept alongside `bayte-wordmark.tsx` (mask version) — that one is for small
+ * static placements like product cards, this one is the section headline.
+ */
+export default function BayteWordmarkDraw({
+  className,
+}: {
+  className?: string
+}) {
+  const rootRef = useRef<SVGSVGElement>(null)
+
+  useGSAP(
+    () => {
+      const letters = gsap.utils.toArray<SVGPathElement>('.bayte-letter')
+      const accent = rootRef.current!.querySelector('.bayte-accent')
+      const mark = rootRef.current!.querySelector('.bayte-mark')
+
+      /** Final, fully-drawn state — also the reduced-motion state. */
+      const settle = () => {
+        gsap.set(letters, {
+          strokeDashoffset: 0,
+          fillOpacity: 1,
+          strokeOpacity: 0,
+          y: 0,
+        })
+        gsap.set([accent, mark], { opacity: 1, scale: 1, x: 0, y: 0, rotation: 0 })
+      }
+
+      const mm = gsap.matchMedia()
+
+      mm.add('(prefers-reduced-motion: reduce)', settle)
+
+      mm.add('(prefers-reduced-motion: no-preference)', () => {
+        // Park everything before the first paint: outlines undrawn, fills off.
+        letters.forEach((letter) => {
+          const length = letter.getTotalLength()
+
+          gsap.set(letter, {
+            strokeDasharray: length,
+            strokeDashoffset: length,
+            fillOpacity: 0,
+            strokeOpacity: 1,
+            y: 26,
+          })
+        })
+        gsap.set(accent, {
+          opacity: 0,
+          x: 70,
+          y: -150,
+          rotation: -30,
+          scale: 0.5,
+          transformOrigin: 'center',
+        })
+        gsap.set(mark, { opacity: 0, scale: 0.6, transformOrigin: 'center' })
+
+        const tl = gsap.timeline({
+          defaults: { ease: 'power2.out' },
+          scrollTrigger: {
+            trigger: rootRef.current,
+            start: 'top 85%',
+            once: true,
+          },
+        })
+
+        letters.forEach((letter, index) => {
+          const at = index * LETTER_STAGGER
+
+          tl.to(
+            letter,
+            { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' },
+            at,
+          )
+            .to(letter, { y: 0, duration: 1, ease: 'power3.out' }, at)
+            // Ink floods the traced outline, which then fades out from under it.
+            .to(letter, { fillOpacity: 1, duration: 0.55 }, at + 0.6)
+            .to(letter, { strokeOpacity: 0, duration: 0.7 }, at + 0.8)
+        })
+
+        const afterLetters = letters.length * LETTER_STAGGER
+
+        tl.to(
+          accent,
+          {
+            opacity: 1,
+            x: 0,
+            y: 0,
+            rotation: 0,
+            scale: 1,
+            duration: 0.9,
+            ease: 'back.out(2.2)',
+          },
+          afterLetters + 0.35,
+        ).to(
+          mark,
+          { opacity: 1, scale: 1, duration: 0.5 },
+          afterLetters + 0.75,
+        )
+
+        // Gentle scroll-linked drift so the wordmark keeps breathing after the
+        // reveal instead of sitting dead on the page.
+        const drift = gsap.fromTo(
+          rootRef.current,
+          { yPercent: 3 },
+          {
+            yPercent: -3,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: rootRef.current,
+              start: 'top bottom',
+              end: 'bottom top',
+              scrub: 0.6,
+            },
+          },
+        )
+
+        return () => {
+          drift.scrollTrigger?.kill()
+          drift.kill()
+        }
+      })
+
+      return () => mm.revert()
+    },
+    { scope: rootRef },
+  )
+
+  return (
+    <svg
+      ref={rootRef}
+      viewBox="0 0 1920.71 517.9"
+      role="img"
+      aria-label="BAYTÉ"
+      className={className}
+      style={{
+        fill: 'var(--color-ink)',
+        stroke: 'var(--color-brand)',
+        strokeWidth: 3,
+        strokeLinejoin: 'round',
+      }}
+    >
+      <path
+        className="bayte-letter"
+        d="M402.39,402.7c-1-9.45-3.02-18.14-6.1-26.11-2.59-6.7-5.94-12.9-9.98-18.54-4.64-6.47-10.48-11.81-17.55-15.99-10.08-6.07-22.59-9.85-37.58-11.34,19.5-1.36,33.97-8.69,43.42-22.06,9.45-13.33,14.16-30.22,14.16-50.62,0-22.66-4.01-40.17-12.04-52.54-8.03-12.37-20.4-21-37.12-25.87-16.72-4.84-38.11-7.3-64.22-7.3H0v345.57h256.24c3.42,0,6.73-.03,9.98-.07,19.84-.23,37.18-1.26,52.05-3.02,3.08-.36,6.07-.76,8.96-1.19,18.97-2.85,34-7.93,45.11-15.19,11.11-7.26,19.01-17.51,23.75-30.72,2.95-8.23,4.98-17.91,6.07-29.02.66-6.67.99-13.87.99-21.59,0-4.98-.23-9.79-.76-14.4ZM43.19,208.32h232.19c17.85,0,31.88,1,42.06,2.92,10.22,1.96,17.45,6.47,21.73,13.5,4.25,7.07,6.4,18.14,6.4,33.3,0,19.34-3.62,33.07-10.81,41.16s-18.21,12.97-33.07,14.63c-14.83,1.66-33.9,2.49-57.12,2.49H43.19v-108ZM355.26,453.45c-2.65,7.4-6.97,13.1-12.87,17.08-1.09.8-2.25,1.49-3.45,2.12-7.73,4.08-18.31,6.6-31.71,7.66-5.91.46-12.47.83-19.74,1.09-9.29.33-19.7.5-31.25.5H43.19v-129.6h201.38c16.02,0,31.05.43,44.98,1.36,13.96.9,26.2,3.28,36.79,7.2,9.19,3.38,16.59,8.62,22.29,15.72.86,1.09,1.66,2.22,2.45,3.38,5.94,8.86,8.89,21.23,8.89,37.12,0,9.39-.6,17.55-1.76,24.45-.73,4.48-1.73,8.43-2.95,11.91Z"
+      />
+      <path
+        className="bayte-letter"
+        d="M746.61,517.9h-50.39l-43.19-79.21h-231.2c.66-6.67.99-13.87.99-21.59,0-4.98-.23-9.79-.76-14.4h209.34l-115.17-201.58-100.28,175.47c-2.59-6.7-5.94-12.9-9.98-18.54-4.64-6.47-10.48-11.81-17.55-15.99l99.01-169.73h57.58l201.58,345.57Z"
+      />
+      <path
+        className="bayte-letter"
+        d="M805.46,517.89v-143.98l-194.37-201.58h57.59l158.38,169.18,158.38-169.18h57.59l-194.37,201.58v143.98h-43.2Z"
+      />
+      <path
+        className="bayte-letter"
+        d="M1166.38,517.89v-233.84c0-41.82-33.9-75.72-75.72-75.72h-97.06v-36h388.76v36h-172.78v309.56h-43.19Z"
+      />
+      <path
+        className="bayte-letter"
+        d="M1382.35,400.91v-228.58h339.26v36h-296.07v115.19h283.69v36h-283.69v122.39h495.16v36h-421.38c-64.61,0-116.98-52.37-116.98-116.98Z"
+      />
+      <polygon
+        className="bayte-accent"
+        points="1503.84 129.59 1489.44 107.99 1619.02 0 1645.57 38.7 1503.84 129.59"
+        style={{ fill: 'var(--color-brand)', stroke: 'none' }}
+      />
+      <path
+        className="bayte-mark"
+        d="M1778.99,161.41c7.94,0,14.75,2.84,20.45,8.53,5.7,5.69,8.55,12.52,8.55,20.51s-2.84,14.83-8.51,20.53c-5.67,5.7-12.51,8.55-20.49,8.55s-14.87-2.84-20.57-8.53c-5.7-5.69-8.55-12.54-8.55-20.55s2.86-14.85,8.57-20.53c5.71-5.68,12.56-8.51,20.55-8.51ZM1778.91,214.76c6.65,0,12.36-2.38,17.12-7.14,4.76-4.76,7.14-10.48,7.14-17.16s-2.37-12.38-7.13-17.12c-4.75-4.74-10.46-7.11-17.14-7.11s-12.38,2.37-17.12,7.11c-4.74,4.74-7.11,10.44-7.11,17.12s2.37,12.4,7.11,17.16c4.74,4.76,10.44,7.14,17.12,7.14ZM1792.01,206.56h-5.78l-2.42-6.82c-1.47-4.08-4.23-6.13-8.28-6.13h-3.97v12.94h-5.05v-31.24h11.75c8.27,0,12.4,2.86,12.4,8.59s-2.71,8.49-8.13,8.9c2.77.85,4.83,2.82,6.16,5.93l3.31,7.82ZM1771.56,189.26h6.32c4.96,0,7.43-1.63,7.43-4.89s-2.56-4.81-7.67-4.81h-6.08v9.7Z"
+        style={{ stroke: 'none' }}
+      />
+    </svg>
+  )
+}

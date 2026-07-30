@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import BayteProductCard from '@/components/bayte-product-card'
+import BayteWordmarkDraw from '@/components/bayte-wordmark-draw'
 
 interface Product {
   name: string
@@ -34,14 +35,7 @@ function Bayte() {
     <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pl-0 lg:pr-16">
       {/* Wordmark, with the "BY HFJE" endorsement tucked under its right edge. */}
       <div className="w-full max-w-3xl @3xl:w-[78%]">
-        <img
-          src="/logos/bayte.svg"
-          alt="BAYTÉ"
-          className="block w-full"
-          loading="lazy"
-          decoding="async"
-          draggable={false}
-        />
+        <BayteWordmarkDraw className="block w-full" />
         <p className="mt-3 text-right uppercase tracking-[0.08em] text-ink text-xs @lg:text-sm">
           By HFJE
         </p>
