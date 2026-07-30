@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { motion, useReducedMotion, type Variants } from 'motion/react';
 
 /** Resting opacity of the filled monogram — a soft watermark, not solid ink. */
-const FILL_OPACITY = 0.14;
+const FILL_OPACITY = 0.2;
 
 const container: Variants = {
     hidden: {},
@@ -42,7 +42,10 @@ export default function FooterMonogram({ className }: { className?: string }) {
             viewBox="0 0 1077.96 314.14"
             role="img"
             aria-label="HFJE"
-            className={cn('h-auto w-full overflow-visible fill-ink stroke-ink/40', className)}
+            className={cn(
+                'h-auto w-full overflow-visible fill-current stroke-current',
+                className,
+            )}
             variants={reduceMotion ? undefined : container}
             initial={reduceMotion ? false : 'hidden'}
             whileInView={reduceMotion ? undefined : 'visible'}
@@ -53,6 +56,7 @@ export default function FooterMonogram({ className }: { className?: string }) {
                     key={letter.d}
                     d={letter.d}
                     strokeWidth={1.5}
+                    strokeOpacity={0.45}
                     vectorEffect="non-scaling-stroke"
                     variants={reduceMotion ? undefined : glyph}
                     style={reduceMotion ? { fillOpacity: FILL_OPACITY } : undefined}

@@ -35,7 +35,7 @@ const columns: { title: string; links: FooterLink[] }[] = [
 ];
 
 function FooterLinkItem({ link }: { link: FooterLink }) {
-    const className = 'text-sm text-ink/70 transition-colors hover:text-brand';
+    const className = 'text-sm text-cream/70 transition-colors hover:text-white';
 
     if (link.external) {
         return (
@@ -54,8 +54,9 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
 
 /**
  * Full-width site footer. A normal, in-flow footer reached at the end of the
- * page — independent of the sidebar and page content. Sits on a warm tint to
- * separate it from the page, and closes with an oversized HFJE monogram.
+ * page — independent of the sidebar and page content. Sits on solid brand
+ * terracotta to separate it from the page, and closes with an oversized HFJE
+ * monogram.
  */
 export default function SiteFooter({ className }: { className?: string }) {
     const year = new Date().getFullYear();
@@ -63,28 +64,28 @@ export default function SiteFooter({ className }: { className?: string }) {
     return (
         <footer
             className={cn(
-                'flex min-h-dvh flex-col overflow-hidden bg-[#f4ede3] text-ink',
+                'flex min-h-dvh flex-col overflow-hidden bg-brand text-cream',
                 className,
             )}
         >
-            {/* Brand-tinted hairline marks the top edge of the footer. */}
+            {/* Warm hairline marks the top edge of the footer. */}
             <div
                 aria-hidden
-                className="h-0.5 w-full bg-gradient-to-r from-brand/0 via-brand/50 to-brand/0"
+                className="h-0.5 w-full bg-gradient-to-r from-cream/0 via-cream/60 to-cream/0"
             />
 
             <div className="mx-auto grid w-full max-w-7xl gap-12 px-6 pt-16 pb-12 sm:px-10 md:grid-cols-2 md:gap-16">
                 {/* CTA */}
                 <div className="max-w-md">
-                    <p className="font-display text-2xl leading-snug text-ink sm:text-3xl">
+                    <p className="font-display text-2xl leading-snug text-white sm:text-3xl">
                         Let&rsquo;s craft something around you.
                     </p>
-                    <p className="mt-4 text-sm leading-relaxed text-ink/60">
+                    <p className="mt-4 text-sm leading-relaxed text-cream/70">
                         Homes designed around the people who live in them.
                     </p>
                     <Link
                         href="/contact"
-                        className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-brand transition-colors hover:text-brand-hover"
+                        className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:text-cream"
                     >
                         Start a project
                         <ArrowRight
@@ -98,7 +99,7 @@ export default function SiteFooter({ className }: { className?: string }) {
                 <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
                     {columns.map((column) => (
                         <div key={column.title}>
-                            <h3 className="font-display text-xs uppercase tracking-[0.2em] text-ink">
+                            <h3 className="font-display text-xs uppercase tracking-[0.2em] text-white">
                                 {column.title}
                             </h3>
                             <ul className="mt-4 flex flex-col gap-3">
@@ -117,14 +118,14 @@ export default function SiteFooter({ className }: { className?: string }) {
                 the full-height footer. */}
             <div className="grow" />
 
-            <div className="border-t border-ink/10">
-                <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-ink/60 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+            <div className="border-t border-cream/20">
+                <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-cream/60 sm:flex-row sm:items-center sm:justify-between sm:px-10">
                     <p>© {year} Home Fashion Jamaleddine. All rights reserved.</p>
                     <div className="flex gap-5">
-                        <Link href="/privacy" className="transition-colors hover:text-brand">
+                        <Link href="/privacy" className="transition-colors hover:text-white">
                             Privacy
                         </Link>
-                        <Link href="/terms" className="transition-colors hover:text-brand">
+                        <Link href="/terms" className="transition-colors hover:text-white">
                             Terms
                         </Link>
                     </div>
