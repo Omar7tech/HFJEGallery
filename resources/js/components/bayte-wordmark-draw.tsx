@@ -1,12 +1,18 @@
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { useRef } from 'react'
 
-gsap.registerPlugin(useGSAP, ScrollTrigger)
+gsap.registerPlugin(useGSAP)
 
-/** Seconds between one letter starting its trace and the next. */
-const LETTER_STAGGER = 0.16
+/**
+ * Seconds between one letter starting its trace and the next. Tracing a dashed
+ * stroke is a main-thread repaint, so this is deliberately wide enough that
+ * only two or three letterforms are ever repainting on the same frame.
+ */
+const LETTER_STAGGER = 0.2
+
+/** How far down the viewport the wordmark must come before the reveal starts. */
+const REVEAL_MARGIN = '0px 0px -15% 0px'
 
 /**
  * The BAYTÉ wordmark as inline SVG so it can animate on scroll: each letterform
@@ -68,12 +74,19 @@ export default function BayteWordmarkDraw({
         })
         gsap.set(mark, { opacity: 0, scale: 0.6, transformOrigin: 'center' })
 
+        const root = rootRef.current!
+
         const tl = gsap.timeline({
+          paused: true,
           defaults: { ease: 'power2.out' },
-          scrollTrigger: {
-            trigger: rootRef.current,
-            start: 'top 85%',
-            once: true,
+          // Give the wordmark its own compositing layer for the duration of the
+          // reveal so the stroke repaints stay inside it, then hand the memory
+          // back — a permanent layer for a one-shot animation isn't worth it.
+          onStart: () => {
+            root.style.willChange = 'transform'
+          },
+          onComplete: () => {
+            root.style.willChange = ''
           },
         })
 
@@ -82,7 +95,7 @@ export default function BayteWordmarkDraw({
 
           tl.to(
             letter,
-            { strokeDashoffset: 0, duration: 1.2, ease: 'power1.inOut' },
+            { strokeDashoffset: 0, duration: 1.05, ease: 'power1.inOut' },
             at,
           )
             .to(letter, { y: 0, duration: 1, ease: 'power3.out' }, at)
@@ -111,26 +124,26 @@ export default function BayteWordmarkDraw({
           afterLetters + 0.75,
         )
 
-        // Gentle scroll-linked drift so the wordmark keeps breathing after the
-        // reveal instead of sitting dead on the page.
-        const drift = gsap.fromTo(
-          rootRef.current,
-          { yPercent: 3 },
-          {
-            yPercent: -3,
-            ease: 'none',
-            scrollTrigger: {
-              trigger: rootRef.current,
-              start: 'top bottom',
-              end: 'bottom top',
-              scrub: 0.6,
-            },
+        // A one-shot on-enter reveal needs no scroll handler and no
+        // ScrollTrigger — IntersectionObserver fires it off the main thread and
+        // then disconnects, leaving nothing running for the rest of the page.
+        const observer = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting) {
+              return
+            }
+
+            observer.disconnect()
+            tl.play()
           },
+          { rootMargin: REVEAL_MARGIN },
         )
 
+        observer.observe(root)
+
         return () => {
-          drift.scrollTrigger?.kill()
-          drift.kill()
+          observer.disconnect()
+          root.style.willChange = ''
         }
       })
 
