@@ -26,7 +26,7 @@ function Experience() {
         <SmartImage
           className="aspect-3/2 w-full min-w-0 rounded-3xl @3xl:col-span-3 @3xl:aspect-4/3"
           imgClassName="object-cover"
-          src="/images/contemporary-house-interior-design.webp"
+          src="/images/contemporary-house-interior-design-w1600.webp"
           alt="Sunlit contemporary living room with a large sectional sofa and floor-to-ceiling windows"
         />
 

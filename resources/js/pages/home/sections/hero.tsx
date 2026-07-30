@@ -127,7 +127,7 @@ function Hero() {
         >
           <img
             className="absolute inset-0 h-full w-full object-cover"
-            src="/images/potted-plant-table.webp"
+            src="/images/potted-plant-table-w2400.webp"
             alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
             loading="eager"
             decoding="async"
@@ -137,7 +137,7 @@ function Hero() {
           <motion.img
             style={{ opacity: mobileNightOpacity }}
             className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-            src="/images/potted-plant-table-night.png"
+            src="/images/potted-plant-table-night-w1535.webp"
             alt=""
             aria-hidden="true"
             loading="eager"
@@ -165,7 +165,7 @@ function Hero() {
           className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${
             dayLoaded ? 'opacity-100' : 'opacity-0'
           }`}
-          src="/images/potted-plant-table.webp"
+          src="/images/potted-plant-table-w2400.webp"
           alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
           loading="eager"
           decoding="async"
@@ -178,7 +178,7 @@ function Hero() {
         <motion.img
           style={{ opacity: nightOpacity }}
           className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-          src="/images/potted-plant-table-night.png"
+          src="/images/potted-plant-table-night-w1535.webp"
           alt=""
           aria-hidden="true"
           loading="eager"

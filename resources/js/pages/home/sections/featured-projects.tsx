@@ -11,19 +11,19 @@ interface Project {
 const projects: Project[] = [
   {
     // Tall image — first column, full height.
-    src: '/images/gray-stylish-modular-sofa-brick-marble-background-rustic-living-room.webp',
+    src: '/images/gray-stylish-modular-sofa-brick-marble-background-rustic-living-room-w1600.webp',
     alt: 'Rustic living room with a low modular sofa, arched mosaic niches and warm textiles',
     className: 'project-tall col-start-1 col-end-2 row-start-1 row-end-5',
   },
   {
     // Short banner — top-right, one row.
-    src: '/images/modern-living-room-interior-design (1).webp',
+    src: '/images/modern-living-room-interior-design (1)-w1600.webp',
     alt: 'Double-height modern living room with a sectional sofa and a wood-burning fireplace',
     className: 'project-banner col-start-2 col-end-5 row-start-1 row-end-2',
   },
   {
     // Large image — bottom-right, fills the remaining rows.
-    src: '/images/modern-living-room-interior-design.webp',
+    src: '/images/modern-living-room-interior-design-w1600.webp',
     alt: 'Sunlit contemporary lounge with a sectional sofa, low table and forest views',
     className: 'col-start-2 col-end-5 row-start-2 row-end-5',
   },
@@ -85,9 +85,8 @@ function ViewPortfolioButton() {
 function FeaturedProjects() {
   return (
     <section className="@container relative w-full overflow-hidden px-6 py-10 font-display md:px-12 md:py-15 lg:pl-0 lg:pr-16">
-      {/* Faded architectural background — content sits on top. Fades out toward
-          the left so the text side stays clean. */}
-      <SpacesPattern className="pointer-events-none absolute inset-0 z-0 text-brand/50 mask-[radial-gradient(120%_120%_at_top_right,black,transparent_65%)] [-webkit-mask-image:radial-gradient(120%_120%_at_top_right,black,transparent_65%)] opacity-[0.18]" />
+
+      <SpacesPattern className="pointer-events-none absolute inset-0 z-0 transform-gpu text-brand/50 mask-[radial-gradient(120%_120%_at_top_right,black,transparent_65%)] [-webkit-mask-image:radial-gradient(120%_120%_at_top_right,black,transparent_65%)] opacity-[0.18]" />
 
       <div className="relative z-10">
         <h2 className="max-w-4xl font-display leading-[1.05] text-ink text-[clamp(2.25rem,9cqi,4.75rem)]">
@@ -100,13 +99,7 @@ function FeaturedProjects() {
           crafted around each client's lifestyle.
         </p>
 
-        {/* Collage: one tall image on the left, two stacked on the right. Same
-            arrangement at every width — small screens just get a wider first
-            column and a squatter box so the tall image doesn't become a sliver.
-            Hovering the tall image widens the first column, so it borrows
-            space from the two images on the right; hovering the top banner
-            swaps heights with the large image below it (1:3 becomes 3:1). */}
-        <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 @3xl:aspect-auto @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:h-120 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr] @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] motion-reduce:transition-none">
+        <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 contain-[layout_paint] @3xl:aspect-auto @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:h-120 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr] @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] motion-reduce:transition-none">
           {projects.map((project) => (
             <SmartImage
               key={project.src}

@@ -12,7 +12,7 @@ export default function Home() {
                 <link
                     rel="preload"
                     as="image"
-                    href="/images/potted-plant-table.webp"
+                    href="/images/potted-plant-table-w2400.webp"
                     fetchPriority="high"
                 />
             </Head>
