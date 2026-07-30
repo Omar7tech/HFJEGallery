@@ -2,8 +2,8 @@ import { glyphs } from '@/components/logo';
 import { cn } from '@/lib/utils';
 import { motion, useReducedMotion, type Variants } from 'motion/react';
 
-/** Resting opacity of the filled monogram — a soft watermark, not solid ink. */
-const FILL_OPACITY = 0.2;
+/** Resting opacity of the filled monogram — solid white on the brand footer. */
+const FILL_OPACITY = 1;
 
 const container: Variants = {
     hidden: {},
@@ -56,7 +56,7 @@ export default function FooterMonogram({ className }: { className?: string }) {
                     key={letter.d}
                     d={letter.d}
                     strokeWidth={1.5}
-                    strokeOpacity={0.45}
+                    strokeOpacity={1}
                     vectorEffect="non-scaling-stroke"
                     variants={reduceMotion ? undefined : glyph}
                     style={reduceMotion ? { fillOpacity: FILL_OPACITY } : undefined}
