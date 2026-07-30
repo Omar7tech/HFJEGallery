@@ -58,17 +58,22 @@ function Headline({
   )
 }
 
-/** The "EXPLORE OUR WORK" pill with the arrow that slides out on hover. */
+/**
+ * The "EXPLORE OUR WORK" CTA. On mobile it's a full-width rounded pill with the
+ * arrow always showing — there's no hover on touch. From `lg` it becomes the
+ * squared-off bar that bleeds off the right edge of the desktop hero, and the
+ * arrow slides out on hover instead.
+ */
 function ExploreButton({ className }: { className?: string }) {
   return (
     <button
       type="button"
-      className={`group inline-flex items-center bg-brand py-4 pl-8 pr-12 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-[background-color,letter-spacing] duration-300 ease-out hover:bg-brand-hover hover:tracking-[0.26em] motion-reduce:transition-none sm:text-base ${className ?? ''}`}
+      className={`group flex w-full items-center justify-center rounded-full bg-brand px-8 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-brand-foreground transition-[background-color,letter-spacing] duration-300 ease-out active:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none sm:text-base lg:inline-flex lg:w-auto lg:justify-start lg:rounded-none lg:py-4 lg:pl-8 lg:pr-12 lg:hover:bg-brand-hover lg:hover:tracking-[0.26em] ${className ?? ''}`}
     >
       EXPLORE OUR WORK
       <span
         aria-hidden="true"
-        className="inline-flex max-w-0 -translate-x-2 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:ml-3 group-hover:max-w-[1.5rem] group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none"
+        className="ml-3 inline-flex max-w-[1.5rem] overflow-hidden transition-all duration-300 ease-out lg:ml-0 lg:max-w-0 lg:-translate-x-2 lg:opacity-0 lg:group-hover:ml-3 lg:group-hover:max-w-[1.5rem] lg:group-hover:translate-x-0 lg:group-hover:opacity-100 motion-reduce:transition-none"
       >
         <ArrowRight className="size-5" strokeWidth={2.5} />
       </span>
@@ -118,7 +123,7 @@ function Hero() {
             image's own scroll position. */}
         <div
           ref={mobileImageRef}
-          className="relative mt-8 aspect-3/2 w-full overflow-hidden"
+          className="relative mt-8 aspect-3/2 w-full overflow-hidden rounded-3xl"
         >
           <img
             className="absolute inset-0 h-full w-full object-cover"
@@ -200,7 +205,7 @@ function Hero() {
             the people who live in them.
           </motion.p>
 
-          <ExploreButton className="-mr-12 pr-12 lg:-mr-16 lg:pr-20" />
+          <ExploreButton className="lg:-mr-16 lg:pr-20" />
         </div>
       </section>
     </>
