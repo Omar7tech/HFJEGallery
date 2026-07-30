@@ -35,7 +35,7 @@ const columns: { title: string; links: FooterLink[] }[] = [
 ];
 
 function FooterLinkItem({ link }: { link: FooterLink }) {
-    const className = 'text-sm text-cream/70 transition-colors hover:text-white';
+    const className = 'text-base text-cream/70 transition-colors hover:text-white';
 
     if (link.external) {
         return (
@@ -99,7 +99,7 @@ export default function SiteFooter({ className }: { className?: string }) {
                 <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
                     {columns.map((column) => (
                         <div key={column.title}>
-                            <h3 className="font-display text-xs uppercase tracking-[0.2em] text-white">
+                            <h3 className="font-display text-sm uppercase tracking-[0.2em] text-white">
                                 {column.title}
                             </h3>
                             <ul className="mt-4 flex flex-col gap-3">
@@ -119,7 +119,7 @@ export default function SiteFooter({ className }: { className?: string }) {
             <div className="grow" />
 
             <div className="border-t border-cream/20">
-                <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-xs text-cream/60 sm:flex-row sm:items-center sm:justify-between sm:px-10">
+                <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-sm text-cream/60 sm:flex-row sm:items-center sm:justify-between sm:px-10">
                     <p>© {year} Home Fashion Jamaleddine. All rights reserved.</p>
                     <div className="flex gap-5">
                         <Link href="/privacy" className="transition-colors hover:text-white">
