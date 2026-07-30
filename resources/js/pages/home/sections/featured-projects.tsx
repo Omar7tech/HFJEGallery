@@ -4,10 +4,8 @@ import { SmartImage } from '@/components/smart-image'
 interface Project {
   src: string
   alt: string
-  /** Placement inside the desktop collage grid. */
+  /** Placement inside the collage grid — identical at every width. */
   className: string
-  /** Aspect ratio used when the images stack on small screens. */
-  mobileClassName: string
 }
 
 const projects: Project[] = [
@@ -15,25 +13,19 @@ const projects: Project[] = [
     // Tall image — first column, full height.
     src: '/images/gray-stylish-modular-sofa-brick-marble-background-rustic-living-room.webp',
     alt: 'Rustic living room with a low modular sofa, arched mosaic niches and warm textiles',
-    className:
-      'project-tall @3xl:col-start-1 @3xl:col-end-2 @3xl:row-start-1 @3xl:row-end-5 @3xl:aspect-auto @3xl:h-full',
-    mobileClassName: 'aspect-4/5',
+    className: 'project-tall col-start-1 col-end-2 row-start-1 row-end-5',
   },
   {
     // Short banner — top-right, one row.
     src: '/images/modern-living-room-interior-design (1).webp',
     alt: 'Double-height modern living room with a sectional sofa and a wood-burning fireplace',
-    className:
-      'project-banner @3xl:col-start-2 @3xl:col-end-5 @3xl:row-start-1 @3xl:row-end-2 @3xl:aspect-auto @3xl:h-full',
-    mobileClassName: 'aspect-16/7',
+    className: 'project-banner col-start-2 col-end-5 row-start-1 row-end-2',
   },
   {
     // Large image — bottom-right, fills the remaining rows.
     src: '/images/modern-living-room-interior-design.webp',
     alt: 'Sunlit contemporary lounge with a sectional sofa, low table and forest views',
-    className:
-      '@3xl:col-start-2 @3xl:col-end-5 @3xl:row-start-2 @3xl:row-end-5 @3xl:aspect-auto @3xl:h-full',
-    mobileClassName: 'aspect-3/2',
+    className: 'col-start-2 col-end-5 row-start-2 row-end-5',
   },
 ]
 
@@ -108,18 +100,19 @@ function FeaturedProjects() {
           crafted around each client's lifestyle.
         </p>
 
-        {/* Collage: one tall image on the left, two stacked on the right.
-            Stacks vertically below the @3xl container width.
+        {/* Collage: one tall image on the left, two stacked on the right. Same
+            arrangement at every width — small screens just get a wider first
+            column and a squatter box so the tall image doesn't become a sliver.
             Hovering the tall image widens the first column, so it borrows
             space from the two images on the right; hovering the top banner
             swaps heights with the large image below it (1:3 becomes 3:1). */}
-        <div className="mt-10 flex flex-col gap-4 @3xl:grid @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:grid-rows-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:h-120 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr] @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] motion-reduce:transition-none">
+        <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 @3xl:aspect-auto @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:h-120 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr] @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] motion-reduce:transition-none">
           {projects.map((project) => (
             <SmartImage
               key={project.src}
               src={project.src}
               alt={project.alt}
-              className={`min-w-0 rounded-3xl ${project.mobileClassName} ${project.className}`}
+              className={`h-full min-w-0 rounded-2xl @3xl:rounded-3xl ${project.className}`}
               imgClassName="object-cover"
             />
           ))}
