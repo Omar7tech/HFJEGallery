@@ -6,10 +6,13 @@ gsap.registerPlugin(useGSAP)
 
 /**
  * Seconds between one letter starting its trace and the next. Tracing a dashed
- * stroke is a main-thread repaint, so this is deliberately wide enough that
- * only two or three letterforms are ever repainting on the same frame.
+ * stroke is a main-thread repaint, so keep this close to the trace duration
+ * below — the ratio between them is how many letterforms repaint per frame.
  */
-const LETTER_STAGGER = 0.2
+const LETTER_STAGGER = 0.18
+
+/** How long one letterform takes to trace itself. */
+const LETTER_TRACE = 0.7
 
 /** How far down the viewport the wordmark must come before the reveal starts. */
 const REVEAL_MARGIN = '0px 0px -15% 0px'
@@ -95,13 +98,13 @@ export default function BayteWordmarkDraw({
 
           tl.to(
             letter,
-            { strokeDashoffset: 0, duration: 1.05, ease: 'power1.inOut' },
+            { strokeDashoffset: 0, duration: LETTER_TRACE, ease: 'power1.inOut' },
             at,
           )
-            .to(letter, { y: 0, duration: 1, ease: 'power3.out' }, at)
+            .to(letter, { y: 0, duration: 0.7, ease: 'power3.out' }, at)
             // Ink floods the traced outline, which then fades out from under it.
-            .to(letter, { fillOpacity: 1, duration: 0.55 }, at + 0.6)
-            .to(letter, { strokeOpacity: 0, duration: 0.7 }, at + 0.8)
+            .to(letter, { fillOpacity: 1, duration: 0.4 }, at + 0.4)
+            .to(letter, { strokeOpacity: 0, duration: 0.5 }, at + 0.55)
         })
 
         const afterLetters = letters.length * LETTER_STAGGER
@@ -114,15 +117,11 @@ export default function BayteWordmarkDraw({
             y: 0,
             rotation: 0,
             scale: 1,
-            duration: 0.9,
+            duration: 0.7,
             ease: 'back.out(2.2)',
           },
-          afterLetters + 0.35,
-        ).to(
-          mark,
-          { opacity: 1, scale: 1, duration: 0.5 },
-          afterLetters + 0.75,
-        )
+          afterLetters + 0.25,
+        ).to(mark, { opacity: 1, scale: 1, duration: 0.4 }, afterLetters + 0.5)
 
         // A one-shot on-enter reveal needs no scroll handler and no
         // ScrollTrigger — IntersectionObserver fires it off the main thread and
