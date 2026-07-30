@@ -1,8 +1,9 @@
 import { Head } from '@inertiajs/react';
-import Hero from "./sections/hero";
+import Bayte from "./sections/bayte";
+import Curtains from "./sections/curtains";
 import Experience from "./sections/experience";
 import FeaturedProjects from "./sections/featured-projects";
-import Bayte from "./sections/bayte";
+import Hero from "./sections/hero";
 
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
             <Experience />
             <FeaturedProjects />
             <Bayte />
+            <Curtains />
         </>
     );
 }
