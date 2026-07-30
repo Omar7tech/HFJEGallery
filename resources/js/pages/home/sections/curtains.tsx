@@ -21,17 +21,20 @@ const gallery: Shot[] = [
   },
 ]
 
-/**
- * Static for now — each will filter the gallery once the curtain content comes
- * from the backend, so the selection is already real state.
- */
-const tabs = ['Curtain Styles', 'Projects', 'Fabric Library']
+interface Action {
+  label: string
+  /** Solid terracotta instead of soft cream — one per row. */
+  filled?: boolean
+}
 
-const DEFAULT_TAB = 'Projects'
+/** Plain buttons for now; behaviour to come. */
+const actions: Action[] = [
+  { label: 'Curtain Styles' },
+  { label: 'Projects', filled: true },
+  { label: 'Fabric Library' },
+]
 
 function Curtains() {
-  const [activeTab, setActiveTab] = useState(DEFAULT_TAB)
-
   return (
     <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pl-0 lg:pr-16">
       <h2 className="max-w-4xl font-display leading-[1.05] text-ink text-[clamp(2rem,8cqi,3.5rem)]">
@@ -64,29 +67,23 @@ function Curtains() {
         ))}
       </div>
 
-      {/* Selected tab sits proud of the row: solid terracotta, sized to its
-          label, while the others share the remaining width. */}
+      {/* The terracotta button sits proud of the row and is sized to its label,
+          while the others share the remaining width. */}
       <div className="mt-3 flex flex-col gap-3 @lg:flex-row @lg:items-stretch @lg:gap-4">
-        {tabs.map((tab) => {
-          const isActive = tab === activeTab
-
-          return (
-            <button
-              key={tab}
-              type="button"
-              aria-pressed={isActive}
-              onClick={() => setActiveTab(tab)}
-              className={cn(
-                'rounded-2xl tracking-[0.02em] transition-colors duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:rounded-3xl @lg:text-lg',
-                isActive
-                  ? 'bg-brand py-6 text-brand-foreground shadow-[0_12px_34px_rgba(166,94,60,0.22)] hover:bg-brand-hover @lg:-my-1 @lg:shrink-0 @lg:px-14'
-                  : 'bg-cream/40 py-5 text-brand hover:bg-cream/70 @lg:flex-1',
-              )}
-            >
-              {tab}
-            </button>
-          )
-        })}
+        {actions.map((action) => (
+          <button
+            key={action.label}
+            type="button"
+            className={cn(
+              'rounded-2xl tracking-[0.02em] transition-colors duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:rounded-3xl @lg:text-lg',
+              action.filled
+                ? 'bg-brand py-6 text-brand-foreground hover:bg-brand-hover @lg:-my-1 @lg:shrink-0 @lg:px-14'
+                : 'bg-cream/40 py-5 text-brand hover:bg-cream/70 @lg:flex-1',
+            )}
+          >
+            {action.label}
+          </button>
+        ))}
       </div>
     </section>
   )
