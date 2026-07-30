@@ -10,6 +10,8 @@ interface SmartImageProps {
   className?: string
   /** Classes for the `<img>` itself (object-fit, transforms). */
   imgClassName?: string
+  /** Classes for the loading placeholder — match the surface behind the image. */
+  placeholderClassName?: string
   loading?: 'lazy' | 'eager'
   fetchPriority?: 'high' | 'low' | 'auto'
   /** Overlays rendered above the image, e.g. gradients or badges. */
@@ -26,6 +28,7 @@ export function SmartImage({
   alt,
   className,
   imgClassName,
+  placeholderClassName = 'bg-cream',
   loading = 'lazy',
   fetchPriority,
   children,
@@ -42,7 +45,12 @@ export function SmartImage({
   return (
     <span className={cn('relative block overflow-hidden', className)}>
       {!loaded && (
-        <span className="absolute inset-0 grid place-items-center bg-cream">
+        <span
+          className={cn(
+            'absolute inset-0 grid place-items-center',
+            placeholderClassName,
+          )}
+        >
           <Loader2 className="size-6 animate-spin text-brand/60" />
         </span>
       )}

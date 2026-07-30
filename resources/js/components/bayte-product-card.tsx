@@ -62,6 +62,7 @@ export default function BayteProductCard({
         alt={alt}
         className="mt-4 aspect-3/2 w-full"
         imgClassName="object-contain"
+        placeholderClassName="bg-transparent"
       />
 
       <BayteWordmark className="mx-auto mt-4 w-24" />
