@@ -119,8 +119,22 @@ export default function SiteFooter({ className }: { className?: string }) {
             <div className="grow" />
 
             <div className="border-t border-cream/20">
-                <div className="mx-auto flex max-w-7xl flex-col gap-2 px-6 py-6 text-sm text-cream/60 sm:flex-row sm:items-center sm:justify-between sm:px-10">
-                    <p>© {year} Home Fashion Jamaleddine. All rights reserved.</p>
+                <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 text-sm text-cream/60 sm:flex-row sm:items-end sm:justify-between sm:gap-6 sm:px-10">
+                    <div className="flex flex-col gap-2">
+                        <p>© {year} Home Fashion Jamaleddine. All rights reserved.</p>
+
+                        {/* Credit — studio wordmark sits inline with the label. */}
+                        <a
+                            href="https://yamencreates.com"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="group flex w-fit items-center gap-2.5 text-xs uppercase tracking-[0.2em] transition-colors hover:text-white"
+                        >
+                            Crafted by
+                            <img src="/logos/yamenlogo.svg" alt="Yamen" className="h-3 w-auto" />
+                        </a>
+                    </div>
+
                     <div className="flex gap-5">
                         <Link href="/privacy" className="transition-colors hover:text-white">
                             Privacy
