@@ -43,7 +43,7 @@ export default function FooterMonogram({ className }: { className?: string }) {
             role="img"
             aria-label="HFJE"
             className={cn(
-                'h-auto w-full overflow-visible fill-current stroke-current',
+                'h-auto w-full overflow-visible fill-white stroke-white',
                 className,
             )}
             variants={reduceMotion ? undefined : container}
