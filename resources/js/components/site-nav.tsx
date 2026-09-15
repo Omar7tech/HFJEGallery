@@ -25,9 +25,9 @@ const navItems: NavItem[] = [
     {
         label: 'Work',
         href: '/work',
-       
     },
     { label: 'BAYTÉ', href: '/bayte' },
+    { label: 'Living Edit', href: '/living-edit' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
 ];
@@ -67,7 +67,8 @@ function NavLinks({
                         <div
                             className={cn(
                                 'mt-2 flex flex-col gap-1 border-l border-brand/30 pl-4',
-                                item.children.length > SUBLINKS_SCROLL_THRESHOLD &&
+                                item.children.length >
+                                    SUBLINKS_SCROLL_THRESHOLD &&
                                     'nav-scroll max-h-44 overflow-y-auto pr-2',
                             )}
                         >
@@ -232,7 +233,12 @@ export function NavBar({
                     )
                     .to(
                         foot,
-                        { y: 0, autoAlpha: 1, duration: d(0.4), ease: 'power2.out' },
+                        {
+                            y: 0,
+                            autoAlpha: 1,
+                            duration: d(0.4),
+                            ease: 'power2.out',
+                        },
                         '-=0.35',
                     );
 
@@ -331,7 +337,7 @@ export function NavBar({
             <header
                 ref={barRef}
                 className={cn(
-                    'px-3 pt-[max(0.75rem,env(safe-area-inset-top))] fixed top-0 left-0 right-0 z-[70] lg:hidden',
+                    'fixed top-0 right-0 left-0 z-[70] px-3 pt-[max(0.75rem,env(safe-area-inset-top))] lg:hidden',
                     className,
                 )}
             >
@@ -429,7 +435,7 @@ export function NavBar({
                                             href={child.href}
                                             onClick={closeMenu}
                                             className={cn(
-                                                'border px-4 py-2.5 text-xs font-semibold uppercase tracking-[0.15em]',
+                                                'border px-4 py-2.5 text-xs font-semibold tracking-[0.15em] uppercase',
                                                 isActive(url, child.href)
                                                     ? 'border-cream bg-cream text-brand'
                                                     : 'border-cream/40 text-cream/80',
@@ -448,7 +454,7 @@ export function NavBar({
                     <p className="font-display text-xl text-cream">
                         Crafted Around Living.
                     </p>
-                    <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-cream/60">
+                    <p className="mt-1 text-[11px] tracking-[0.2em] text-cream/60 uppercase">
                         Home Fashion Jamaleddine
                     </p>
                 </div>
