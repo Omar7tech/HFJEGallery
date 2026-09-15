@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
+use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
+use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -53,6 +56,17 @@ class AdminPanelProvider extends PanelProvider
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
             ])
+            ->plugin(
+                AuthDesignerPlugin::make()
+                    ->login(
+                        fn (AuthPageConfig $config) => $config
+                            ->media(asset('covers/cover.webp'))
+                            ->mediaPosition(MediaPosition::Left)
+                            ->mediaSize('65%')
+                            ->themeToggle()
+                    )
+            )
+
             ->authMiddleware([
                 Authenticate::class,
             ]);
