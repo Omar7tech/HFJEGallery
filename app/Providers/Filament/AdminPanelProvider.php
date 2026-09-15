@@ -14,7 +14,6 @@ use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -34,11 +33,11 @@ class AdminPanelProvider extends PanelProvider
             ->spa()
             ->sidebarWidth('14rem')
             ->profile()
-            ->brandLogo(asset('logos/mainlogo.svg'))
-            ->darkModeBrandLogo(asset('logos/mainlogo-dark.svg'))
+            ->brandLogo(asset('logos/mainlogo-dark.svg'))
             ->brandLogoHeight('2rem')
             ->colors([
-                'primary' => Color::Amber,
+                'primary' => Color::hex('#a65e3c'),
+                'gray' => Color::Stone,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
