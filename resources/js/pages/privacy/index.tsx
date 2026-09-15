@@ -1,4 +1,5 @@
-import LegalDocument, { type LegalSection } from '@/components/legal-document';
+import LegalDocument from '@/components/legal-document';
+import type {LegalSection} from '@/components/legal-document';
 
 /**
  * Standard privacy content for the studio site. It matches what the site

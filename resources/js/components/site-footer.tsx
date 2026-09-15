@@ -1,7 +1,7 @@
-import FooterMonogram from '@/components/footer-monogram';
-import { cn } from '@/lib/utils';
 import { Link } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
+import FooterMonogram from '@/components/footer-monogram';
+import { cn } from '@/lib/utils';
 
 type FooterLink = { label: string; href: string; external?: boolean };
 

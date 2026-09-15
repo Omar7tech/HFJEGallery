@@ -1,7 +1,8 @@
-import { yearsOfExperience } from '@/lib/experience'
 import { ArrowRight } from 'lucide-react'
-import { motion, useScroll, useTransform, type MotionStyle } from 'motion/react'
+import { motion, useScroll, useTransform  } from 'motion/react'
+import type {MotionStyle} from 'motion/react';
 import { useRef, useState } from 'react'
+import { yearsOfExperience } from '@/lib/experience'
 
 // How far through the hero's own scroll-out the day→night swap completes
 // (1 = hero fully scrolled past). No pinning — it plays during normal scroll.

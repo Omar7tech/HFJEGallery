@@ -1,6 +1,7 @@
-import { glyphs } from '@/components/logo'
-import { AnimatePresence, motion, type Variants } from 'motion/react'
+import { AnimatePresence, motion  } from 'motion/react'
+import type {Variants} from 'motion/react';
 import { useEffect, useState } from 'react'
+import { glyphs } from '@/components/logo'
 
 const HOLD_MS = 2400
 
@@ -47,8 +48,10 @@ export default function Preloader() {
     if (!visible) {
       return
     }
+
     document.body.style.overflow = 'hidden'
     const timer = window.setTimeout(() => setVisible(false), HOLD_MS)
+
     return () => {
       window.clearTimeout(timer)
       document.body.style.overflow = ''

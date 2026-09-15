@@ -80,7 +80,9 @@ export default function CountUp({
 
     useEffect(() => {
         if (isInView && startWhen) {
-            if (typeof onStart === 'function') onStart();
+            if (typeof onStart === 'function') {
+onStart();
+}
 
             const timeoutId = setTimeout(() => {
                 motionValue.set(direction === 'down' ? from : to);
@@ -88,7 +90,9 @@ export default function CountUp({
 
             const durationTimeoutId = setTimeout(
                 () => {
-                    if (typeof onEnd === 'function') onEnd();
+                    if (typeof onEnd === 'function') {
+onEnd();
+}
                 },
                 delay * 1000 + duration * 1000,
             );

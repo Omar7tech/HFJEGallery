@@ -1,5 +1,5 @@
-import AppLayout from '@/layouts/app-layout';
 import { createInertiaApp } from '@inertiajs/react';
+import AppLayout from '@/layouts/app-layout';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 

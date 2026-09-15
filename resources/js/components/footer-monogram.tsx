@@ -1,6 +1,7 @@
+import { motion, useReducedMotion  } from 'motion/react';
+import type {Variants} from 'motion/react';
 import { glyphs } from '@/components/logo';
 import { cn } from '@/lib/utils';
-import { motion, useReducedMotion, type Variants } from 'motion/react';
 
 /** Resting opacity of the filled monogram — solid white on the brand footer. */
 const FILL_OPACITY = 1;
