@@ -35,8 +35,8 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarWidth('14rem')
             ->profile()
             ->brandLogo(asset('logos/mainlogo.svg'))
-            ->darkMode(false)
-            ->brandLogoHeight('3rem')
+            ->darkModeBrandLogo(asset('logos/mainlogo-dark.svg'))
+            ->brandLogoHeight('2rem')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -48,7 +48,6 @@ class AdminPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([
                 AccountWidget::class,
-                FilamentInfoWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
