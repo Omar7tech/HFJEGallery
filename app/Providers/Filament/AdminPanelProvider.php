@@ -32,6 +32,11 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->spa()
+            ->sidebarWidth('14rem')
+            ->profile()
+            ->brandLogo(asset('logos/mainlogo.svg'))
+            ->darkMode(false)
+            ->brandLogoHeight('3rem')
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -61,9 +66,8 @@ class AdminPanelProvider extends PanelProvider
                     ->login(
                         fn (AuthPageConfig $config) => $config
                             ->media(asset('covers/cover.webp'))
-                            ->mediaPosition(MediaPosition::Left)
+                            ->mediaPosition(MediaPosition::Cover)
                             ->mediaSize('65%')
-                            ->themeToggle()
                     )
             )
 
