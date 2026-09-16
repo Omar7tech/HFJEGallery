@@ -53,8 +53,8 @@ export default function LivingMoodBoard({
                 </p>
             </header>
 
-            <div className="mt-10 grid items-start gap-10 @2xl:grid-cols-[1.04fr_1fr]">
-                <div className="pt-2 font-sans">
+            <div className="mt-10 grid items-start gap-10 @2xl:grid-cols-[minmax(0,1.04fr)_minmax(0,1fr)]">
+                <div className="min-w-0 pt-2 font-sans">
                     <h2 className="text-xl leading-6">
                         STEP {STEP_NUMBER} OF {LIVING_EDIT_TOTAL_STEPS}
                     </h2>
@@ -139,18 +139,20 @@ export default function LivingMoodBoard({
                     </div>
                 </div>
 
-                <div className="font-sans">
+                <div className="min-w-0 font-sans">
                     <div className="flex min-h-9 items-end justify-between gap-2">
-                        <div>
+                        <div className="min-w-0 flex-1">
                             <p className="text-[9px] leading-tight">
                                 Mood Pack X · Live Preview
                             </p>
                             <h2
                                 aria-live="polite"
-                                className="text-base leading-tight capitalize"
+                                className="truncate text-base leading-tight capitalize"
                             >
                                 {selectedNames.length > 0 ? (
-                                    `${joinNames(selectedNames)} ${space.name}`
+                                    <MarqueeText>
+                                        {`${joinNames(selectedNames)} ${space.name}`}
+                                    </MarqueeText>
                                 ) : (
                                     <>
                                         {space.name}{' '}
