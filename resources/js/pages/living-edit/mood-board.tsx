@@ -94,7 +94,7 @@ export default function LivingMoodBoard({
                                             : 'bg-[#f3f3f3] text-[#ad6844]',
                                     )}
                                 >
-                                    <span className="w-full truncate">
+                                    <span className="w-full truncate leading-normal">
                                         {name}
                                     </span>
                                     {icon && (
