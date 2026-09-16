@@ -70,4 +70,13 @@ svg {
     --color-brand-foreground: #ffffff; /* text on solid brand button */
     --color-cream: #e7d8c4; /* warm hero / section background */
     --color-ink: #1a1614; /* near-black headings & body text */
+
+    /* Seamless loop for overflowing labels (content is rendered twice) */
+    --animate-marquee: marquee 6s linear infinite;
+
+    @keyframes marquee {
+        to {
+            transform: translateX(-50%);
+        }
+    }
 }

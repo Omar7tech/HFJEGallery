@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { RefreshCw } from 'lucide-react';
+import MarqueeText from '@/components/marquee-text';
 import { cn } from '@/lib/utils';
 import type { LivingSpace } from '@/types';
 import MaskedIcon from './masked-icon';
@@ -94,9 +95,9 @@ export default function LivingMoodBoard({
                                             : 'bg-[#f3f3f3] text-[#ad6844]',
                                     )}
                                 >
-                                    <span className="w-full truncate leading-normal">
+                                    <MarqueeText className="w-full leading-normal">
                                         {name}
-                                    </span>
+                                    </MarqueeText>
                                     {icon && (
                                         <MaskedIcon
                                             src={icon}
