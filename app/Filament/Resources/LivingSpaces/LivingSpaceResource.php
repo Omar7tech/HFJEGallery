@@ -11,7 +11,6 @@ use App\Filament\Resources\LivingSpaces\Schemas\LivingSpaceInfolist;
 use App\Filament\Resources\LivingSpaces\Tables\LivingSpacesTable;
 use App\Models\LivingSpace;
 use BackedEnum;
-use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -47,14 +46,6 @@ class LivingSpaceResource extends Resource
     public static function table(Table $table): Table
     {
         return LivingSpacesTable::configure($table);
-    }
-
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        return $page->generateNavigationItems([
-            ViewLivingSpace::class,
-            EditLivingSpace::class,
-        ]);
     }
 
     public static function getPages(): array

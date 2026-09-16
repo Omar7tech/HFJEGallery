@@ -11,7 +11,6 @@ use App\Filament\Resources\LivingFeelings\Schemas\LivingFeelingInfolist;
 use App\Filament\Resources\LivingFeelings\Tables\LivingFeelingsTable;
 use App\Models\LivingFeeling;
 use BackedEnum;
-use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -47,14 +46,6 @@ class LivingFeelingResource extends Resource
     public static function table(Table $table): Table
     {
         return LivingFeelingsTable::configure($table);
-    }
-
-    public static function getRecordSubNavigation(Page $page): array
-    {
-        return $page->generateNavigationItems([
-            ViewLivingFeeling::class,
-            EditLivingFeeling::class,
-        ]);
     }
 
     public static function getPages(): array
