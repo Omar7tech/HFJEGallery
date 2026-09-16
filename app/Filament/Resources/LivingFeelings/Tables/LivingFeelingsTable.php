@@ -29,8 +29,7 @@ class LivingFeelingsTable
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable()
-                    ->weight('medium')
-                    ->description(fn ($record): string => $record->slug),
+                    ->weight('medium'),
                 TextColumn::make('spaces_count')
                     ->label('Spaces')
                     ->counts('spaces')

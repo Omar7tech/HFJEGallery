@@ -16,11 +16,9 @@ class LivingFeelingInfolist
             ->components([
                 Section::make('Details')
                     ->columnSpanFull()
-                    ->columns(3)
+                    ->columns(2)
                     ->components([
                         TextEntry::make('name'),
-                        TextEntry::make('slug')
-                            ->copyable(),
                         IconEntry::make('is_active')
                             ->label('Active')
                             ->boolean(),
