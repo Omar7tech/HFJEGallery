@@ -95,7 +95,7 @@ export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
                         type="button"
                         onClick={() => goTo('feelings')}
                         disabled={!space}
-                        className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-[#ad6844] px-6 py-1.5 text-center text-xl leading-tight text-white disabled:cursor-default max-sm:mt-10"
+                        className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-[#ad6844] px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-[#ad6844] motion-safe:active:scale-[0.98] motion-reduce:transition-none max-sm:mt-10"
                     >
                         NEXT
                     </button>
