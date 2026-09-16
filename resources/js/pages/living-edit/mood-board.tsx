@@ -108,14 +108,14 @@ export default function LivingMoodBoard({
                             ))}
                         </div>
                     </fieldset>
-                    <p className="mt-8 border-b border-[#bd7959] pb-2 text-[9px]">
+                    <p className="mt-8 border-b border-[#bd7959] pb-2 text-[clamp(0.75rem,1.4cqi,0.875rem)]">
                         Select Up To {MAX_FEELINGS}
                     </p>
                     <div className="mt-5 flex items-center justify-between px-2">
                         <button
                             type="button"
                             onClick={onBack}
-                            className="text-[10px] text-[#777] hover:text-brand focus-visible:outline-brand"
+                            className="min-h-9 px-1 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-[#777] transition-colors hover:text-brand focus-visible:outline-brand"
                         >
                             Back
                         </button>
@@ -123,7 +123,7 @@ export default function LivingMoodBoard({
                             type="button"
                             disabled
                             title="The next step is coming soon"
-                            className="rounded-lg bg-[#ad6844] px-5 py-1 text-[10px] text-white disabled:cursor-default"
+                            className="min-h-9 rounded-lg bg-[#ad6844] px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white disabled:cursor-default"
                         >
                             Continue
                         </button>
