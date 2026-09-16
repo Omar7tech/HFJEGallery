@@ -46,4 +46,9 @@ class LivingSpace extends Model implements HasMedia
     {
         return $this->belongsToMany(LivingFeeling::class)->withTimestamps();
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 }
