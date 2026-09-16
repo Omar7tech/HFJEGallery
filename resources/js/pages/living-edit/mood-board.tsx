@@ -88,21 +88,21 @@ export default function LivingMoodBoard({
                                     }
                                     onClick={() => onToggle(id)}
                                     className={cn(
-                                        'flex aspect-square min-w-0 flex-col items-center justify-center gap-[12%] rounded-xl p-2 text-center text-[9px] leading-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-60',
+                                        'flex aspect-square min-w-0 flex-col items-center justify-center gap-[8%] rounded-xl p-2 text-center text-[9px] leading-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-60',
                                         selected.includes(id)
                                             ? 'bg-[#ad6844] text-white'
                                             : 'bg-[#f3f3f3] text-[#ad6844]',
                                     )}
                                 >
-                                    {icon && (
-                                        <MaskedIcon
-                                            src={icon}
-                                            className="aspect-square w-[46%] shrink-0"
-                                        />
-                                    )}
                                     <span className="w-full truncate">
                                         {name}
                                     </span>
+                                    {icon && (
+                                        <MaskedIcon
+                                            src={icon}
+                                            className="aspect-square w-[62%] shrink-0"
+                                        />
+                                    )}
                                 </button>
                             ))}
                         </div>
