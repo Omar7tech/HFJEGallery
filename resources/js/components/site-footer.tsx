@@ -1,11 +1,11 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
 import FooterMonogram from '@/components/footer-monogram';
 import { cn } from '@/lib/utils';
 
 type FooterLink = { label: string; href: string; external?: boolean };
 
-const columns: { title: string; links: FooterLink[] }[] = [
+const staticColumns: { title: string; links: FooterLink[] }[] = [
     {
         title: 'Explore',
         links: [
@@ -24,22 +24,22 @@ const columns: { title: string; links: FooterLink[] }[] = [
             { label: 'Materials', href: '/about' },
         ],
     },
-    {
-        title: 'Social',
-        links: [
-            { label: 'Instagram', href: 'https://instagram.com', external: true },
-            { label: 'Pinterest', href: 'https://pinterest.com', external: true },
-            { label: 'LinkedIn', href: 'https://linkedin.com', external: true },
-        ],
-    },
 ];
 
 function FooterLinkItem({ link }: { link: FooterLink }) {
-    const className = 'text-base text-cream/70 transition-colors hover:text-white';
+    const className =
+        'text-base text-cream/70 transition-colors hover:text-white';
 
     if (link.external) {
+        const opensNewTab = link.href.startsWith('http');
+
         return (
-            <a href={link.href} target="_blank" rel="noreferrer" className={className}>
+            <a
+                href={link.href}
+                target={opensNewTab ? '_blank' : undefined}
+                rel={opensNewTab ? 'noreferrer' : undefined}
+                className={className}
+            >
                 {link.label}
             </a>
         );
@@ -60,6 +60,39 @@ function FooterLinkItem({ link }: { link: FooterLink }) {
  */
 export default function SiteFooter({ className }: { className?: string }) {
     const year = new Date().getFullYear();
+    const { contact, socials } = usePage().props;
+
+    // Contact details and socials come from the admin General settings.
+    const connectLinks: FooterLink[] = [
+        ...(contact.phoneNumber
+            ? [
+                  {
+                      label: contact.phoneNumber,
+                      href: `tel:${contact.phoneNumber.replace(/[^\d+]/g, '')}`,
+                      external: true,
+                  },
+              ]
+            : []),
+        ...(contact.email
+            ? [
+                  {
+                      label: contact.email,
+                      href: `mailto:${contact.email}`,
+                      external: true,
+                  },
+              ]
+            : []),
+        ...socials.map((social) => ({
+            label: social.label,
+            href: social.url,
+            external: true,
+        })),
+    ];
+
+    const columns =
+        connectLinks.length > 0
+            ? [...staticColumns, { title: 'Connect', links: connectLinks }]
+            : staticColumns;
 
     return (
         <footer
@@ -85,7 +118,7 @@ export default function SiteFooter({ className }: { className?: string }) {
                     </p>
                     <Link
                         href="/contact"
-                        className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-white transition-colors hover:text-cream"
+                        className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors hover:text-cream"
                     >
                         Start a project
                         <ArrowRight
@@ -99,7 +132,7 @@ export default function SiteFooter({ className }: { className?: string }) {
                 <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
                     {columns.map((column) => (
                         <div key={column.title}>
-                            <h3 className="font-display text-sm uppercase tracking-[0.2em] text-white">
+                            <h3 className="font-display text-sm tracking-[0.2em] text-white uppercase">
                                 {column.title}
                             </h3>
                             <ul className="mt-4 flex flex-col gap-3">
@@ -121,25 +154,38 @@ export default function SiteFooter({ className }: { className?: string }) {
             <div className="border-t border-cream/20">
                 <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 text-sm text-cream/60 sm:flex-row sm:items-end sm:justify-between sm:gap-6 sm:px-10">
                     <div className="flex flex-col gap-2">
-                        <p>© {year} Home Fashion Jamaleddine. All rights reserved.</p>
+                        <p>
+                            © {year} Home Fashion Jamaleddine. All rights
+                            reserved.
+                        </p>
 
                         {/* Credit — studio wordmark sits inline with the label. */}
                         <a
                             href="https://yamencreates.com"
                             target="_blank"
                             rel="noreferrer"
-                            className="group flex w-fit items-center gap-2.5 text-xs uppercase tracking-[0.2em] transition-colors hover:text-white"
+                            className="group flex w-fit items-center gap-2.5 text-xs tracking-[0.2em] uppercase transition-colors hover:text-white"
                         >
                             Crafted by
-                            <img src="/logos/yamenlogo.svg" alt="Yamen" className="h-3 w-auto" />
+                            <img
+                                src="/logos/yamenlogo.svg"
+                                alt="Yamen"
+                                className="h-3 w-auto"
+                            />
                         </a>
                     </div>
 
                     <div className="flex gap-5">
-                        <Link href="/privacy" className="transition-colors hover:text-white">
+                        <Link
+                            href="/privacy"
+                            className="transition-colors hover:text-white"
+                        >
                             Privacy
                         </Link>
-                        <Link href="/terms" className="transition-colors hover:text-white">
+                        <Link
+                            href="/terms"
+                            className="transition-colors hover:text-white"
+                        >
                             Terms
                         </Link>
                     </div>
@@ -147,7 +193,7 @@ export default function SiteFooter({ className }: { className?: string }) {
             </div>
 
             {/* Oversized HFJE monogram — draws itself in as the footer appears. */}
-            <div className="px-6 pb-8 pt-8 sm:px-10 sm:pb-10">
+            <div className="px-6 pt-8 pb-8 sm:px-10 sm:pb-10">
                 <FooterMonogram />
             </div>
         </footer>
