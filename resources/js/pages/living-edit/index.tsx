@@ -27,8 +27,8 @@ export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
         <>
             <Head title="Living Edit" />
 
-            <section className="w-full px-4 pt-6 pb-4 font-display md:px-8 lg:pt-7 lg:pr-7 lg:pl-0">
-                <div className="mx-auto flex min-h-[630px] w-full flex-col items-center rounded-[30px] bg-[#f4f4f4] px-5 pt-8 pb-9 text-[#171915] shadow-[0_3px_12px_rgba(0,0,0,0.12)] sm:px-10 sm:pt-7">
+            <section className="w-full px-4 pt-9 pb-4 font-display md:px-8 lg:pt-[52px] lg:pr-7 lg:pl-0">
+                <div className="mx-auto flex min-h-[630px] w-full flex-col items-center rounded-[30px] bg-[#f4f4f4] px-5 pt-8 pb-9 text-[#171915] shadow-[0_3px_12px_rgba(0,0,0,0.12)] sm:px-10 sm:pt-10">
                     <h1 className="text-center text-[clamp(1.5rem,3.4vw,2.25rem)] leading-[1.4] tracking-[-0.045em]">
                         The Living Edit
                     </h1>
