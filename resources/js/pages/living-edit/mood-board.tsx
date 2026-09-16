@@ -1,32 +1,29 @@
 import { Link } from '@inertiajs/react';
 import { RefreshCw } from 'lucide-react';
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { LivingSpace } from '@/types';
 import MaskedIcon from './masked-icon';
+import {
+    LIVING_EDIT_STEPS,
+    LIVING_EDIT_TOTAL_STEPS,
+    MAX_FEELINGS,
+} from './use-living-edit-flow';
 
-const MAX_FEELINGS = 3;
+const STEP_NUMBER = LIVING_EDIT_STEPS.indexOf('feelings') + 1;
 
 export default function LivingMoodBoard({
     space,
+    selected,
+    onToggle,
     onBack,
 }: {
     space: LivingSpace;
+    selected: string[];
+    onToggle: (id: string) => void;
     onBack: () => void;
 }) {
     const { feelings } = space;
-    const [selected, setSelected] = useState<string[]>([]);
     const leadFeeling = feelings.find((feeling) => feeling.id === selected[0]);
-
-    function toggleFeeling(id: string) {
-        setSelected((current) =>
-            current.includes(id)
-                ? current.filter((value) => value !== id)
-                : current.length < MAX_FEELINGS
-                  ? [...current, id]
-                  : current,
-        );
-    }
 
     return (
         <section className="@container px-5 pt-9 pb-8 text-[#191b17] md:px-8 lg:pt-[52px] lg:pr-8 lg:pl-0">
@@ -48,17 +45,22 @@ export default function LivingMoodBoard({
 
             <div className="mt-10 grid items-start gap-10 @2xl:grid-cols-[1.04fr_1fr]">
                 <div className="pt-2 font-sans">
-                    <h2 className="text-xl leading-6">STEP 1 OF 4</h2>
+                    <h2 className="text-xl leading-6">
+                        STEP {STEP_NUMBER} OF {LIVING_EDIT_TOTAL_STEPS}
+                    </h2>
                     <div
                         className="mt-5 grid grid-cols-4 gap-2"
-                        aria-label="Step 1 of 4"
+                        aria-label={`Step ${STEP_NUMBER} of ${LIVING_EDIT_TOTAL_STEPS}`}
                     >
-                        {[0, 1, 2, 3].map((step) => (
+                        {Array.from(
+                            { length: LIVING_EDIT_TOTAL_STEPS },
+                            (_, step) => step,
+                        ).map((step) => (
                             <span
                                 key={step}
                                 className={cn(
                                     'h-px',
-                                    step === 0
+                                    step < STEP_NUMBER
                                         ? 'bg-[#b56c49]'
                                         : 'bg-[#ead4c9]',
                                 )}
@@ -84,7 +86,7 @@ export default function LivingMoodBoard({
                                         !selected.includes(id) &&
                                         selected.length >= MAX_FEELINGS
                                     }
-                                    onClick={() => toggleFeeling(id)}
+                                    onClick={() => onToggle(id)}
                                     className={cn(
                                         'flex aspect-square min-w-0 flex-col items-center rounded-xl px-1 py-2 text-[9px] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-60',
                                         selected.includes(id)
@@ -105,7 +107,7 @@ export default function LivingMoodBoard({
                         </div>
                     </fieldset>
                     <p className="mt-8 border-b border-[#bd7959] pb-2 text-[9px]">
-                        Select Up To 3
+                        Select Up To {MAX_FEELINGS}
                     </p>
                     <div className="mt-5 flex items-center justify-between px-2">
                         <button

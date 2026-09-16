@@ -1,25 +1,23 @@
 import { Head } from '@inertiajs/react';
-import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import type { LivingSpace } from '@/types';
 import MaskedIcon from './masked-icon';
 import LivingMoodBoard from './mood-board';
+import { useLivingEditFlow } from './use-living-edit-flow';
 
 export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
-    const [selectedSpaceId, setSelectedSpaceId] = useState(
-        spaces[0]?.id ?? null,
-    );
-    const [showMoodBoard, setShowMoodBoard] = useState(false);
-    const selectedSpace = spaces.find((space) => space.id === selectedSpaceId);
+    const { space, step, feelingIds, goTo, selectSpace, toggleFeeling } =
+        useLivingEditFlow(spaces);
 
-    if (showMoodBoard && selectedSpace) {
+    if (space && step === 'feelings') {
         return (
             <>
                 <Head title="Living Edit" />
                 <LivingMoodBoard
-                    key={selectedSpace.id}
-                    space={selectedSpace}
-                    onBack={() => setShowMoodBoard(false)}
+                    space={space}
+                    selected={feelingIds}
+                    onToggle={toggleFeeling}
+                    onBack={() => goTo(null)}
                 />
             </>
         );
@@ -56,14 +54,14 @@ export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
                                         type="radio"
                                         name="space"
                                         value={id}
-                                        checked={selectedSpaceId === id}
-                                        onChange={() => setSelectedSpaceId(id)}
+                                        checked={space?.id === id}
+                                        onChange={() => selectSpace(id)}
                                         className="peer sr-only"
                                     />
                                     <span
                                         className={cn(
                                             'flex aspect-[1.6] w-full items-center justify-center rounded-[20px] border border-white/65 shadow-[0_3px_4px_rgba(0,0,0,0.16)] transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-brand motion-reduce:transition-none',
-                                            selectedSpaceId === id
+                                            space?.id === id
                                                 ? 'border-[#ad6844] bg-[#ad6844] text-[#f4f4f4]'
                                                 : 'bg-[#f4f4f4] text-[#ad6844] group-hover:bg-[#ece7e3]',
                                         )}
@@ -85,8 +83,8 @@ export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
 
                     <button
                         type="button"
-                        onClick={() => setShowMoodBoard(true)}
-                        disabled={!selectedSpace}
+                        onClick={() => goTo('feelings')}
+                        disabled={!space}
                         className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-[#ad6844] px-6 py-1.5 text-center text-xl leading-tight text-white disabled:cursor-default max-sm:mt-10"
                     >
                         NEXT
