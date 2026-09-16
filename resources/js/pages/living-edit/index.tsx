@@ -60,7 +60,7 @@ export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
                                     />
                                     <span
                                         className={cn(
-                                            '@container flex aspect-[1.6] w-full items-center justify-center rounded-[20px] border border-white/65 shadow-[0_3px_4px_rgba(0,0,0,0.16)] transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-brand motion-reduce:transition-none',
+                                            '@container flex aspect-[1.6] w-full items-center justify-center rounded-[20px] border border-white/65 shadow-[0_3px_4px_rgba(0,0,0,0.16)] transition-[background-color,border-color,color,scale] duration-300 ease-out peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-brand motion-safe:group-active:scale-[0.98] motion-reduce:transition-none',
                                             space?.id === id
                                                 ? 'border-[#ad6844] bg-[#ad6844] text-[#f4f4f4]'
                                                 : 'bg-[#f4f4f4] text-[#ad6844] group-hover:bg-[#ece7e3]',
