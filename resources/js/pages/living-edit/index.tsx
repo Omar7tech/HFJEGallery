@@ -60,20 +60,30 @@ export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
                                     />
                                     <span
                                         className={cn(
-                                            'flex aspect-[1.6] w-full items-center justify-center rounded-[20px] border border-white/65 shadow-[0_3px_4px_rgba(0,0,0,0.16)] transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-brand motion-reduce:transition-none',
+                                            '@container flex aspect-[1.6] w-full items-center justify-center rounded-[20px] border border-white/65 shadow-[0_3px_4px_rgba(0,0,0,0.16)] transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-brand motion-reduce:transition-none',
                                             space?.id === id
                                                 ? 'border-[#ad6844] bg-[#ad6844] text-[#f4f4f4]'
                                                 : 'bg-[#f4f4f4] text-[#ad6844] group-hover:bg-[#ece7e3]',
                                         )}
                                     >
-                                        {icon && (
+                                        {icon ? (
                                             <MaskedIcon
                                                 src={icon}
                                                 className="h-[58%] w-[58%]"
                                             />
+                                        ) : (
+                                            <span className="px-[8cqi] text-center text-[clamp(0.7rem,7.5cqi,1.2rem)] leading-snug tracking-[0.04em] text-balance uppercase">
+                                                {name}
+                                            </span>
                                         )}
                                     </span>
-                                    <span className="mt-3 text-center text-[clamp(0.55rem,1.1vw,0.75rem)] leading-relaxed uppercase">
+                                    <span
+                                        aria-hidden={!icon}
+                                        className={cn(
+                                            'mt-3 text-center text-[clamp(0.55rem,1.1vw,0.75rem)] leading-relaxed uppercase',
+                                            !icon && 'invisible',
+                                        )}
+                                    >
                                         {name}
                                     </span>
                                 </label>
