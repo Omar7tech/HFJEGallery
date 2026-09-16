@@ -1,33 +1,24 @@
 import { Head } from '@inertiajs/react';
-import { BedDouble, CookingPot, Sofa, UtensilsCrossed } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import type { LivingSpace } from '@/types';
+import MaskedIcon from './masked-icon';
 import LivingMoodBoard from './mood-board';
 
-// Temporary icons; room data and artwork can be supplied by the backend later.
-const spaces = [
-    { id: 'living-room', label: 'Living room', icon: Sofa },
-    { id: 'kitchen', label: 'Kitchen', icon: CookingPot },
-    { id: 'bed-room', label: 'Bed room', icon: BedDouble },
-    { id: 'dining-room', label: 'Dining room', icon: UtensilsCrossed },
-];
-
-export default function LivingEdit() {
-    const [selectedSpace, setSelectedSpace] = useState('kitchen');
+export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
+    const [selectedSpaceId, setSelectedSpaceId] = useState(
+        spaces[0]?.id ?? null,
+    );
     const [showMoodBoard, setShowMoodBoard] = useState(false);
+    const selectedSpace = spaces.find((space) => space.id === selectedSpaceId);
 
-    if (showMoodBoard) {
-        const room =
-            selectedSpace === 'living-room'
-                ? 'Living'
-                : (spaces.find((space) => space.id === selectedSpace)?.label ??
-                  'Living');
-
+    if (showMoodBoard && selectedSpace) {
         return (
             <>
                 <Head title="Living Edit" />
                 <LivingMoodBoard
-                    room={room}
+                    key={selectedSpace.id}
+                    space={selectedSpace}
                     onBack={() => setShowMoodBoard(false)}
                 />
             </>
@@ -49,8 +40,14 @@ export default function LivingEdit() {
                             Choose your space
                         </legend>
 
+                        {spaces.length === 0 && (
+                            <p className="mt-10 text-center text-sm text-[#777] sm:mt-14">
+                                Spaces are being curated. Check back soon.
+                            </p>
+                        )}
+
                         <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-4 sm:mt-14 sm:gap-x-10">
-                            {spaces.map(({ id, label, icon: Icon }) => (
+                            {spaces.map(({ id, name, icon }) => (
                                 <label
                                     key={id}
                                     className="group flex min-w-0 cursor-pointer flex-col items-center"
@@ -59,26 +56,27 @@ export default function LivingEdit() {
                                         type="radio"
                                         name="space"
                                         value={id}
-                                        checked={selectedSpace === id}
-                                        onChange={() => setSelectedSpace(id)}
+                                        checked={selectedSpaceId === id}
+                                        onChange={() => setSelectedSpaceId(id)}
                                         className="peer sr-only"
                                     />
                                     <span
                                         className={cn(
                                             'flex aspect-[1.6] w-full items-center justify-center rounded-[20px] border border-white/65 shadow-[0_3px_4px_rgba(0,0,0,0.16)] transition-colors peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-brand motion-reduce:transition-none',
-                                            selectedSpace === id
+                                            selectedSpaceId === id
                                                 ? 'border-[#ad6844] bg-[#ad6844] text-[#f4f4f4]'
                                                 : 'bg-[#f4f4f4] text-[#ad6844] group-hover:bg-[#ece7e3]',
                                         )}
                                     >
-                                        <Icon
-                                            aria-hidden="true"
-                                            className="h-[58%] w-[58%]"
-                                            strokeWidth={1.5}
-                                        />
+                                        {icon && (
+                                            <MaskedIcon
+                                                src={icon}
+                                                className="h-[58%] w-[58%]"
+                                            />
+                                        )}
                                     </span>
                                     <span className="mt-3 text-center text-[clamp(0.55rem,1.1vw,0.75rem)] leading-relaxed uppercase">
-                                        {label}
+                                        {name}
                                     </span>
                                 </label>
                             ))}
@@ -88,6 +86,7 @@ export default function LivingEdit() {
                     <button
                         type="button"
                         onClick={() => setShowMoodBoard(true)}
+                        disabled={!selectedSpace}
                         className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-[#ad6844] px-6 py-1.5 text-center text-xl leading-tight text-white disabled:cursor-default max-sm:mt-10"
                     >
                         NEXT

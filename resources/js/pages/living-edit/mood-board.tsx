@@ -1,32 +1,28 @@
 import { Link } from '@inertiajs/react';
-import { House, Leaf, RefreshCw, Sun, Amphora } from 'lucide-react';
+import { RefreshCw } from 'lucide-react';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
+import type { LivingSpace } from '@/types';
+import MaskedIcon from './masked-icon';
 
-const feelings = [
-    { id: 'warm', label: 'Warm', icon: Sun },
-    { id: 'refined', label: 'Refined', icon: Amphora },
-    { id: 'social', label: 'Social', icon: House },
-    { id: 'grounded', label: 'Grounded', icon: Leaf },
-    { id: 'expressive', label: 'Expressive' },
-    { id: 'calm', label: 'Calm' },
-    { id: 'grounded-soft', label: 'Grounded' },
-];
+const MAX_FEELINGS = 3;
 
 export default function LivingMoodBoard({
-    room,
+    space,
     onBack,
 }: {
-    room: string;
+    space: LivingSpace;
     onBack: () => void;
 }) {
-    const [selected, setSelected] = useState(['warm', 'refined']);
+    const { feelings } = space;
+    const [selected, setSelected] = useState<string[]>([]);
+    const leadFeeling = feelings.find((feeling) => feeling.id === selected[0]);
 
     function toggleFeeling(id: string) {
         setSelected((current) =>
             current.includes(id)
                 ? current.filter((value) => value !== id)
-                : current.length < 3
+                : current.length < MAX_FEELINGS
                   ? [...current, id]
                   : current,
         );
@@ -73,15 +69,20 @@ export default function LivingMoodBoard({
                         <legend className="sr-only">
                             Choose your feelings. Select up to three.
                         </legend>
+                        {feelings.length === 0 && (
+                            <p className="text-[10px] text-[#777]">
+                                Feelings for this space are coming soon.
+                            </p>
+                        )}
                         <div className="grid grid-cols-4 gap-2">
-                            {feelings.map(({ id, label, icon: Icon }) => (
+                            {feelings.map(({ id, name, icon }) => (
                                 <button
                                     key={id}
                                     type="button"
                                     aria-pressed={selected.includes(id)}
                                     disabled={
                                         !selected.includes(id) &&
-                                        selected.length >= 3
+                                        selected.length >= MAX_FEELINGS
                                     }
                                     onClick={() => toggleFeeling(id)}
                                     className={cn(
@@ -89,15 +90,14 @@ export default function LivingMoodBoard({
                                         selected.includes(id)
                                             ? 'bg-[#ad6844] text-white'
                                             : 'bg-[#f3f3f3] text-[#ad6844]',
-                                        !Icon && 'justify-center',
+                                        !icon && 'justify-center',
                                     )}
                                 >
-                                    <span>{label}</span>
-                                    {Icon && (
-                                        <Icon
-                                            aria-hidden="true"
+                                    <span>{name}</span>
+                                    {icon && (
+                                        <MaskedIcon
+                                            src={icon}
                                             className="mt-1 h-9 w-9 max-w-[70%]"
-                                            strokeWidth={1.6}
                                         />
                                     )}
                                 </button>
@@ -133,14 +133,7 @@ export default function LivingMoodBoard({
                                 Mood Pack X · Live Preview
                             </p>
                             <h2 className="text-base leading-tight">
-                                {room}{' '}
-                                {selected.includes('warm')
-                                    ? 'Warm'
-                                    : (feelings.find(
-                                          (feeling) =>
-                                              feeling.id === selected[0],
-                                      )?.label ?? '')}{' '}
-                                × Gather
+                                {space.name} {leadFeeling?.name} × Gather
                             </h2>
                         </div>
                         <button
