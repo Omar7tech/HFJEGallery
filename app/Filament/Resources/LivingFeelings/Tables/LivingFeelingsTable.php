@@ -21,11 +21,6 @@ class LivingFeelingsTable
             ->reorderable('sort_order')
             ->defaultSort('sort_order')
             ->columns([
-                SpatieMediaLibraryImageColumn::make('image')
-                    ->label('Image')
-                    ->collection('image')
-                    ->conversion('webp')
-                    ->circular(),
                 SpatieMediaLibraryImageColumn::make('icon')
                     ->label('Icon')
                     ->collection('icon')

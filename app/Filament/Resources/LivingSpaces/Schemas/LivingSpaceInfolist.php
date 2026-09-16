@@ -26,18 +26,11 @@ class LivingSpaceInfolist
                             ->boolean(),
                     ]),
 
-                Section::make('Media')
+                Section::make('Icon')
                     ->columnSpanFull()
-                    ->columns(2)
                     ->components([
-                        SpatieMediaLibraryImageEntry::make('image')
-                            ->label('Image')
-                            ->collection('image')
-                            ->conversion('webp')
-                            ->imageHeight(200)
-                            ->placeholder('-'),
                         SpatieMediaLibraryImageEntry::make('icon')
-                            ->label('Icon')
+                            ->hiddenLabel()
                             ->collection('icon')
                             ->conversion('webp')
                             ->imageHeight(64)

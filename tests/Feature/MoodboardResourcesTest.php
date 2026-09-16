@@ -44,7 +44,7 @@ test('tables list records in sort order', function () {
         ->assertCanSeeTableRecords(LivingFeeling::orderBy('sort_order')->get(), inOrder: true);
 });
 
-test('a space can be created with feelings, image and icon', function () {
+test('a space can be created with feelings and an icon', function () {
     Storage::fake('public');
     $feelingIds = LivingFeeling::orderBy('id')->limit(2)->pluck('id')->all();
 
@@ -53,7 +53,6 @@ test('a space can be created with feelings, image and icon', function () {
             'name' => 'Home office',
             'is_active' => true,
             'feelings' => $feelingIds,
-            'image' => [UploadedFile::fake()->image('cover.jpg', 800, 600)],
             'icon' => [UploadedFile::fake()->image('icon.png', 64, 64)],
         ])
         ->call('create')
@@ -62,7 +61,6 @@ test('a space can be created with feelings, image and icon', function () {
     $space = LivingSpace::where('slug', 'home-office')->firstOrFail();
 
     expect($space->feelings()->pluck('living_feelings.id')->sort()->values()->all())->toBe($feelingIds)
-        ->and($space->getFirstMedia('image'))->not->toBeNull()
         ->and($space->getFirstMedia('icon'))->not->toBeNull();
 });
 

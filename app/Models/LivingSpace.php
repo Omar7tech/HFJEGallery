@@ -18,10 +18,6 @@ class LivingSpace extends Model implements HasMedia
 
     public function registerMediaCollections(): void
     {
-        $this->addMediaCollection('image')
-            ->singleFile()
-            ->useDisk('public');
-
         $this->addMediaCollection('icon')
             ->singleFile()
             ->useDisk('public');

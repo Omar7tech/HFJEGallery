@@ -31,22 +31,12 @@ class LivingFeelingForm
                             ->inline(false),
                     ]),
 
-                Section::make('Media')
-                    ->description('Cover image and icon shown on the moodboard.')
+                Section::make('Icon')
+                    ->description('Icon shown on the moodboard.')
                     ->columnSpanFull()
-                    ->columns(2)
                     ->components([
-                        SpatieMediaLibraryFileUpload::make('image')
-                            ->collection('image')
-                            ->disk('public')
-                            ->visibility('public')
-                            ->image()
-                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                            ->maxSize(5120)
-                            ->conversion('webp')
-                            ->responsiveImages()
-                            ->imageEditor(),
                         SpatieMediaLibraryFileUpload::make('icon')
+                            ->hiddenLabel()
                             ->collection('icon')
                             ->disk('public')
                             ->visibility('public')
