@@ -11,38 +11,24 @@ class LivingEditSeeder extends Seeder
 {
     public function run(): void
     {
+        if (LivingSpace::exists() || LivingFeeling::exists()) {
+            return;
+        }
+
         DB::transaction(function () {
-            $feelings = [
-                ['warm', 'Warm'],
-                ['refined', 'Refined'],
-                ['social', 'Social'],
-                ['grounded', 'Grounded'],
-                ['expressive', 'Expressive'],
-                ['calm', 'Calm'],
-            ];
+            $feelings = ['Warm', 'Refined', 'Social', 'Grounded', 'Expressive', 'Calm'];
             $feelingIds = [];
 
-            foreach ($feelings as $order => [$slug, $name]) {
-                $feeling = LivingFeeling::firstOrCreate(
-                    ['slug' => $slug],
-                    ['name' => $name, 'sort_order' => $order],
-                );
-                $feelingIds[] = $feeling->getKey();
+            foreach ($feelings as $order => $name) {
+                $feelingIds[] = LivingFeeling::create(['name' => $name, 'sort_order' => $order])->getKey();
             }
 
-            $spaces = [
-                ['living-room', 'Living room'],
-                ['kitchen', 'Kitchen'],
-                ['bed-room', 'Bed room'],
-                ['dining-room', 'Dining room'],
-            ];
+            $spaces = ['Living room', 'Kitchen', 'Bed room', 'Dining room'];
 
-            foreach ($spaces as $order => [$slug, $name]) {
-                $space = LivingSpace::firstOrCreate(
-                    ['slug' => $slug],
-                    ['name' => $name, 'sort_order' => $order],
-                );
-                $space->feelings()->syncWithoutDetaching($feelingIds);
+            foreach ($spaces as $order => $name) {
+                LivingSpace::create(['name' => $name, 'sort_order' => $order])
+                    ->feelings()
+                    ->attach($feelingIds);
             }
         });
     }

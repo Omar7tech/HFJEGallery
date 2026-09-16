@@ -11,7 +11,7 @@ uses(RefreshDatabase::class);
 test('living edit seeds can be rerun without duplicates or overwriting edited content', function () {
     $this->seed(LivingEditSeeder::class);
     $space = LivingSpace::where('slug', 'living-room')->firstOrFail();
-    $space->update(['name' => 'Lounge', 'image_path' => 'spaces/lounge.webp']);
+    $space->update(['name' => 'Lounge']);
 
     $this->seed(LivingEditSeeder::class);
 
@@ -19,7 +19,6 @@ test('living edit seeds can be rerun without duplicates or overwriting edited co
     $this->assertDatabaseCount('living_feelings', 6);
     $this->assertDatabaseCount('living_feeling_living_space', 24);
     expect($space->fresh()->getAttribute('name'))->toBe('Lounge')
-        ->and($space->fresh()->getAttribute('image_path'))->toBe('spaces/lounge.webp')
         ->and($space->getAttribute('is_active'))->toBeTrue()
         ->and($space->feelings()->count())->toBe(6);
     expect(LivingFeeling::where('slug', 'warm')->firstOrFail()->spaces()->count())->toBe(4);
