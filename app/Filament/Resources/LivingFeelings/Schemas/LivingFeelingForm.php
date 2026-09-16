@@ -2,7 +2,7 @@
 
 namespace App\Filament\Resources\LivingFeelings\Schemas;
 
-use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -53,16 +53,16 @@ class LivingFeelingForm
                     ->description('Spaces this feeling is offered in.')
                     ->columnSpanFull()
                     ->components([
-                        CheckboxList::make('spaces')
+                        Select::make('spaces')
                             ->hiddenLabel()
                             ->relationship(
                                 titleAttribute: 'name',
                                 modifyQueryUsing: fn (Builder $query): Builder => $query->orderBy('sort_order'),
                             )
-                            ->columns(3)
-                            ->gridDirection('row')
-                            ->bulkToggleable()
+                            ->multiple()
                             ->searchable()
+                            ->placeholder('Search spaces to add')
+                            ->searchPrompt('Type to search spaces')
                             ->noSearchResultsMessage('No spaces found.'),
                     ]),
             ]);
