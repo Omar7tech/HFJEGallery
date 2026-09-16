@@ -98,10 +98,10 @@ export default function LivingMoodBoard({
                                     }
                                     onClick={() => onToggle(id)}
                                     className={cn(
-                                        'flex aspect-square min-w-0 flex-col items-center justify-center gap-[8%] rounded-xl p-2 text-center text-[clamp(0.625rem,1.5cqi,0.8125rem)] leading-none focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-60',
+                                        'flex aspect-square min-w-0 flex-col items-center justify-center gap-[8%] rounded-xl p-2 text-center text-[clamp(0.625rem,1.5cqi,0.8125rem)] leading-none transition-[background-color,color,opacity,scale] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-60 motion-safe:enabled:active:scale-[0.97] motion-reduce:transition-none',
                                         selected.includes(id)
                                             ? 'bg-[#ad6844] text-white'
-                                            : 'bg-[#f3f3f3] text-[#ad6844]',
+                                            : 'bg-[#f3f3f3] text-[#ad6844] enabled:hover:bg-[#ece7e3]',
                                     )}
                                 >
                                     <MarqueeText className="w-full leading-normal">
