@@ -13,34 +13,34 @@ class LivingEditSeeder extends Seeder
     {
         DB::transaction(function () {
             $feelings = [
-                ['warm', 'Warm', 'Sun'],
-                ['refined', 'Refined', 'Amphora'],
-                ['social', 'Social', 'House'],
-                ['grounded', 'Grounded', 'Leaf'],
-                ['expressive', 'Expressive', null],
-                ['calm', 'Calm', null],
+                ['warm', 'Warm'],
+                ['refined', 'Refined'],
+                ['social', 'Social'],
+                ['grounded', 'Grounded'],
+                ['expressive', 'Expressive'],
+                ['calm', 'Calm'],
             ];
             $feelingIds = [];
 
-            foreach ($feelings as $order => [$slug, $name, $icon]) {
+            foreach ($feelings as $order => [$slug, $name]) {
                 $feeling = LivingFeeling::firstOrCreate(
                     ['slug' => $slug],
-                    ['name' => $name, 'icon' => $icon, 'sort_order' => $order],
+                    ['name' => $name, 'sort_order' => $order],
                 );
                 $feelingIds[] = $feeling->getKey();
             }
 
             $spaces = [
-                ['living-room', 'Living room', 'Sofa'],
-                ['kitchen', 'Kitchen', 'CookingPot'],
-                ['bed-room', 'Bed room', 'BedDouble'],
-                ['dining-room', 'Dining room', 'UtensilsCrossed'],
+                ['living-room', 'Living room'],
+                ['kitchen', 'Kitchen'],
+                ['bed-room', 'Bed room'],
+                ['dining-room', 'Dining room'],
             ];
 
-            foreach ($spaces as $order => [$slug, $name, $icon]) {
+            foreach ($spaces as $order => [$slug, $name]) {
                 $space = LivingSpace::firstOrCreate(
                     ['slug' => $slug],
-                    ['name' => $name, 'icon' => $icon, 'sort_order' => $order],
+                    ['name' => $name, 'sort_order' => $order],
                 );
                 $space->feelings()->syncWithoutDetaching($feelingIds);
             }
