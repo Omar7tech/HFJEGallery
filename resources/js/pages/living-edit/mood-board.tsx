@@ -12,6 +12,13 @@ import {
 
 const STEP_NUMBER = LIVING_EDIT_STEPS.indexOf('feelings') + 1;
 
+/** Joins names as "A", "A & B" or "A, B & C". */
+function joinNames(names: string[]): string {
+    return names.length > 1
+        ? `${names.slice(0, -1).join(', ')} & ${names.at(-1)}`
+        : (names[0] ?? '');
+}
+
 export default function LivingMoodBoard({
     space,
     selected,
@@ -24,7 +31,9 @@ export default function LivingMoodBoard({
     onBack: () => void;
 }) {
     const { feelings } = space;
-    const leadFeeling = feelings.find((feeling) => feeling.id === selected[0]);
+    const selectedNames = selected
+        .map((id) => feelings.find((feeling) => feeling.id === id)?.name)
+        .filter((name): name is string => Boolean(name));
 
     return (
         <section className="@container px-5 pt-9 pb-8 text-[#191b17] md:px-8 lg:pt-[52px] lg:pr-8 lg:pl-0">
@@ -136,8 +145,20 @@ export default function LivingMoodBoard({
                             <p className="text-[9px] leading-tight">
                                 Mood Pack X · Live Preview
                             </p>
-                            <h2 className="text-base leading-tight">
-                                {space.name} {leadFeeling?.name} × Gather
+                            <h2
+                                aria-live="polite"
+                                className="text-base leading-tight capitalize"
+                            >
+                                {selectedNames.length > 0 ? (
+                                    `${joinNames(selectedNames)} ${space.name}`
+                                ) : (
+                                    <>
+                                        {space.name}{' '}
+                                        <span className="text-[#999] normal-case">
+                                            · pick a feeling
+                                        </span>
+                                    </>
+                                )}
                             </h2>
                         </div>
                         <button
