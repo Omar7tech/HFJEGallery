@@ -46,7 +46,7 @@ export default function LivingMoodBoard({
                         The Living Edit
                     </h1>
                 </div>
-                <p className="max-w-[340px] font-display text-[10px] leading-[1.55] text-[#b56c49] @2xl:pt-0.5">
+                <p className="max-w-[380px] font-display text-[clamp(0.6875rem,1.3cqi,0.8125rem)] leading-[1.6] text-[#b56c49] @2xl:pt-0.5">
                     Choose The Feelings, Moments, And Materials That Feel Like
                     Home. Your Selections Are Matched With Visual Directions
                     Curated By HFJE.
