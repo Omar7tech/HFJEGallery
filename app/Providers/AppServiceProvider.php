@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Carbon\CarbonImmutable;
+use Filament\Support\Assets\Css;
+use Filament\Support\Facades\FilamentAsset;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+
+        FilamentAsset::register([
+            Css::make('mood-board-slot-picker', resource_path('css/filament/mood-board-slot-picker.css'))->loadedOnRequest(),
+        ]);
     }
 
     /**

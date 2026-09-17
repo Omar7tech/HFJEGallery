@@ -4,12 +4,12 @@ namespace App\Filament\Resources\GalleryImages\Schemas;
 
 use App\Enums\LivingEditStep;
 use App\Enums\MoodBoardImageSlot;
+use App\Filament\Forms\Components\MoodBoardSlotPicker;
 use App\Filament\LivingEdit\Resources\LivingEditOptions\LivingEditOptionResource;
 use App\Models\GalleryImage;
 use App\Models\LivingEditOption;
 use BackedEnum;
 use Filament\Forms\Components\CheckboxList;
-use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
@@ -33,9 +33,8 @@ class GalleryImageForm
                     Section::make('Image')
                         ->description('Choose where the image sits on the mood board, then upload it.')
                         ->components([
-                            Radio::make('slot')
+                            MoodBoardSlotPicker::make('slot')
                                 ->label('Position on the mood board')
-                                ->options(MoodBoardImageSlot::class)
                                 ->required()
                                 ->live(),
                             SpatieMediaLibraryFileUpload::make('image')

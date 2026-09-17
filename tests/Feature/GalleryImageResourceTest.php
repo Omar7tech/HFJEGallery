@@ -104,6 +104,26 @@ test('an image needs a position, a file and at least one space', function () {
     expect(GalleryImage::count())->toBe(0);
 });
 
+test('the position picker offers every mood board position with its shape', function () {
+    Livewire::test(CreateGalleryImage::class)
+        ->assertSeeHtml('role="radiogroup"')
+        ->assertSeeInOrder(['Large', '9:16', 'Top right', '1:1', 'Small left', '3:4', 'Small middle', '3:4', 'Small right', '3:4']);
+});
+
+test('a position that is not on the mood board is rejected', function () {
+    Livewire::test(CreateGalleryImage::class)
+        ->fillForm(['slot' => 9])
+        ->call('create')
+        ->assertHasFormErrors(['slot']);
+});
+
+test('the position picker is filled with the saved position when editing', function () {
+    $image = GalleryImage::factory()->slot(MoodBoardImageSlot::SmallMiddle)->create();
+
+    Livewire::test(EditGalleryImage::class, ['record' => $image->getRouteKey()])
+        ->assertSchemaStateSet(['slot' => MoodBoardImageSlot::SmallMiddle->value]);
+});
+
 test('an image needs at least one option in every step', function (LivingEditStep $missingStep) {
     Storage::fake('public');
     $space = LivingSpace::create(['name' => 'Kitchen']);
