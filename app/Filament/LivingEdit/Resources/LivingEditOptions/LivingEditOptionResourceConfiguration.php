@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\LivingEditOptions;
+namespace App\Filament\LivingEdit\Resources\LivingEditOptions;
 
 use App\Enums\LivingEditStep;
 use Filament\Resources\ResourceConfiguration;

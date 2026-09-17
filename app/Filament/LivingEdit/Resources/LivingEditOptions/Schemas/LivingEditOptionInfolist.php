@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\LivingEditOptions\Schemas;
+namespace App\Filament\LivingEdit\Resources\LivingEditOptions\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;

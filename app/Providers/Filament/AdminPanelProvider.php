@@ -3,8 +3,8 @@
 namespace App\Providers\Filament;
 
 use App\Enums\LivingEditStep;
-use App\Filament\Resources\LivingEditOptions\LivingEditOptionResource;
-use App\Filament\Resources\LivingEditOptions\LivingEditOptionResourceConfiguration;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\LivingEditOptionResource;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\LivingEditOptionResourceConfiguration;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;

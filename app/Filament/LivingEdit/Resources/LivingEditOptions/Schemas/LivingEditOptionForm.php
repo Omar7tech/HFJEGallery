@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\LivingEditOptions\Schemas;
+namespace App\Filament\LivingEdit\Resources\LivingEditOptions\Schemas;
 
-use App\Filament\Resources\LivingEditOptions\LivingEditOptionResource;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\LivingEditOptionResource;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;

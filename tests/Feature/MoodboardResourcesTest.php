@@ -1,10 +1,10 @@
 <?php
 
 use App\Enums\LivingEditStep;
-use App\Filament\Resources\LivingEditOptions\LivingEditOptionResource;
-use App\Filament\Resources\LivingEditOptions\Pages\CreateLivingEditOption;
-use App\Filament\Resources\LivingEditOptions\Pages\EditLivingEditOption;
-use App\Filament\Resources\LivingEditOptions\Pages\ListLivingEditOptions;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\LivingEditOptionResource;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Pages\CreateLivingEditOption;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Pages\EditLivingEditOption;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Pages\ListLivingEditOptions;
 use App\Filament\Resources\LivingSpaces\LivingSpaceResource;
 use App\Filament\Resources\LivingSpaces\Pages\CreateLivingSpace;
 use App\Filament\Resources\LivingSpaces\Pages\EditLivingSpace;
@@ -54,13 +54,13 @@ test('every step has its own option pages', function (LivingEditStep $step) {
     $this->get(LivingEditOptionResource::getUrl('edit', $parameters, configuration: $step->key()))->assertSuccessful();
 })->with(LivingEditStep::cases());
 
-test('the sidebar lists each step on its own and hides the unconfigured options resource', function () {
+test('the sidebar lists each step on its own and no stepless options route exists', function () {
     $this->get(LivingSpaceResource::getUrl('index'))
         ->assertSuccessful()
         ->assertSeeInOrder(['Spaces', 'Step 1', 'Step 2', 'Step 3', 'Step 4'])
         ->assertDontSee('Living Edit Options');
 
-    $this->get('/admin/living-edit-options')->assertForbidden();
+    $this->get('/admin/living-edit-options')->assertNotFound();
 });
 
 test('a step only lists its own options in sort order', function () {

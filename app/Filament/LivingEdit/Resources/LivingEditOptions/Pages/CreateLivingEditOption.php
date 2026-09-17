@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Filament\Resources\LivingEditOptions\Pages;
+namespace App\Filament\LivingEdit\Resources\LivingEditOptions\Pages;
 
-use App\Filament\Resources\LivingEditOptions\LivingEditOptionResource;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\LivingEditOptionResource;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateLivingEditOption extends CreateRecord

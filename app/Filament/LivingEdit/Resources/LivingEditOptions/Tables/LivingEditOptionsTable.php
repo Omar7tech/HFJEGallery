@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\LivingEditOptions\Tables;
+namespace App\Filament\LivingEdit\Resources\LivingEditOptions\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;

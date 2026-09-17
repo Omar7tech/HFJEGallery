@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\LivingEditOptions;
+namespace App\Filament\LivingEdit\Resources\LivingEditOptions;
 
 use App\Enums\LivingEditStep;
-use App\Filament\Resources\LivingEditOptions\Pages\CreateLivingEditOption;
-use App\Filament\Resources\LivingEditOptions\Pages\EditLivingEditOption;
-use App\Filament\Resources\LivingEditOptions\Pages\ListLivingEditOptions;
-use App\Filament\Resources\LivingEditOptions\Pages\ViewLivingEditOption;
-use App\Filament\Resources\LivingEditOptions\Schemas\LivingEditOptionForm;
-use App\Filament\Resources\LivingEditOptions\Schemas\LivingEditOptionInfolist;
-use App\Filament\Resources\LivingEditOptions\Tables\LivingEditOptionsTable;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Pages\CreateLivingEditOption;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Pages\EditLivingEditOption;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Pages\ListLivingEditOptions;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Pages\ViewLivingEditOption;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Schemas\LivingEditOptionForm;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Schemas\LivingEditOptionInfolist;
+use App\Filament\LivingEdit\Resources\LivingEditOptions\Tables\LivingEditOptionsTable;
 use App\Models\LivingEditOption;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -40,14 +40,6 @@ class LivingEditOptionResource extends Resource
     public static function getStep(): ?LivingEditStep
     {
         return static::getConfiguration()?->getStep();
-    }
-
-    /**
-     * The unconfigured registration created by resource discovery is not reachable.
-     */
-    public static function canAccess(): bool
-    {
-        return static::hasConfiguration() && parent::canAccess();
     }
 
     /**
