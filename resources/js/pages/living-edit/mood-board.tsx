@@ -2,8 +2,9 @@ import { Link } from '@inertiajs/react';
 import { RefreshCw } from 'lucide-react';
 import MarqueeText from '@/components/marquee-text';
 import { cn } from '@/lib/utils';
-import type { LivingEditOption, LivingSpace } from '@/types';
+import type { LivingEditOption, LivingSpace, MoodBoardSlot } from '@/types';
 import MaskedIcon from './masked-icon';
+import MoodBoardPreview from './mood-board-preview';
 import {
     LIVING_EDIT_STEPS,
     LIVING_EDIT_TOTAL_STEPS,
@@ -46,6 +47,7 @@ export default function LivingMoodBoard({
     onToggle,
     onBack,
     onContinue,
+    board,
 }: {
     step: LivingEditStep;
     space: LivingSpace;
@@ -54,6 +56,11 @@ export default function LivingMoodBoard({
     onToggle: (id: string) => void;
     onBack: () => void;
     onContinue?: () => void;
+    board: {
+        slots: MoodBoardSlot[] | null;
+        isLoading: boolean;
+        refresh: () => void;
+    };
 }) {
     const stepNumber = LIVING_EDIT_STEPS.indexOf(step) + 1;
 
@@ -196,39 +203,31 @@ export default function LivingMoodBoard({
                         </div>
                         <button
                             type="button"
-                            disabled
-                            title="Available when mood-board images are connected"
-                            className="flex shrink-0 items-center gap-1 rounded-full bg-[#f4f4f4] px-2 py-1 text-[9px] text-[#ad6844] disabled:cursor-default"
+                            onClick={board.refresh}
+                            disabled={board.slots === null}
+                            className="flex shrink-0 items-center gap-1 rounded-full bg-[#f4f4f4] px-2 py-1 text-[9px] text-[#ad6844] transition-colors hover:bg-[#ece7e3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-[#f4f4f4]"
                         >
-                            <RefreshCw aria-hidden="true" size={15} /> Refresh
-                            Board
+                            <RefreshCw
+                                aria-hidden="true"
+                                size={15}
+                                className={cn(
+                                    board.isLoading &&
+                                        'motion-safe:animate-spin',
+                                )}
+                            />{' '}
+                            Refresh Board
                         </button>
                     </div>
 
-                    <div
-                        role="img"
-                        aria-label="Mood board with gray image placeholders and brown and beige color swatches"
-                        className="mt-6 grid aspect-square grid-cols-[1.1fr_1fr] gap-1.5"
-                    >
-                        <div className="rounded-xl bg-[#d9d9d9]" />
-                        <div className="grid min-h-0 grid-rows-[1.65fr_1fr_0.7fr] gap-1.5">
-                            <div className="rounded-xl bg-[#dedede]" />
-                            <div className="grid grid-cols-[2fr_1fr] gap-1">
-                                <div className="rounded-xl bg-[#6c4936]" />
-                                <div className="rounded-xl bg-[#d6c2a6]" />
-                            </div>
-                            <div className="grid grid-cols-3 gap-1">
-                                <div className="rounded-lg bg-[#d1d1d1]" />
-                                <div className="rounded-lg bg-[#e4e4e4]" />
-                                <div className="rounded-lg bg-[#d8d8d8]" />
-                            </div>
-                        </div>
-                    </div>
+                    <MoodBoardPreview
+                        slots={board.slots}
+                        isLoading={board.isLoading}
+                    />
                     <div className="mt-9 flex justify-center">
                         <button
                             type="button"
                             disabled
-                            title="Available when mood-board images are connected"
+                            title="Saving the board is coming soon"
                             className="w-[136px] rounded-full bg-[#f4f4f4] py-0.5 text-xs text-[#ad6844] disabled:cursor-default"
                         >
                             Save Image

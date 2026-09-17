@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\MoodBoardImageSlot;
 use App\Models\GalleryImage;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Http\UploadedFile;
 
 /**
  * @extends Factory<GalleryImage>
@@ -31,5 +32,15 @@ class GalleryImageFactory extends Factory
     public function inactive(): static
     {
         return $this->state(['is_active' => false]);
+    }
+
+    /**
+     * Attaches a small image file, as uploaded from the dashboard. Fake the public disk first.
+     */
+    public function withImage(): static
+    {
+        return $this->afterCreating(function (GalleryImage $image): void {
+            $image->addMedia(UploadedFile::fake()->image('image.jpg', 12, 16))->toMediaCollection('image');
+        });
     }
 }
