@@ -12,6 +12,7 @@ use App\Filament\LivingEdit\Resources\LivingEditOptions\Schemas\LivingEditOption
 use App\Filament\LivingEdit\Resources\LivingEditOptions\Tables\LivingEditOptionsTable;
 use App\Models\LivingEditOption;
 use BackedEnum;
+use Filament\Panel;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Tables\Table;
@@ -21,8 +22,6 @@ use UnitEnum;
 
 /**
  * Registered once per step in the panel provider, so every step keeps its own sidebar item and URL.
- *
- * @extends resource<LivingEditOption, LivingEditOptionResourceConfiguration>
  */
 class LivingEditOptionResource extends Resource
 {
@@ -33,6 +32,18 @@ class LivingEditOptionResource extends Resource
     protected static string|UnitEnum|null $navigationGroup = 'Moodboard';
 
     protected static ?string $recordTitleAttribute = 'name';
+
+    public static function make(string $key = 'default'): LivingEditOptionResourceConfiguration
+    {
+        /** @var LivingEditOptionResourceConfiguration */
+        return parent::make($key);
+    }
+
+    public static function getConfiguration(?Panel $panel = null): ?LivingEditOptionResourceConfiguration
+    {
+        /** @var ?LivingEditOptionResourceConfiguration */
+        return parent::getConfiguration($panel);
+    }
 
     /**
      * The step of the current registration, or null outside of one.
