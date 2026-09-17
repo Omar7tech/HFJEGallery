@@ -27,6 +27,5 @@
                 </span>
             </span>
         </div>
-        <span class="mb-slot-mini__label">{{ $slot->getLabel() }}</span>
     @endif
 </div>
