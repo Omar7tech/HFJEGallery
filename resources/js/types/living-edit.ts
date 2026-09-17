@@ -4,13 +4,8 @@ export type LivingSpace = {
     icon: string | null;
 };
 
-export type StepOneOption = {
-    id: string;
-    name: string;
-    icon: string | null;
-};
-
-export type StepTwoOption = {
+/** A selectable option of a Living Edit step (step 1 to 4). */
+export type LivingEditOption = {
     id: string;
     name: string;
     icon: string | null;

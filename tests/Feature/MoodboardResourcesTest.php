@@ -4,14 +4,22 @@ use App\Filament\Resources\LivingSpaces\LivingSpaceResource;
 use App\Filament\Resources\LivingSpaces\Pages\CreateLivingSpace;
 use App\Filament\Resources\LivingSpaces\Pages\EditLivingSpace;
 use App\Filament\Resources\LivingSpaces\Pages\ListLivingSpaces;
+use App\Filament\Resources\StepFours\Pages\CreateStepFour;
+use App\Filament\Resources\StepFours\Pages\ListStepFours;
+use App\Filament\Resources\StepFours\StepFourResource;
 use App\Filament\Resources\StepOnes\Pages\CreateStepOne;
 use App\Filament\Resources\StepOnes\Pages\ListStepOnes;
 use App\Filament\Resources\StepOnes\StepOneResource;
+use App\Filament\Resources\StepThrees\Pages\CreateStepThree;
+use App\Filament\Resources\StepThrees\Pages\ListStepThrees;
+use App\Filament\Resources\StepThrees\StepThreeResource;
 use App\Filament\Resources\StepTwos\Pages\CreateStepTwo;
 use App\Filament\Resources\StepTwos\Pages\ListStepTwos;
 use App\Filament\Resources\StepTwos\StepTwoResource;
 use App\Models\LivingSpace;
+use App\Models\StepFour;
 use App\Models\StepOne;
+use App\Models\StepThree;
 use App\Models\StepTwo;
 use App\Models\User;
 use Database\Seeders\LivingEditSeeder;
@@ -27,33 +35,27 @@ beforeEach(function () {
     $this->seed(LivingEditSeeder::class);
 });
 
-test('moodboard resource pages render', function (string $url) {
-    $this->get($url)->assertSuccessful();
-})->with([
-    'spaces index' => fn () => LivingSpaceResource::getUrl('index'),
-    'spaces create' => fn () => LivingSpaceResource::getUrl('create'),
-    'spaces view' => fn () => LivingSpaceResource::getUrl('view', ['record' => LivingSpace::firstOrFail()]),
-    'spaces edit' => fn () => LivingSpaceResource::getUrl('edit', ['record' => LivingSpace::firstOrFail()]),
-    'step 1 index' => fn () => StepOneResource::getUrl('index'),
-    'step 1 create' => fn () => StepOneResource::getUrl('create'),
-    'step 1 view' => fn () => StepOneResource::getUrl('view', ['record' => StepOne::firstOrFail()]),
-    'step 1 edit' => fn () => StepOneResource::getUrl('edit', ['record' => StepOne::firstOrFail()]),
-    'step 2 index' => fn () => StepTwoResource::getUrl('index'),
-    'step 2 create' => fn () => StepTwoResource::getUrl('create'),
-    'step 2 view' => fn () => StepTwoResource::getUrl('view', ['record' => StepTwo::firstOrFail()]),
-    'step 2 edit' => fn () => StepTwoResource::getUrl('edit', ['record' => StepTwo::firstOrFail()]),
+dataset('moodboard resources', [
+    'spaces' => [LivingSpaceResource::class, LivingSpace::class, ListLivingSpaces::class],
+    'step 1' => [StepOneResource::class, StepOne::class, ListStepOnes::class],
+    'step 2' => [StepTwoResource::class, StepTwo::class, ListStepTwos::class],
+    'step 3' => [StepThreeResource::class, StepThree::class, ListStepThrees::class],
+    'step 4' => [StepFourResource::class, StepFour::class, ListStepFours::class],
 ]);
 
-test('tables list records in sort order', function () {
-    Livewire::test(ListLivingSpaces::class)
-        ->assertCanSeeTableRecords(LivingSpace::orderBy('sort_order')->get(), inOrder: true);
+test('moodboard resource pages render', function (string $resource, string $model) {
+    $record = $model::firstOrFail();
 
-    Livewire::test(ListStepOnes::class)
-        ->assertCanSeeTableRecords(StepOne::orderBy('sort_order')->get(), inOrder: true);
+    $this->get($resource::getUrl('index'))->assertSuccessful();
+    $this->get($resource::getUrl('create'))->assertSuccessful();
+    $this->get($resource::getUrl('view', ['record' => $record]))->assertSuccessful();
+    $this->get($resource::getUrl('edit', ['record' => $record]))->assertSuccessful();
+})->with('moodboard resources');
 
-    Livewire::test(ListStepTwos::class)
-        ->assertCanSeeTableRecords(StepTwo::orderBy('sort_order')->get(), inOrder: true);
-});
+test('tables list records in sort order', function (string $resource, string $model, string $listPage) {
+    Livewire::test($listPage)
+        ->assertCanSeeTableRecords($model::orderBy('sort_order')->get(), inOrder: true);
+})->with('moodboard resources');
 
 test('a space can be created with an icon', function () {
     Storage::fake('public');
@@ -72,23 +74,19 @@ test('a space can be created with an icon', function () {
     expect($space->getFirstMedia('icon'))->not->toBeNull();
 });
 
-test('a step 1 option can be created', function () {
-    Livewire::test(CreateStepOne::class)
+test('a step option can be created', function (string $createPage, string $table) {
+    Livewire::test($createPage)
         ->fillForm(['name' => 'Playful'])
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas('step_ones', ['name' => 'Playful', 'slug' => 'playful', 'is_active' => true]);
-});
-
-test('a step 2 option can be created', function () {
-    Livewire::test(CreateStepTwo::class)
-        ->fillForm(['name' => 'Game night'])
-        ->call('create')
-        ->assertHasNoFormErrors();
-
-    $this->assertDatabaseHas('step_twos', ['name' => 'Game night', 'slug' => 'game-night', 'is_active' => true]);
-});
+    $this->assertDatabaseHas($table, ['name' => 'Playful', 'slug' => 'playful', 'is_active' => true]);
+})->with([
+    'step 1' => [CreateStepOne::class, 'step_ones'],
+    'step 2' => [CreateStepTwo::class, 'step_twos'],
+    'step 3' => [CreateStepThree::class, 'step_threes'],
+    'step 4' => [CreateStepFour::class, 'step_fours'],
+]);
 
 test('names must be unique and present', function () {
     Livewire::test(CreateLivingSpace::class)

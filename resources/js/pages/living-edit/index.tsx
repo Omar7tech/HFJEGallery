@@ -1,58 +1,48 @@
 import { Head } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
-import type { LivingSpace, StepOneOption, StepTwoOption } from '@/types';
+import type { LivingEditOption, LivingSpace } from '@/types';
 import MaskedIcon from './masked-icon';
 import LivingMoodBoard from './mood-board';
-import { useLivingEditFlow } from './use-living-edit-flow';
+import { LIVING_EDIT_STEPS, useLivingEditFlow } from './use-living-edit-flow';
 
 export default function LivingEdit({
     spaces,
     stepOne,
     stepTwo,
+    stepThree,
+    stepFour,
 }: {
     spaces: LivingSpace[];
-    stepOne: StepOneOption[];
-    stepTwo: StepTwoOption[];
+    stepOne: LivingEditOption[];
+    stepTwo: LivingEditOption[];
+    stepThree: LivingEditOption[];
+    stepFour: LivingEditOption[];
 }) {
-    const {
-        space,
-        step,
-        stepOneIds,
-        stepTwoIds,
-        goTo,
-        selectSpace,
-        toggleStepOne,
-        toggleStepTwo,
-    } = useLivingEditFlow(spaces, stepOne, stepTwo);
+    const options = {
+        'step-1': stepOne,
+        'step-2': stepTwo,
+        'step-3': stepThree,
+        'step-4': stepFour,
+    };
+    const { space, step, selections, goTo, selectSpace, toggleOption } =
+        useLivingEditFlow(spaces, options);
 
-    if (space && step === 'step-1') {
+    if (space && step) {
+        const stepIndex = LIVING_EDIT_STEPS.indexOf(step);
+        const previousStep = LIVING_EDIT_STEPS[stepIndex - 1] ?? null;
+        const nextStep = LIVING_EDIT_STEPS[stepIndex + 1];
+
         return (
             <>
                 <Head title="Living Edit" />
                 <LivingMoodBoard
                     step={step}
                     space={space}
-                    options={stepOne}
-                    selected={stepOneIds}
-                    onToggle={toggleStepOne}
-                    onBack={() => goTo(null)}
-                    onContinue={() => goTo('step-2')}
-                />
-            </>
-        );
-    }
-
-    if (space && step === 'step-2') {
-        return (
-            <>
-                <Head title="Living Edit" />
-                <LivingMoodBoard
-                    step={step}
-                    space={space}
-                    options={stepTwo}
-                    selected={stepTwoIds}
-                    onToggle={toggleStepTwo}
-                    onBack={() => goTo('step-1')}
+                    options={options[step]}
+                    selected={selections[step]}
+                    onToggle={(id) => toggleOption(step, id)}
+                    onBack={() => goTo(previousStep)}
+                    onContinue={nextStep ? () => goTo(nextStep) : undefined}
                 />
             </>
         );

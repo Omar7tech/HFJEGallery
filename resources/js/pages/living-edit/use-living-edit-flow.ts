@@ -1,23 +1,42 @@
 import { router, usePage } from '@inertiajs/react';
-import type { LivingSpace, StepOneOption, StepTwoOption } from '@/types';
+import type { LivingEditOption, LivingSpace } from '@/types';
 
 /**
- * The steps after choosing a space, in order. Add later steps here
- * and render them in the page.
+ * The steps after choosing a space, in order, with the query string key
+ * that holds each step's selections.
  */
-export const LIVING_EDIT_STEPS = ['step-1', 'step-2'] as const;
+export const LIVING_EDIT_STEP_PARAMS = {
+    'step-1': 'step1',
+    'step-2': 'step2',
+    'step-3': 'step3',
+    'step-4': 'step4',
+} as const;
 
-export const LIVING_EDIT_TOTAL_STEPS = 4;
+export type LivingEditStep = keyof typeof LIVING_EDIT_STEP_PARAMS;
+
+export const LIVING_EDIT_STEPS = Object.keys(
+    LIVING_EDIT_STEP_PARAMS,
+) as LivingEditStep[];
+
+export const LIVING_EDIT_TOTAL_STEPS = LIVING_EDIT_STEPS.length;
 
 export const MAX_STEP_SELECTIONS = 3;
 
-export type LivingEditStep = (typeof LIVING_EDIT_STEPS)[number];
+export type LivingEditSelections = Record<LivingEditStep, string[]>;
+
+export type LivingEditOptions = Record<LivingEditStep, LivingEditOption[]>;
 
 type FlowState = {
     spaceId: string | null;
     step: LivingEditStep | null;
-    stepOneIds: string[];
-    stepTwoIds: string[];
+    selections: LivingEditSelections;
+};
+
+const NO_SELECTIONS: LivingEditSelections = {
+    'step-1': [],
+    'step-2': [],
+    'step-3': [],
+    'step-4': [],
 };
 
 function isStep(value: string | null): value is LivingEditStep {
@@ -25,7 +44,7 @@ function isStep(value: string | null): value is LivingEditStep {
 }
 
 /** Reads a comma separated list of ids, keeping only known ones. */
-function parseIds(value: string | null, options: { id: string }[]): string[] {
+function parseIds(value: string | null, options: LivingEditOption[]): string[] {
     const allowedIds = options.map(({ id }) => id);
 
     return [...new Set((value ?? '').split(','))]
@@ -33,21 +52,7 @@ function parseIds(value: string | null, options: { id: string }[]): string[] {
         .slice(0, MAX_STEP_SELECTIONS);
 }
 
-/** Adds or removes an id, up to the selection limit. */
-function toggleId(ids: string[], id: string): string[] {
-    if (ids.includes(id)) {
-        return ids.filter((value) => value !== id);
-    }
-
-    return ids.length < MAX_STEP_SELECTIONS ? [...ids, id] : ids;
-}
-
-function buildUrl({
-    spaceId,
-    step,
-    stepOneIds,
-    stepTwoIds,
-}: FlowState): string {
+function buildUrl({ spaceId, step, selections }: FlowState): string {
     const params = new URLSearchParams();
 
     if (spaceId) {
@@ -58,12 +63,10 @@ function buildUrl({
         params.set('step', step);
     }
 
-    if (stepOneIds.length > 0) {
-        params.set('step1', stepOneIds.join(','));
-    }
-
-    if (stepTwoIds.length > 0) {
-        params.set('step2', stepTwoIds.join(','));
+    for (const key of LIVING_EDIT_STEPS) {
+        if (selections[key].length > 0) {
+            params.set(LIVING_EDIT_STEP_PARAMS[key], selections[key].join(','));
+        }
     }
 
     const query = params.toString().replaceAll('%2C', ',');
@@ -77,8 +80,7 @@ function buildUrl({
  */
 export function useLivingEditFlow(
     spaces: LivingSpace[],
-    stepOneOptions: StepOneOption[],
-    stepTwoOptions: StepTwoOption[],
+    options: LivingEditOptions,
 ) {
     const { url } = usePage();
     const params = new URL(url, 'http://localhost').searchParams;
@@ -87,14 +89,17 @@ export function useLivingEditFlow(
         spaces.find(({ id }) => id === params.get('space')) ?? spaces[0];
     const requestedStep = params.get('step');
     const step = space && isStep(requestedStep) ? requestedStep : null;
-    const stepOneIds = parseIds(params.get('step1'), stepOneOptions);
-    const stepTwoIds = parseIds(params.get('step2'), stepTwoOptions);
+    const selections = Object.fromEntries(
+        LIVING_EDIT_STEPS.map((key) => [
+            key,
+            parseIds(params.get(LIVING_EDIT_STEP_PARAMS[key]), options[key]),
+        ]),
+    ) as LivingEditSelections;
 
     const state: FlowState = {
         spaceId: space?.id ?? null,
         step,
-        stepOneIds,
-        stepTwoIds,
+        selections,
     };
 
     /** Moves to another step and adds a browser history entry. */
@@ -116,26 +121,32 @@ export function useLivingEditFlow(
 
     function selectSpace(spaceId: string) {
         if (spaceId !== state.spaceId) {
-            update({ spaceId, stepOneIds: [], stepTwoIds: [] });
+            update({ spaceId, selections: NO_SELECTIONS });
         }
     }
 
-    function toggleStepOne(id: string) {
-        update({ stepOneIds: toggleId(stepOneIds, id) });
-    }
+    /** Adds or removes an option of a step, up to the selection limit. */
+    function toggleOption(key: LivingEditStep, id: string) {
+        const ids = selections[key];
 
-    function toggleStepTwo(id: string) {
-        update({ stepTwoIds: toggleId(stepTwoIds, id) });
+        if (ids.includes(id)) {
+            update({
+                selections: {
+                    ...selections,
+                    [key]: ids.filter((value) => value !== id),
+                },
+            });
+        } else if (ids.length < MAX_STEP_SELECTIONS) {
+            update({ selections: { ...selections, [key]: [...ids, id] } });
+        }
     }
 
     return {
         space,
         step,
-        stepOneIds,
-        stepTwoIds,
+        selections,
         goTo,
         selectSpace,
-        toggleStepOne,
-        toggleStepTwo,
+        toggleOption,
     };
 }

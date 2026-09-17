@@ -2,7 +2,7 @@ import { Link } from '@inertiajs/react';
 import { RefreshCw } from 'lucide-react';
 import MarqueeText from '@/components/marquee-text';
 import { cn } from '@/lib/utils';
-import type { LivingSpace, StepOneOption, StepTwoOption } from '@/types';
+import type { LivingEditOption, LivingSpace } from '@/types';
 import MaskedIcon from './masked-icon';
 import {
     LIVING_EDIT_STEPS,
@@ -20,6 +20,14 @@ const STEP_COPY: Record<LivingEditStep, { legend: string; pickHint: string }> =
         'step-2': {
             legend: 'Choose your moments. Select up to three.',
             pickHint: 'pick a moment',
+        },
+        'step-3': {
+            legend: 'Choose your materials. Select up to three.',
+            pickHint: 'pick a material',
+        },
+        'step-4': {
+            legend: 'Choose your palette. Select up to three.',
+            pickHint: 'pick a palette',
         },
     };
 
@@ -41,7 +49,7 @@ export default function LivingMoodBoard({
 }: {
     step: LivingEditStep;
     space: LivingSpace;
-    options: StepOneOption[] | StepTwoOption[];
+    options: LivingEditOption[];
     selected: string[];
     onToggle: (id: string) => void;
     onBack: () => void;
