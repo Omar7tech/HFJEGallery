@@ -31,30 +31,31 @@ class GalleryImageForm
             ->components([
                 Group::make([
                     Section::make('Image')
-                        ->description('Choose where the image sits on the mood board, then upload it.')
+                        ->description('Choose where the image sits on the mood board. The upload appears once a position is picked.')
                         ->components([
                             MoodBoardSlotPicker::make('slot')
                                 ->label('Position on the mood board')
                                 ->required()
                                 ->live(),
-                            SpatieMediaLibraryFileUpload::make('image')
-                                ->collection('image')
-                                ->disk('public')
-                                ->visibility('public')
-                                ->required()
-                                ->image()
-                                ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
-                                ->maxSize(10240)
-                                ->conversion('thumb')
-                                ->imageEditor()
-                                ->imageEditorAspectRatioOptions(fn (Get $get): array => static::selectedSlot($get)
-                                    ? [static::selectedSlot($get)->aspectRatio(), null]
-                                    : [])
-                                ->helperText(fn (Get $get): string => static::uploadHelperText(static::selectedSlot($get))),
-                            TextInput::make('alt_text')
-                                ->label('Alt text')
-                                ->maxLength(255)
-                                ->helperText('A short description of the image for screen readers and search engines.'),
+                            Group::make([
+                                SpatieMediaLibraryFileUpload::make('image')
+                                    ->collection('image')
+                                    ->disk('public')
+                                    ->visibility('public')
+                                    ->required()
+                                    ->image()
+                                    ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/webp'])
+                                    ->maxSize(10240)
+                                    ->conversion('thumb')
+                                    ->imageEditor()
+                                    ->imageEditorAspectRatioOptions(fn (Get $get): array => [static::selectedSlot($get)?->aspectRatio(), null])
+                                    ->helperText(fn (Get $get): string => static::uploadHelperText(static::selectedSlot($get))),
+                                TextInput::make('alt_text')
+                                    ->label('Alt text')
+                                    ->maxLength(255)
+                                    ->helperText('A short description of the image for screen readers and search engines.'),
+                            ])
+                                ->visible(fn (Get $get): bool => static::selectedSlot($get) !== null),
                         ]),
 
                     Section::make('Steps')
@@ -144,13 +145,7 @@ class GalleryImageForm
 
     protected static function uploadHelperText(?MoodBoardImageSlot $slot): string
     {
-        $formats = 'JPG, PNG or WebP up to 10 MB, converted to WebP automatically.';
-
-        if (! $slot) {
-            return $formats;
-        }
-
-        return "Best at {$slot->aspectRatio()}, the shape of the {$slot->getLabel()} position. Use the editor to crop. {$formats}";
+        return "Best at {$slot?->aspectRatio()}, the shape of the {$slot?->getLabel()} position. Use the editor to crop. JPG, PNG or WebP up to 10 MB, converted to WebP automatically.";
     }
 
     protected static function missingOptionsHelperText(LivingEditStep $step): HtmlString

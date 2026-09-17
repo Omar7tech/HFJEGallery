@@ -47,7 +47,7 @@
                 </span>
             </template>
             <template x-if="! slots[state]">
-                <span>Click a position on the board.</span>
+                <span>Click a position on the board to upload its image.</span>
             </template>
         </p>
     </div>

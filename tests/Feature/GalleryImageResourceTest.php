@@ -96,12 +96,25 @@ test('an image needs a position, a file and at least one space', function () {
     optionPerStep();
 
     Livewire::test(CreateGalleryImage::class)
-        ->fillForm(['slot' => null, 'image' => [], 'spaces' => []])
+        ->fillForm(['slot' => MoodBoardImageSlot::Large->value, 'image' => [], 'spaces' => []])
         ->call('create')
-        ->assertHasFormErrors(['slot' => 'required', 'image' => 'required', 'spaces' => 'required'])
-        ->assertSee('Pick at least one space.');
+        ->assertHasFormErrors(['image' => 'required', 'spaces' => 'required'])
+        ->assertSee('Pick at least one space.')
+        ->fillForm(['slot' => null])
+        ->call('create')
+        ->assertHasFormErrors(['slot' => 'required']);
 
     expect(GalleryImage::count())->toBe(0);
+});
+
+test('the upload and alt text appear only after a position is picked', function () {
+    Livewire::test(CreateGalleryImage::class)
+        ->assertFormFieldHidden('image')
+        ->assertFormFieldHidden('alt_text')
+        ->fillForm(['slot' => MoodBoardImageSlot::TopRight->value])
+        ->assertFormFieldVisible('image')
+        ->assertFormFieldVisible('alt_text')
+        ->assertSee('Best at 1:1, the shape of the Top right position.');
 });
 
 test('the position picker offers every mood board position with its shape', function () {
