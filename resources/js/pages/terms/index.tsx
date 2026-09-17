@@ -1,5 +1,5 @@
 import LegalDocument from '@/components/legal-document';
-import type {LegalSection} from '@/components/legal-document';
+import type { LegalSection } from '@/components/legal-document';
 
 /**
  * Standard website terms for the studio site. Governing law should be

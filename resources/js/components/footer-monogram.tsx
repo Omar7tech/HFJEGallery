@@ -1,5 +1,5 @@
-import { motion, useReducedMotion  } from 'motion/react';
-import type {Variants} from 'motion/react';
+import { motion, useReducedMotion } from 'motion/react';
+import type { Variants } from 'motion/react';
 import { glyphs } from '@/components/logo';
 import { cn } from '@/lib/utils';
 
@@ -60,7 +60,9 @@ export default function FooterMonogram({ className }: { className?: string }) {
                     strokeOpacity={1}
                     vectorEffect="non-scaling-stroke"
                     variants={reduceMotion ? undefined : glyph}
-                    style={reduceMotion ? { fillOpacity: FILL_OPACITY } : undefined}
+                    style={
+                        reduceMotion ? { fillOpacity: FILL_OPACITY } : undefined
+                    }
                 />
             ))}
         </motion.svg>

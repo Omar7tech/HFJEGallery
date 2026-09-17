@@ -1,33 +1,33 @@
-import { ArrowUpRight } from 'lucide-react'
-import { SmartImage } from '@/components/smart-image'
+import { ArrowUpRight } from 'lucide-react';
+import { SmartImage } from '@/components/smart-image';
 
 interface Project {
-  src: string
-  alt: string
-  /** Placement inside the collage grid — identical at every width. */
-  className: string
+    src: string;
+    alt: string;
+    /** Placement inside the collage grid — identical at every width. */
+    className: string;
 }
 
 const projects: Project[] = [
-  {
-    // Tall image — first column, full height.
-    src: '/images/gray-stylish-modular-sofa-brick-marble-background-rustic-living-room-w1600.webp',
-    alt: 'Rustic living room with a low modular sofa, arched mosaic niches and warm textiles',
-    className: 'project-tall col-start-1 col-end-2 row-start-1 row-end-5',
-  },
-  {
-    // Short banner — top-right, one row.
-    src: '/images/modern-living-room-interior-design (1)-w1600.webp',
-    alt: 'Double-height modern living room with a sectional sofa and a wood-burning fireplace',
-    className: 'project-banner col-start-2 col-end-5 row-start-1 row-end-2',
-  },
-  {
-    // Large image — bottom-right, fills the remaining rows.
-    src: '/images/modern-living-room-interior-design-w1600.webp',
-    alt: 'Sunlit contemporary lounge with a sectional sofa, low table and forest views',
-    className: 'col-start-2 col-end-5 row-start-2 row-end-5',
-  },
-]
+    {
+        // Tall image — first column, full height.
+        src: '/images/gray-stylish-modular-sofa-brick-marble-background-rustic-living-room-w1600.webp',
+        alt: 'Rustic living room with a low modular sofa, arched mosaic niches and warm textiles',
+        className: 'project-tall col-start-1 col-end-2 row-start-1 row-end-5',
+    },
+    {
+        // Short banner — top-right, one row.
+        src: '/images/modern-living-room-interior-design (1)-w1600.webp',
+        alt: 'Double-height modern living room with a sectional sofa and a wood-burning fireplace',
+        className: 'project-banner col-start-2 col-end-5 row-start-1 row-end-2',
+    },
+    {
+        // Large image — bottom-right, fills the remaining rows.
+        src: '/images/modern-living-room-interior-design-w1600.webp',
+        alt: 'Sunlit contemporary lounge with a sectional sofa, low table and forest views',
+        className: 'col-start-2 col-end-5 row-start-2 row-end-5',
+    },
+];
 
 /**
  * Seamless architectural line pattern used as a faded section background:
@@ -35,30 +35,30 @@ const projects: Project[] = [
  * looks cropped. Color comes from `currentColor`.
  */
 function SpacesPattern({ className }: { className?: string }) {
-  return (
-    <svg
-      aria-hidden="true"
-      className={className}
-      width="100%"
-      height="100%"
-    >
-      <defs>
-        <pattern
-          id="spaces-grid"
-          width="112"
-          height="112"
-          patternUnits="userSpaceOnUse"
+    return (
+        <svg
+            aria-hidden="true"
+            className={className}
+            width="100%"
+            height="100%"
         >
-          <g fill="none" stroke="currentColor" strokeWidth="1">
-            <rect x="0" y="0" width="112" height="112" />
-            <rect x="28" y="28" width="56" height="56" />
-            <rect x="48" y="48" width="16" height="16" />
-          </g>
-        </pattern>
-      </defs>
-      <rect width="100%" height="100%" fill="url(#spaces-grid)" />
-    </svg>
-  )
+            <defs>
+                <pattern
+                    id="spaces-grid"
+                    width="112"
+                    height="112"
+                    patternUnits="userSpaceOnUse"
+                >
+                    <g fill="none" stroke="currentColor" strokeWidth="1">
+                        <rect x="0" y="0" width="112" height="112" />
+                        <rect x="28" y="28" width="56" height="56" />
+                        <rect x="48" y="48" width="16" height="16" />
+                    </g>
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#spaces-grid)" />
+        </svg>
+    );
 }
 
 /**
@@ -66,55 +66,55 @@ function SpacesPattern({ className }: { className?: string }) {
  * from behind the label — the same restrained language as the hero button.
  */
 function ViewPortfolioButton() {
-  return (
-    <button
-      type="button"
-      className="group mt-3 flex w-full items-center justify-center rounded-3xl bg-brand py-6 font-medium uppercase tracking-[0.15em] text-brand-foreground text-lg transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-xl"
-    >
-      View Portfolio
-      <span
-        aria-hidden="true"
-        className="inline-flex max-w-0 -translate-x-2 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:ml-3 group-hover:max-w-[1.4em] group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none"
-      >
-        <ArrowUpRight className="size-[1.1em]" strokeWidth={2} />
-      </span>
-    </button>
-  )
+    return (
+        <button
+            type="button"
+            className="group mt-3 flex w-full items-center justify-center rounded-3xl bg-brand py-6 text-lg font-medium tracking-[0.15em] text-brand-foreground uppercase transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-xl"
+        >
+            View Portfolio
+            <span
+                aria-hidden="true"
+                className="inline-flex max-w-0 -translate-x-2 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:ml-3 group-hover:max-w-[1.4em] group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none"
+            >
+                <ArrowUpRight className="size-[1.1em]" strokeWidth={2} />
+            </span>
+        </button>
+    );
 }
 
 function FeaturedProjects() {
-  return (
-    <section className="@container relative w-full overflow-hidden px-6 py-10 font-display md:px-12 md:py-15 lg:pl-0 lg:pr-16">
+    return (
+        <section className="@container relative w-full overflow-hidden px-6 py-10 font-display md:px-12 md:py-15 lg:pr-16 lg:pl-0">
+            <SpacesPattern className="pointer-events-none absolute inset-0 z-0 transform-gpu mask-[radial-gradient(120%_120%_at_top_right,black,transparent_65%)] text-brand/50 opacity-[0.18] [-webkit-mask-image:radial-gradient(120%_120%_at_top_right,black,transparent_65%)]" />
 
-      <SpacesPattern className="pointer-events-none absolute inset-0 z-0 transform-gpu text-brand/50 mask-[radial-gradient(120%_120%_at_top_right,black,transparent_65%)] [-webkit-mask-image:radial-gradient(120%_120%_at_top_right,black,transparent_65%)] opacity-[0.18]" />
+            <div className="relative z-10">
+                <h2 className="max-w-4xl font-display text-[clamp(2.25rem,9cqi,4.75rem)] leading-[1.05] text-ink">
+                    Spaces That Tell Their Own Story
+                </h2>
 
-      <div className="relative z-10">
-        <h2 className="max-w-4xl font-display leading-[1.05] text-ink text-[clamp(2.25rem,9cqi,4.75rem)]">
-          Spaces That Tell Their Own Story
-        </h2>
+                <p className="mt-6 max-w-2xl text-base leading-relaxed font-medium text-brand @lg:text-lg">
+                    Every project is unique because every family lives
+                    differently. Explore a portfolio of homes, apartments,
+                    restaurants, and commercial spaces crafted around each
+                    client's lifestyle.
+                </p>
 
-        <p className="mt-6 max-w-2xl font-medium leading-relaxed text-brand text-base @lg:text-lg">
-          Every project is unique because every family lives differently. Explore
-          a portfolio of homes, apartments, restaurants, and commercial spaces
-          crafted around each client's lifestyle.
-        </p>
+                <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 contain-[layout_paint] motion-reduce:transition-none @3xl:aspect-auto @3xl:h-120 @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr]">
+                    {projects.map((project) => (
+                        <SmartImage
+                            key={project.src}
+                            src={project.src}
+                            alt={project.alt}
+                            className={`h-full min-w-0 rounded-2xl @3xl:rounded-3xl ${project.className}`}
+                            imgClassName="object-cover"
+                        />
+                    ))}
+                </div>
 
-        <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 contain-[layout_paint] @3xl:aspect-auto @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:h-120 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr] @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] motion-reduce:transition-none">
-          {projects.map((project) => (
-            <SmartImage
-              key={project.src}
-              src={project.src}
-              alt={project.alt}
-              className={`h-full min-w-0 rounded-2xl @3xl:rounded-3xl ${project.className}`}
-              imgClassName="object-cover"
-            />
-          ))}
-        </div>
-
-        <ViewPortfolioButton />
-      </div>
-    </section>
-  )
+                <ViewPortfolioButton />
+            </div>
+        </section>
+    );
 }
 
-export default FeaturedProjects
+export default FeaturedProjects;

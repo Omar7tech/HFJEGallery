@@ -65,24 +65,30 @@ export default function CountUp({
                 maximumFractionDigits: hasDecimals ? maxDecimals : 0,
             };
 
-            const formattedNumber = Intl.NumberFormat('en-US', options).format(latest);
+            const formattedNumber = Intl.NumberFormat('en-US', options).format(
+                latest,
+            );
 
-            return separator ? formattedNumber.replace(/,/g, separator) : formattedNumber;
+            return separator
+                ? formattedNumber.replace(/,/g, separator)
+                : formattedNumber;
         },
         [maxDecimals, separator],
     );
 
     useEffect(() => {
         if (ref.current) {
-            ref.current.textContent = formatValue(direction === 'down' ? to : from);
+            ref.current.textContent = formatValue(
+                direction === 'down' ? to : from,
+            );
         }
     }, [from, to, direction, formatValue]);
 
     useEffect(() => {
         if (isInView && startWhen) {
             if (typeof onStart === 'function') {
-onStart();
-}
+                onStart();
+            }
 
             const timeoutId = setTimeout(() => {
                 motionValue.set(direction === 'down' ? from : to);
@@ -91,8 +97,8 @@ onStart();
             const durationTimeoutId = setTimeout(
                 () => {
                     if (typeof onEnd === 'function') {
-onEnd();
-}
+                        onEnd();
+                    }
                 },
                 delay * 1000 + duration * 1000,
             );
@@ -102,7 +108,18 @@ onEnd();
                 clearTimeout(durationTimeoutId);
             };
         }
-    }, [isInView, startWhen, motionValue, direction, from, to, delay, onStart, onEnd, duration]);
+    }, [
+        isInView,
+        startWhen,
+        motionValue,
+        direction,
+        from,
+        to,
+        delay,
+        onStart,
+        onEnd,
+        duration,
+    ]);
 
     useEffect(() => {
         const unsubscribe = springValue.on('change', (latest: number) => {

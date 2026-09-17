@@ -5,7 +5,7 @@ import { NavBar, NavSidebar } from '@/components/site-nav';
 
 export default function AppLayout({ children }: { children: ReactNode }) {
     return (
-        <div className="flex min-h-dvh flex-col bg-white text-ink max-w-[1600px] mx-auto">
+        <div className="mx-auto flex min-h-dvh max-w-[1600px] flex-col bg-white text-ink">
             <Preloader />
             {/* Mobile / tablet fixed brand bar — above the menu panel (z-60).
                 Fixed (not sticky) so scroll-locking the body when the menu
@@ -20,7 +20,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
                 </aside>
 
                 {/* Page content — reserve the fixed bar's height on mobile */}
-                <main className="min-w-0 flex-1 mb-8 pt-[calc(4rem+max(0.75rem,env(safe-area-inset-top)))] lg:pt-0">
+                <main className="mb-8 min-w-0 flex-1 pt-[calc(4rem+max(0.75rem,env(safe-area-inset-top)))] lg:pt-0">
                     {children}
                 </main>
             </div>
