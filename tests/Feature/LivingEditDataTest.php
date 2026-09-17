@@ -14,7 +14,7 @@ test('living edit seeds can be rerun without duplicates or overwriting edited co
     $this->seed(LivingEditSeeder::class);
 
     $this->assertDatabaseCount('living_spaces', 4);
-    $this->assertDatabaseCount('step_twos', 6);
+    $this->assertDatabaseCount('step_ones', 6);
     expect($space->fresh()->getAttribute('name'))->toBe('Lounge')
         ->and($space->getAttribute('is_active'))->toBeTrue();
 });

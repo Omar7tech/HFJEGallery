@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\StepTwos\Pages;
+namespace App\Filament\Resources\StepOnes\Pages;
 
-use App\Filament\Resources\StepTwos\StepTwoResource;
+use App\Filament\Resources\StepOnes\StepOneResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditStepTwo extends EditRecord
+class EditStepOne extends EditRecord
 {
-    protected static string $resource = StepTwoResource::class;
+    protected static string $resource = StepOneResource::class;
 
     protected function getHeaderActions(): array
     {

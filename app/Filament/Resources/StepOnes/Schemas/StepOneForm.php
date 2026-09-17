@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\StepTwos\Schemas;
+namespace App\Filament\Resources\StepOnes\Schemas;
 
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
@@ -8,14 +8,14 @@ use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class StepTwoForm
+class StepOneForm
 {
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
                 Section::make('Details')
-                    ->description('Basic information about the step 2 option.')
+                    ->description('Basic information about the step 1 option.')
                     ->columnSpanFull()
                     ->columns(2)
                     ->components([

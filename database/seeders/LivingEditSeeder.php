@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\LivingSpace;
-use App\Models\StepTwo;
+use App\Models\StepOne;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -11,7 +11,7 @@ class LivingEditSeeder extends Seeder
 {
     public function run(): void
     {
-        if (LivingSpace::exists() || StepTwo::exists()) {
+        if (LivingSpace::exists() || StepOne::exists()) {
             return;
         }
 
@@ -22,10 +22,10 @@ class LivingEditSeeder extends Seeder
                 LivingSpace::create(['name' => $name, 'sort_order' => $order]);
             }
 
-            $stepTwoOptions = ['Warm', 'Refined', 'Social', 'Grounded', 'Expressive', 'Calm'];
+            $stepOneOptions = ['Warm', 'Refined', 'Social', 'Grounded', 'Expressive', 'Calm'];
 
-            foreach ($stepTwoOptions as $order => $name) {
-                StepTwo::create(['name' => $name, 'sort_order' => $order]);
+            foreach ($stepOneOptions as $order => $name) {
+                StepOne::create(['name' => $name, 'sort_order' => $order]);
             }
         });
     }

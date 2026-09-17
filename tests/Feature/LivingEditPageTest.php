@@ -1,7 +1,7 @@
 <?php
 
 use App\Models\LivingSpace;
-use App\Models\StepTwo;
+use App\Models\StepOne;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -9,10 +9,10 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
 
-test('living edit lists active spaces and active step 2 options in order', function () {
-    StepTwo::create(['name' => 'Calm', 'sort_order' => 2]);
-    StepTwo::create(['name' => 'Warm', 'sort_order' => 1]);
-    StepTwo::create(['name' => 'Hidden', 'sort_order' => 0, 'is_active' => false]);
+test('living edit lists active spaces and active step 1 options in order', function () {
+    StepOne::create(['name' => 'Calm', 'sort_order' => 2]);
+    StepOne::create(['name' => 'Warm', 'sort_order' => 1]);
+    StepOne::create(['name' => 'Hidden', 'sort_order' => 0, 'is_active' => false]);
 
     LivingSpace::create(['name' => 'Kitchen', 'sort_order' => 2]);
     LivingSpace::create(['name' => 'Living room', 'sort_order' => 1]);
@@ -26,7 +26,7 @@ test('living edit lists active spaces and active step 2 options in order', funct
                 ['id' => 'living-room', 'name' => 'Living room', 'icon' => null],
                 ['id' => 'kitchen', 'name' => 'Kitchen', 'icon' => null],
             ])
-            ->where('stepTwo', [
+            ->where('stepOne', [
                 ['id' => 'warm', 'name' => 'Warm', 'icon' => null],
                 ['id' => 'calm', 'name' => 'Calm', 'icon' => null],
             ])

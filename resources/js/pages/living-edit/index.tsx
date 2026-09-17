@@ -1,29 +1,29 @@
 import { Head } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
-import type { LivingSpace, StepTwoOption } from '@/types';
+import type { LivingSpace, StepOneOption } from '@/types';
 import MaskedIcon from './masked-icon';
 import LivingMoodBoard from './mood-board';
 import { useLivingEditFlow } from './use-living-edit-flow';
 
 export default function LivingEdit({
     spaces,
-    stepTwo,
+    stepOne,
 }: {
     spaces: LivingSpace[];
-    stepTwo: StepTwoOption[];
+    stepOne: StepOneOption[];
 }) {
-    const { space, step, stepTwoIds, goTo, selectSpace, toggleStepTwo } =
-        useLivingEditFlow(spaces, stepTwo);
+    const { space, step, stepOneIds, goTo, selectSpace, toggleStepOne } =
+        useLivingEditFlow(spaces, stepOne);
 
-    if (space && step === 'step-2') {
+    if (space && step === 'step-1') {
         return (
             <>
                 <Head title="Living Edit" />
                 <LivingMoodBoard
                     space={space}
-                    options={stepTwo}
-                    selected={stepTwoIds}
-                    onToggle={toggleStepTwo}
+                    options={stepOne}
+                    selected={stepOneIds}
+                    onToggle={toggleStepOne}
                     onBack={() => goTo(null)}
                 />
             </>
@@ -100,7 +100,7 @@ export default function LivingEdit({
 
                     <button
                         type="button"
-                        onClick={() => goTo('step-2')}
+                        onClick={() => goTo('step-1')}
                         disabled={!space}
                         className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-[#ad6844] px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-[#ad6844] motion-safe:active:scale-[0.98] motion-reduce:transition-none max-sm:mt-10"
                     >

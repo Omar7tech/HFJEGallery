@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\StepTwos\Pages;
+namespace App\Filament\Resources\StepOnes\Pages;
 
-use App\Filament\Resources\StepTwos\StepTwoResource;
+use App\Filament\Resources\StepOnes\StepOneResource;
 use Filament\Actions\EditAction;
 use Filament\Resources\Pages\ViewRecord;
 
-class ViewStepTwo extends ViewRecord
+class ViewStepOne extends ViewRecord
 {
-    protected static string $resource = StepTwoResource::class;
+    protected static string $resource = StepOneResource::class;
 
     protected function getHeaderActions(): array
     {

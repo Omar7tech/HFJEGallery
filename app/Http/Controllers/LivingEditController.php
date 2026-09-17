@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\LivingSpaceResource;
-use App\Http\Resources\StepTwoResource;
+use App\Http\Resources\StepOneResource;
 use App\Models\LivingSpace;
-use App\Models\StepTwo;
+use App\Models\StepOne;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class LivingEditController extends Controller
 {
     /**
-     * Show the Living Edit with its active spaces and active step 2 options.
+     * Show the Living Edit with its active spaces and active step 1 options.
      */
     public function __invoke(): Response
     {
@@ -22,7 +22,7 @@ class LivingEditController extends Controller
             ->with('media')
             ->get();
 
-        $stepTwoOptions = StepTwo::query()
+        $stepOneOptions = StepOne::query()
             ->where('is_active', true)
             ->orderBy('sort_order')
             ->with('media')
@@ -30,7 +30,7 @@ class LivingEditController extends Controller
 
         return Inertia::render('living-edit/index', [
             'spaces' => LivingSpaceResource::collection($spaces)->resolve(),
-            'stepTwo' => StepTwoResource::collection($stepTwoOptions)->resolve(),
+            'stepOne' => StepOneResource::collection($stepOneOptions)->resolve(),
         ]);
     }
 }

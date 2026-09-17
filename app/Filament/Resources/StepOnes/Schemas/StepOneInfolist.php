@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\StepTwos\Schemas;
+namespace App\Filament\Resources\StepOnes\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
@@ -8,7 +8,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class StepTwoInfolist
+class StepOneInfolist
 {
     public static function configure(Schema $schema): Schema
     {

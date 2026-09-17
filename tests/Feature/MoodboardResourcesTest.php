@@ -4,11 +4,11 @@ use App\Filament\Resources\LivingSpaces\LivingSpaceResource;
 use App\Filament\Resources\LivingSpaces\Pages\CreateLivingSpace;
 use App\Filament\Resources\LivingSpaces\Pages\EditLivingSpace;
 use App\Filament\Resources\LivingSpaces\Pages\ListLivingSpaces;
-use App\Filament\Resources\StepTwos\Pages\CreateStepTwo;
-use App\Filament\Resources\StepTwos\Pages\ListStepTwos;
-use App\Filament\Resources\StepTwos\StepTwoResource;
+use App\Filament\Resources\StepOnes\Pages\CreateStepOne;
+use App\Filament\Resources\StepOnes\Pages\ListStepOnes;
+use App\Filament\Resources\StepOnes\StepOneResource;
 use App\Models\LivingSpace;
-use App\Models\StepTwo;
+use App\Models\StepOne;
 use App\Models\User;
 use Database\Seeders\LivingEditSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,18 +30,18 @@ test('moodboard resource pages render', function (string $url) {
     'spaces create' => fn () => LivingSpaceResource::getUrl('create'),
     'spaces view' => fn () => LivingSpaceResource::getUrl('view', ['record' => LivingSpace::firstOrFail()]),
     'spaces edit' => fn () => LivingSpaceResource::getUrl('edit', ['record' => LivingSpace::firstOrFail()]),
-    'step 2 index' => fn () => StepTwoResource::getUrl('index'),
-    'step 2 create' => fn () => StepTwoResource::getUrl('create'),
-    'step 2 view' => fn () => StepTwoResource::getUrl('view', ['record' => StepTwo::firstOrFail()]),
-    'step 2 edit' => fn () => StepTwoResource::getUrl('edit', ['record' => StepTwo::firstOrFail()]),
+    'step 1 index' => fn () => StepOneResource::getUrl('index'),
+    'step 1 create' => fn () => StepOneResource::getUrl('create'),
+    'step 1 view' => fn () => StepOneResource::getUrl('view', ['record' => StepOne::firstOrFail()]),
+    'step 1 edit' => fn () => StepOneResource::getUrl('edit', ['record' => StepOne::firstOrFail()]),
 ]);
 
 test('tables list records in sort order', function () {
     Livewire::test(ListLivingSpaces::class)
         ->assertCanSeeTableRecords(LivingSpace::orderBy('sort_order')->get(), inOrder: true);
 
-    Livewire::test(ListStepTwos::class)
-        ->assertCanSeeTableRecords(StepTwo::orderBy('sort_order')->get(), inOrder: true);
+    Livewire::test(ListStepOnes::class)
+        ->assertCanSeeTableRecords(StepOne::orderBy('sort_order')->get(), inOrder: true);
 });
 
 test('a space can be created with an icon', function () {
@@ -61,13 +61,13 @@ test('a space can be created with an icon', function () {
     expect($space->getFirstMedia('icon'))->not->toBeNull();
 });
 
-test('a step 2 option can be created', function () {
-    Livewire::test(CreateStepTwo::class)
+test('a step 1 option can be created', function () {
+    Livewire::test(CreateStepOne::class)
         ->fillForm(['name' => 'Playful'])
         ->call('create')
         ->assertHasNoFormErrors();
 
-    $this->assertDatabaseHas('step_twos', ['name' => 'Playful', 'slug' => 'playful', 'is_active' => true]);
+    $this->assertDatabaseHas('step_ones', ['name' => 'Playful', 'slug' => 'playful', 'is_active' => true]);
 });
 
 test('names must be unique and present', function () {

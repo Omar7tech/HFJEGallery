@@ -4,7 +4,7 @@ export type LivingSpace = {
     icon: string | null;
 };
 
-export type StepTwoOption = {
+export type StepOneOption = {
     id: string;
     name: string;
     icon: string | null;

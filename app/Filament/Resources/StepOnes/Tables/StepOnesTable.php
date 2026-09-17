@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\StepTwos\Tables;
+namespace App\Filament\Resources\StepOnes\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -12,7 +12,7 @@ use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
-class StepTwosTable
+class StepOnesTable
 {
     public static function configure(Table $table): Table
     {

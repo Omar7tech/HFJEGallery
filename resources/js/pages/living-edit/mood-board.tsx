@@ -2,15 +2,15 @@ import { Link } from '@inertiajs/react';
 import { RefreshCw } from 'lucide-react';
 import MarqueeText from '@/components/marquee-text';
 import { cn } from '@/lib/utils';
-import type { LivingSpace, StepTwoOption } from '@/types';
+import type { LivingSpace, StepOneOption } from '@/types';
 import MaskedIcon from './masked-icon';
 import {
     LIVING_EDIT_STEPS,
     LIVING_EDIT_TOTAL_STEPS,
-    MAX_STEP_TWO_SELECTIONS,
+    MAX_STEP_ONE_SELECTIONS,
 } from './use-living-edit-flow';
 
-const STEP_NUMBER = LIVING_EDIT_STEPS.indexOf('step-2') + 1;
+const STEP_NUMBER = LIVING_EDIT_STEPS.indexOf('step-1') + 1;
 
 /** Joins names as "A", "A & B" or "A, B & C". */
 function joinNames(names: string[]): string {
@@ -27,7 +27,7 @@ export default function LivingMoodBoard({
     onBack,
 }: {
     space: LivingSpace;
-    options: StepTwoOption[];
+    options: StepOneOption[];
     selected: string[];
     onToggle: (id: string) => void;
     onBack: () => void;
@@ -96,7 +96,7 @@ export default function LivingMoodBoard({
                                     disabled={
                                         !selected.includes(id) &&
                                         selected.length >=
-                                            MAX_STEP_TWO_SELECTIONS
+                                            MAX_STEP_ONE_SELECTIONS
                                     }
                                     onClick={() => onToggle(id)}
                                     className={cn(
@@ -120,7 +120,7 @@ export default function LivingMoodBoard({
                         </div>
                     </fieldset>
                     <p className="mt-8 border-b border-[#bd7959] pb-2 text-[clamp(0.75rem,1.4cqi,0.875rem)]">
-                        Select Up To {MAX_STEP_TWO_SELECTIONS}
+                        Select Up To {MAX_STEP_ONE_SELECTIONS}
                     </p>
                     <div className="mt-5 flex items-center justify-between px-2">
                         <button

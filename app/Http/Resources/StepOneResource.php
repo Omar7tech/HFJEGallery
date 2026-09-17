@@ -2,14 +2,14 @@
 
 namespace App\Http\Resources;
 
-use App\Models\StepTwo;
+use App\Models\StepOne;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin StepTwo
+ * @mixin StepOne
  */
-class StepTwoResource extends JsonResource
+class StepOneResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

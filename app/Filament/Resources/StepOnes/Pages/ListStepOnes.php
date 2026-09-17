@@ -1,14 +1,14 @@
 <?php
 
-namespace App\Filament\Resources\StepTwos\Pages;
+namespace App\Filament\Resources\StepOnes\Pages;
 
-use App\Filament\Resources\StepTwos\StepTwoResource;
+use App\Filament\Resources\StepOnes\StepOneResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ListRecords;
 
-class ListStepTwos extends ListRecords
+class ListStepOnes extends ListRecords
 {
-    protected static string $resource = StepTwoResource::class;
+    protected static string $resource = StepOneResource::class;
 
     protected function getHeaderActions(): array
     {
