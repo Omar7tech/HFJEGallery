@@ -14,6 +14,10 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(LivingEditSeeder::class);
 
+        if (app()->isLocal()) {
+            $this->call(GalleryImageSeeder::class);
+        }
+
         User::updateOrCreate([
             'email' => 'admin@hfje.com',
         ], [
