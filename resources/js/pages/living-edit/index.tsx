@@ -16,11 +16,7 @@ export default function LivingEdit({
 }) {
     const { space, step, selections, goTo, selectSpace, toggleOption } =
         useLivingEditFlow(spaces, steps);
-    const board = useMoodBoard(
-        space?.id ?? null,
-        selections,
-        step === LIVING_EDIT_STEPS.at(-1),
-    );
+    const board = useMoodBoard(space?.id ?? null, selections);
 
     if (space && step) {
         const stepIndex = LIVING_EDIT_STEPS.indexOf(step);
@@ -38,6 +34,7 @@ export default function LivingEdit({
                     onToggle={(id) => toggleOption(step, id)}
                     onBack={() => goTo(previousStep)}
                     onContinue={nextStep ? () => goTo(nextStep) : undefined}
+                    isLastStep={!nextStep}
                     board={board}
                 />
             </>

@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { RefreshCw } from 'lucide-react';
+import { LoaderCircle, RefreshCw, Shuffle, Sparkles } from 'lucide-react';
+import { useRef } from 'react';
 import MarqueeText from '@/components/marquee-text';
 import { cn } from '@/lib/utils';
 import type { LivingEditOption, LivingSpace, MoodBoardSlot } from '@/types';
@@ -33,13 +34,78 @@ const STEP_COPY: Record<LivingEditStep, { legend: string; pickHint: string }> =
         },
     };
 
-const REFRESH_LABELS: Record<MoodBoardStatus, string> = {
-    locked: '',
-    loading: 'Updating',
-    ready: 'Refresh Board',
-    stale: 'Update Board',
-    failed: 'Try Again',
-};
+/**
+ * A quiet status line above the board: nothing before the first board, a shuffle once it is
+ * up to date, and an update prompt when the choices change.
+ */
+function BoardStatusControl({
+    status,
+    onShow,
+    onShuffle,
+}: {
+    status: MoodBoardStatus;
+    onShow: () => void;
+    onShuffle: () => void;
+}) {
+    const pill =
+        'inline-flex shrink-0 items-center gap-1 rounded-full px-2.5 py-1 text-[10px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand';
+
+    if (status === 'loading') {
+        return (
+            <span className={cn(pill, 'bg-[#f4f4f4] text-[#ad6844]')}>
+                <LoaderCircle
+                    aria-hidden="true"
+                    size={13}
+                    className="motion-safe:animate-spin"
+                />
+                Creating…
+            </span>
+        );
+    }
+
+    if (status === 'ready') {
+        return (
+            <button
+                type="button"
+                onClick={onShuffle}
+                title="Show other matching images"
+                className={cn(
+                    pill,
+                    'bg-[#f4f4f4] text-[#ad6844] hover:bg-[#ece7e3]',
+                )}
+            >
+                <Shuffle aria-hidden="true" size={13} /> Shuffle
+            </button>
+        );
+    }
+
+    if (status === 'stale' || status === 'failed') {
+        return (
+            <span className="flex shrink-0 items-center gap-2 text-[10px] text-[#777]">
+                <span className="flex items-center gap-1">
+                    <span
+                        aria-hidden="true"
+                        className="size-1.5 rounded-full bg-[#ad6844]"
+                    />
+                    {status === 'stale' ? 'Choices changed' : 'Could not load'}
+                </span>
+                <button
+                    type="button"
+                    onClick={onShow}
+                    className={cn(
+                        pill,
+                        'bg-[#ad6844] text-white hover:bg-brand-hover',
+                    )}
+                >
+                    <RefreshCw aria-hidden="true" size={13} />
+                    {status === 'stale' ? 'Update' : 'Try again'}
+                </button>
+            </span>
+        );
+    }
+
+    return null;
+}
 
 /** Joins names as "A", "A & B" or "A, B & C". */
 function joinNames(names: string[]): string {
@@ -56,6 +122,7 @@ export default function LivingMoodBoard({
     onToggle,
     onBack,
     onContinue,
+    isLastStep,
     board,
 }: {
     step: LivingEditStep;
@@ -65,13 +132,37 @@ export default function LivingMoodBoard({
     onToggle: (id: string) => void;
     onBack: () => void;
     onContinue?: () => void;
+    isLastStep: boolean;
     board: {
         slots: MoodBoardSlot[] | null;
         status: MoodBoardStatus;
-        refresh: () => void;
+        show: () => void;
+        shuffle: () => void;
     };
 }) {
     const stepNumber = LIVING_EDIT_STEPS.indexOf(step) + 1;
+    const boardRef = useRef<HTMLDivElement>(null);
+    const isBoardBusy = board.status === 'loading';
+
+    /** Builds the board and brings it into view when it sits below the choices on small screens. */
+    function showBoard() {
+        board.show();
+        boardRef.current?.scrollIntoView({
+            behavior: window.matchMedia('(prefers-reduced-motion: reduce)')
+                .matches
+                ? 'auto'
+                : 'smooth',
+            block: 'nearest',
+        });
+    }
+
+    const lastStepLabel = {
+        empty: 'Show Mood Board',
+        failed: 'Show Mood Board',
+        loading: 'Creating…',
+        stale: 'Update Mood Board',
+        ready: 'Shuffle Board',
+    }[board.status];
 
     const selectedNames = selected
         .map((id) => options.find((option) => option.id === id)?.name)
@@ -170,19 +261,40 @@ export default function LivingMoodBoard({
                         >
                             Back
                         </button>
-                        <button
-                            type="button"
-                            onClick={onContinue}
-                            disabled={!onContinue || selected.length === 0}
-                            title={
-                                onContinue
-                                    ? undefined
-                                    : 'The next step is coming soon'
-                            }
-                            className="min-h-9 rounded-lg bg-[#ad6844] px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default"
-                        >
-                            Continue
-                        </button>
+                        {isLastStep ? (
+                            <button
+                                type="button"
+                                onClick={
+                                    board.status === 'ready'
+                                        ? board.shuffle
+                                        : showBoard
+                                }
+                                disabled={selected.length === 0 || isBoardBusy}
+                                className="inline-flex min-h-9 min-w-44 items-center justify-center gap-2 rounded-lg bg-[#ad6844] px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default disabled:opacity-80"
+                            >
+                                {isBoardBusy ? (
+                                    <LoaderCircle
+                                        aria-hidden="true"
+                                        size={16}
+                                        className="motion-safe:animate-spin"
+                                    />
+                                ) : board.status === 'ready' ? (
+                                    <Shuffle aria-hidden="true" size={16} />
+                                ) : (
+                                    <Sparkles aria-hidden="true" size={16} />
+                                )}
+                                {lastStepLabel}
+                            </button>
+                        ) : (
+                            <button
+                                type="button"
+                                onClick={onContinue}
+                                disabled={!onContinue || selected.length === 0}
+                                className="min-h-9 rounded-lg bg-[#ad6844] px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default"
+                            >
+                                Continue
+                            </button>
+                        )}
                     </div>
                 </div>
 
@@ -210,42 +322,25 @@ export default function LivingMoodBoard({
                                 )}
                             </h2>
                         </div>
-                        {board.status !== 'locked' && (
-                            <button
-                                type="button"
-                                onClick={board.refresh}
-                                disabled={board.status === 'loading'}
-                                title={
-                                    board.status === 'ready'
-                                        ? 'Show other matching images'
-                                        : undefined
-                                }
-                                className={cn(
-                                    'flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-[9px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default',
-                                    board.status === 'stale'
-                                        ? 'bg-[#ad6844] text-white hover:bg-brand-hover'
-                                        : 'bg-[#f4f4f4] text-[#ad6844] enabled:hover:bg-[#ece7e3]',
-                                )}
-                            >
-                                <RefreshCw
-                                    aria-hidden="true"
-                                    size={15}
-                                    className={cn(
-                                        board.status === 'loading' &&
-                                            'motion-safe:animate-spin',
-                                    )}
-                                />{' '}
-                                {REFRESH_LABELS[board.status]}
-                            </button>
-                        )}
+                        <BoardStatusControl
+                            status={board.status}
+                            onShow={showBoard}
+                            onShuffle={board.shuffle}
+                        />
                     </div>
 
                     <MoodBoardPreview
+                        ref={boardRef}
                         slots={board.slots}
                         status={board.status}
-                        lastStepNumber={LIVING_EDIT_TOTAL_STEPS}
-                        onRefresh={board.refresh}
                     />
+                    {board.status === 'empty' && (
+                        <p className="mt-3 text-center text-[11px] text-[#999]">
+                            {isLastStep
+                                ? 'Press Show Mood Board to see your images.'
+                                : `Your images appear after step ${LIVING_EDIT_TOTAL_STEPS}.`}
+                        </p>
+                    )}
                     <div className="mt-9 flex justify-center">
                         <button
                             type="button"

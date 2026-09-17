@@ -9,14 +9,14 @@ import type { LivingEditSelections } from './use-living-edit-flow';
 const ENDPOINT = '/living-edit/mood-board';
 
 /**
- * - locked: the visitor has not reached the last step yet
+ * - empty: no board shown yet
  * - loading: a board is being built
  * - ready: the board matches the current choices
  * - stale: the choices changed since the board was built
- * - failed: the board could not be loaded
+ * - failed: the last request did not succeed
  */
 export type MoodBoardStatus =
-    'locked' | 'loading' | 'ready' | 'stale' | 'failed';
+    'empty' | 'loading' | 'ready' | 'stale' | 'failed';
 
 type Board = {
     spaceId: string;
@@ -47,44 +47,13 @@ function choicesQuery(
     return params.toString();
 }
 
-async function fetchBoard(
-    choices: string,
-    seed: number,
-    keptImageIds: number[],
-    signal: AbortSignal,
-): Promise<MoodBoardSlot[]> {
-    const params = new URLSearchParams(choices);
-
-    if (seed > 0) {
-        params.set('seed', String(seed));
-    }
-
-    for (const id of keptImageIds) {
-        params.append('keep[]', String(id));
-    }
-
-    const response = await fetch(`${ENDPOINT}?${params}`, {
-        headers: { Accept: 'application/json' },
-        signal,
-    });
-
-    if (!response.ok) {
-        throw new Error(`Mood board request failed (${response.status})`);
-    }
-
-    const { slots } = (await response.json()) as { slots: MoodBoardSlot[] };
-
-    return slots;
-}
-
 /**
- * The mood board of a space. It is built once the visitor reaches the last step, and after that
- * only when they ask for it: changed choices mark the board as stale instead of replacing it.
+ * The mood board of a space. Nothing loads on its own: the visitor asks for the board, and once
+ * shown it stays on screen, marked as stale when their choices change.
  */
 export function useMoodBoard(
     spaceId: string | null,
     selections: LivingEditSelections,
-    isUnlocked: boolean,
 ) {
     const [board, setBoard] = useState<Board | null>(null);
     const [isLoading, setIsLoading] = useState(false);
@@ -95,8 +64,9 @@ export function useMoodBoard(
     const spaceBoard = board && board.spaceId === spaceId ? board : null;
     const isStale = spaceBoard !== null && spaceBoard.choices !== choices;
 
-    /** Loads a board on request, replacing any board request still in flight. */
-    async function load(nextSeed: number, keptImageIds: number[]) {
+    useEffect(() => () => requestRef.current?.abort(), []);
+
+    async function load(seed: number, keptImageIds: number[]) {
         if (!spaceId || !choices) {
             return;
         }
@@ -105,18 +75,36 @@ export function useMoodBoard(
         const controller = new AbortController();
         requestRef.current = controller;
 
+        const params = new URLSearchParams(choices);
+
+        if (seed > 0) {
+            params.set('seed', String(seed));
+        }
+
+        for (const id of keptImageIds) {
+            params.append('keep[]', String(id));
+        }
+
         setIsLoading(true);
         setHasFailed(false);
 
         try {
-            const slots = await fetchBoard(
-                choices,
-                nextSeed,
-                keptImageIds,
-                controller.signal,
-            );
+            const response = await fetch(`${ENDPOINT}?${params}`, {
+                headers: { Accept: 'application/json' },
+                signal: controller.signal,
+            });
 
-            setBoard({ spaceId, choices, seed: nextSeed, slots });
+            if (!response.ok) {
+                throw new Error(
+                    `Mood board request failed (${response.status})`,
+                );
+            }
+
+            const { slots } = (await response.json()) as {
+                slots: MoodBoardSlot[];
+            };
+
+            setBoard({ spaceId, choices, seed, slots });
         } catch {
             if (!controller.signal.aborted) {
                 setHasFailed(true);
@@ -130,66 +118,37 @@ export function useMoodBoard(
     }
 
     /**
-     * Updates a stale board, keeping images that still match best, or shows other matching
-     * images when the board is already up to date.
+     * Shows the board for the current choices. An existing board keeps the images that still
+     * match best, so updating changes as little as needed.
      */
-    function refresh() {
-        if (!spaceBoard) {
-            void load(0, []);
-
-            return;
-        }
-
-        if (isStale) {
-            void load(
-                spaceBoard.seed,
-                spaceBoard.slots.flatMap(({ image }) =>
-                    image ? [image.id] : [],
-                ),
-            );
-
-            return;
-        }
-
-        void load(spaceBoard.seed + 1, []);
+    function show() {
+        void load(
+            spaceBoard?.seed ?? 0,
+            spaceBoard?.slots.flatMap(({ image }) =>
+                image ? [image.id] : [],
+            ) ?? [],
+        );
     }
 
-    const needsFirstBoard = isUnlocked && spaceBoard === null && !hasFailed;
+    /** Swaps in other images that match the same choices equally well. */
+    function shuffle() {
+        void load((spaceBoard?.seed ?? 0) + 1, []);
+    }
 
-    /** The first board is built as soon as the last step is reached. */
-    useEffect(() => {
-        if (!needsFirstBoard || !spaceId || !choices) {
-            return;
-        }
-
-        const controller = new AbortController();
-
-        fetchBoard(choices, 0, [], controller.signal)
-            .then((slots) => setBoard({ spaceId, choices, seed: 0, slots }))
-            .catch(() => {
-                if (!controller.signal.aborted) {
-                    setHasFailed(true);
-                }
-            });
-
-        return () => controller.abort();
-    }, [needsFirstBoard, spaceId, choices]);
-
-    useEffect(() => () => requestRef.current?.abort(), []);
-
-    const status: MoodBoardStatus = !isUnlocked
-        ? 'locked'
-        : isLoading || needsFirstBoard
-          ? 'loading'
-          : hasFailed
-            ? 'failed'
+    const status: MoodBoardStatus = isLoading
+        ? 'loading'
+        : hasFailed
+          ? 'failed'
+          : spaceBoard === null
+            ? 'empty'
             : isStale
               ? 'stale'
               : 'ready';
 
     return {
-        slots: isUnlocked ? (spaceBoard?.slots ?? null) : null,
+        slots: spaceBoard?.slots ?? null,
         status,
-        refresh,
+        show,
+        shuffle,
     };
 }
