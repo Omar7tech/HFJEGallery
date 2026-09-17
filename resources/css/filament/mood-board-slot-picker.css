@@ -141,3 +141,81 @@
 .dark .mb-slot-picker__summary {
     color: var(--gray-400);
 }
+
+/*
+ * Miniature board used in the gallery table to show an image's position.
+ */
+
+.mb-slot-mini-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.25rem 0.75rem;
+}
+
+.mb-slot-mini {
+    display: grid;
+    flex-shrink: 0;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 2px;
+    width: 2.75rem;
+    aspect-ratio: 1;
+}
+
+.mb-slot-mini__side {
+    display: grid;
+    grid-template-rows: 1.65fr 1fr 0.7fr;
+    gap: 2px;
+    min-height: 0;
+}
+
+.mb-slot-mini__swatches {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 1px;
+}
+
+.mb-slot-mini__swatches .mb-slot-picker__swatch {
+    border-radius: 2px;
+}
+
+.mb-slot-mini__smalls {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    min-height: 0;
+}
+
+.mb-slot-mini__cell {
+    display: block;
+    min-width: 0;
+    min-height: 0;
+    border-radius: 3px;
+    background-color: var(--gray-200);
+}
+
+.mb-slot-mini__smalls .mb-slot-mini__cell {
+    border-radius: 2px;
+}
+
+.mb-slot-mini__cell--active {
+    background-color: var(--primary-600);
+}
+
+.mb-slot-mini__label {
+    font-size: 0.875rem;
+    color: var(--gray-950);
+    white-space: nowrap;
+}
+
+.dark .mb-slot-mini__cell {
+    background-color: var(--gray-700);
+}
+
+.dark .mb-slot-mini__cell--active {
+    background-color: var(--primary-500);
+}
+
+.dark .mb-slot-mini__label {
+    color: var(--gray-200);
+}

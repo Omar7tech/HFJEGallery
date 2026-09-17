@@ -194,6 +194,21 @@ test('syncing a step ignores options that belong to another step', function () {
     expect($image->options()->pluck('living_edit_options.id')->all())->toBe([$stepOneOption->id]);
 });
 
+test('the position column highlights the image position on a miniature board', function () {
+    GalleryImage::factory()->slot(MoodBoardImageSlot::SmallMiddle)->create();
+
+    Livewire::test(ListGalleryImages::class)
+        ->assertSeeHtml('aria-label="Small middle position"')
+        ->assertSeeHtml('title="Small middle · 3:4"')
+        ->assertSeeHtmlInOrder([
+            'class="mb-slot-mini__cell"',
+            'class="mb-slot-mini__cell"',
+            'class="mb-slot-mini__cell"',
+            'class="mb-slot-mini__cell mb-slot-mini__cell--active"',
+            'class="mb-slot-mini__cell"',
+        ]);
+});
+
 test('position tabs list only the images of their position and count them', function () {
     $largeImages = GalleryImage::factory()->slot(MoodBoardImageSlot::Large)->count(2)->create();
     $smallImage = GalleryImage::factory()->slot(MoodBoardImageSlot::SmallLeft)->create();

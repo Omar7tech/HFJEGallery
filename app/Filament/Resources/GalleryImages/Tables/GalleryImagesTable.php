@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\GalleryImages\Tables;
 
 use App\Enums\LivingEditStep;
+use App\Filament\Tables\Columns\MoodBoardSlotColumn;
 use App\Models\GalleryImage;
 use App\Models\LivingEditOption;
 use Filament\Actions\BulkAction;
@@ -35,9 +36,8 @@ class GalleryImagesTable
                     ->square()
                     ->imageSize(56)
                     ->extraImgAttributes(['loading' => 'lazy']),
-                TextColumn::make('slot')
+                MoodBoardSlotColumn::make('slot')
                     ->label('Position')
-                    ->badge()
                     ->sortable(),
                 TextColumn::make('spaces.name')
                     ->label('Spaces')
