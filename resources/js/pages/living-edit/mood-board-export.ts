@@ -1,17 +1,16 @@
 import { dominantColor } from '@/lib/dominant-color';
 import type { MoodBoardSlot } from '@/types';
 
-/** 4:5 portrait at twice the usual 1080px social size, sharp on any screen or print. */
+/** Twice the usual 1080px social width, sharp on any screen or print. */
 const WIDTH = 2160;
-const HEIGHT = 2700;
-const MARGIN = 230;
+const MARGIN = 100;
+const CONTENT_WIDTH = WIDTH - MARGIN * 2;
 
 const COLORS = {
     paper: '#f5f1ea',
     ink: '#191b17',
     muted: '#8a8580',
     brand: '#a65e3c',
-    frame: '#e3d6c9',
     placeholder: '#dedede',
     defaultDark: '#6c4936',
     defaultLight: '#d6c2a6',
@@ -20,6 +19,23 @@ const COLORS = {
 const DISPLAY_FONT = 'Michroma';
 const TEXT_FONT = 'Instrument Sans';
 const LOGO_URL = '/logos/mainlogo-dark.svg';
+
+const SIZES = {
+    logoHeight: 84,
+    headerTitle: 34,
+    headerDate: 26,
+    headerDateOffset: 50,
+    sectionGap: 48,
+    boardGap: 20,
+    boardSmallGap: 14,
+    choiceColumnGap: 48,
+    choiceLabel: 22,
+    choiceLabelGap: 14,
+    choiceValue: 30,
+    choiceValueLineHeight: 40,
+    choiceValueLines: 2,
+    footer: 26,
+};
 
 export type MoodBoardExport = {
     /** e.g. "Warm & Calm Kitchen" */
@@ -45,10 +61,74 @@ function loadImage(src: string): Promise<HTMLImageElement | null> {
 
 async function loadFonts(): Promise<void> {
     await Promise.allSettled([
-        document.fonts.load(`76px "${DISPLAY_FONT}"`),
-        document.fonts.load(`34px "${TEXT_FONT}"`),
-        document.fonts.load(`600 34px "${TEXT_FONT}"`),
+        document.fonts.load(`${SIZES.choiceLabel}px "${DISPLAY_FONT}"`),
+        document.fonts.load(`${SIZES.choiceValue}px "${TEXT_FONT}"`),
+        document.fonts.load(`600 ${SIZES.headerTitle}px "${TEXT_FONT}"`),
     ]);
+}
+
+/** Letter spacing where the browser supports it on canvas; plain text elsewhere. */
+function setLetterSpacing(
+    context: CanvasRenderingContext2D,
+    spacing: string,
+): void {
+    if ('letterSpacing' in context) {
+        context.letterSpacing = spacing;
+    }
+}
+
+/** Shortens text with an ellipsis so it fits the given width. */
+function fitText(
+    context: CanvasRenderingContext2D,
+    text: string,
+    maxWidth: number,
+): string {
+    if (context.measureText(text).width <= maxWidth) {
+        return text;
+    }
+
+    let shortened = text;
+
+    while (
+        shortened.length > 1 &&
+        context.measureText(`${shortened}…`).width > maxWidth
+    ) {
+        shortened = shortened.slice(0, -1);
+    }
+
+    return `${shortened.trimEnd()}…`;
+}
+
+/** Word-wraps text into at most `maxLines` lines, shortening the last line when needed. */
+function wrapText(
+    context: CanvasRenderingContext2D,
+    text: string,
+    maxWidth: number,
+    maxLines: number,
+): string[] {
+    const lines: string[] = [];
+    let line = '';
+
+    for (const word of text.split(/\s+/).filter(Boolean)) {
+        const candidate = line ? `${line} ${word}` : word;
+
+        if (context.measureText(candidate).width > maxWidth && line) {
+            lines.push(line);
+            line = word;
+        } else {
+            line = candidate;
+        }
+    }
+
+    lines.push(line);
+
+    const visible = lines.slice(0, maxLines);
+
+    if (lines.length > maxLines) {
+        visible[maxLines - 1] = lines.slice(maxLines - 1).join(' ');
+    }
+
+    return visible.map((entry) => fitText(context, entry, maxWidth));
 }
 
 /** Draws an image cropped to fill a rounded rectangle, like CSS object-fit: cover. */
@@ -63,7 +143,7 @@ function drawCover(
     context.roundRect(rect.x, rect.y, rect.width, rect.height, radius);
     context.clip();
 
-    if (image) {
+    if (image && image.naturalWidth > 0 && image.naturalHeight > 0) {
         const scale = Math.max(
             rect.width / image.naturalWidth,
             rect.height / image.naturalHeight,
@@ -94,79 +174,116 @@ function isLight(hex: string): boolean {
     return 0.299 * red + 0.587 * green + 0.114 * blue > 150;
 }
 
+/** A colour swatch with its hex code, sized so the code always fits inside. */
 function drawSwatch(
     context: CanvasRenderingContext2D,
     rect: Rect,
     color: string,
+    radius: number,
 ): void {
     context.fillStyle = color;
     context.beginPath();
-    context.roundRect(rect.x, rect.y, rect.width, rect.height, 28);
+    context.roundRect(rect.x, rect.y, rect.width, rect.height, radius);
     context.fill();
 
+    const fontSize = Math.round(
+        Math.min(34, Math.max(18, rect.width * 0.11, rect.height * 0.1)),
+    );
+    const padding = Math.round(fontSize * 0.9);
+
+    if (rect.width < padding * 2 + fontSize * 2 || rect.height < fontSize * 2) {
+        return;
+    }
+
+    context.save();
     context.fillStyle = isLight(color) ? COLORS.ink : '#ffffff';
-    context.font = `600 34px "${TEXT_FONT}"`;
+    context.font = `600 ${fontSize}px "${TEXT_FONT}"`;
+    context.textAlign = 'left';
     context.textBaseline = 'bottom';
+    setLetterSpacing(context, '1px');
     context.fillText(
-        color.toUpperCase(),
-        rect.x + 32,
-        rect.y + rect.height - 28,
+        fitText(context, color.toUpperCase(), rect.width - padding * 2),
+        rect.x + padding,
+        rect.y + rect.height - padding,
+    );
+    context.restore();
+}
+
+/** Draws the board with the same proportions as on the website. */
+function drawBoard(
+    context: CanvasRenderingContext2D,
+    rect: Rect,
+    images: (HTMLImageElement | null)[],
+): void {
+    const [large, topRight, smallLeft, smallMiddle, smallRight] = images;
+    const { boardGap: gap, boardSmallGap: smallGap } = SIZES;
+    const radius = Math.round(rect.width * 0.018);
+    const smallRadius = Math.round(radius * 0.7);
+
+    const leftWidth = ((rect.width - gap) * 1.1) / 2.1;
+    const rightWidth = rect.width - gap - leftWidth;
+    const rightLeft = rect.x + leftWidth + gap;
+    const rowsHeight = rect.height - gap * 2;
+    const topHeight = (rowsHeight * 1.65) / 3.35;
+    const swatchHeight = rowsHeight / 3.35;
+    const smallHeight = (rowsHeight * 0.7) / 3.35;
+
+    drawCover(
+        context,
+        large,
+        { x: rect.x, y: rect.y, width: leftWidth, height: rect.height },
+        radius,
+    );
+    drawCover(
+        context,
+        topRight,
+        { x: rightLeft, y: rect.y, width: rightWidth, height: topHeight },
+        radius,
+    );
+
+    const swatchTop = rect.y + topHeight + gap;
+    const darkWidth = ((rightWidth - smallGap) * 2) / 3;
+
+    drawSwatch(
+        context,
+        { x: rightLeft, y: swatchTop, width: darkWidth, height: swatchHeight },
+        (large && dominantColor(large)) || COLORS.defaultDark,
+        radius,
+    );
+    drawSwatch(
+        context,
+        {
+            x: rightLeft + darkWidth + smallGap,
+            y: swatchTop,
+            width: rightWidth - darkWidth - smallGap,
+            height: swatchHeight,
+        },
+        (topRight && dominantColor(topRight)) || COLORS.defaultLight,
+        radius,
+    );
+
+    const smallTop = swatchTop + swatchHeight + gap;
+    const smallWidth = (rightWidth - smallGap * 2) / 3;
+
+    [smallLeft, smallMiddle, smallRight].forEach((image, index) =>
+        drawCover(
+            context,
+            image,
+            {
+                x: rightLeft + index * (smallWidth + smallGap),
+                y: smallTop,
+                width: smallWidth,
+                height: smallHeight,
+            },
+            smallRadius,
+        ),
     );
 }
 
-/** Shortens text with an ellipsis so it fits the given width. */
-function fitText(
-    context: CanvasRenderingContext2D,
-    text: string,
-    maxWidth: number,
-): string {
-    if (context.measureText(text).width <= maxWidth) {
-        return text;
-    }
-
-    let shortened = text;
-
-    while (
-        shortened.length > 1 &&
-        context.measureText(`${shortened}…`).width > maxWidth
-    ) {
-        shortened = shortened.slice(0, -1);
-    }
-
-    return `${shortened.trimEnd()}…`;
-}
-
-/** Splits a title over at most two lines. */
-function wrapTitle(
-    context: CanvasRenderingContext2D,
-    title: string,
-    maxWidth: number,
-): string[] {
-    const words = title.split(' ');
-    const lines: string[] = [];
-    let line = '';
-
-    for (const word of words) {
-        const candidate = line ? `${line} ${word}` : word;
-
-        if (context.measureText(candidate).width > maxWidth && line) {
-            lines.push(line);
-            line = word;
-        } else {
-            line = candidate;
-        }
-    }
-
-    lines.push(line);
-
-    return lines.length > 2
-        ? [lines[0], fitText(context, lines.slice(1).join(' '), maxWidth)]
-        : lines;
-}
-
 /**
- * Renders the branded mood board image: header, title, the board with its colour swatches,
- * the visitor's choices and a footer.
+ * Renders the branded mood board image: a slim header, the board at full width, the visitor's
+ * choices in one row and a small footer. The image is exactly as tall as its content, and all
+ * text is measured and fitted to its column, so nothing overlaps or runs off the edges.
  */
 export async function renderMoodBoardImage(
     board: MoodBoardExport,
@@ -189,7 +306,7 @@ export async function renderMoodBoardImage(
 
     const canvas = document.createElement('canvas');
     canvas.width = WIDTH;
-    canvas.height = HEIGHT;
+    canvas.height = 1;
 
     const context = canvas.getContext('2d');
 
@@ -197,167 +314,148 @@ export async function renderMoodBoardImage(
         throw new Error('Canvas is not supported.');
     }
 
+    // Measure the choices first, so the image can be exactly as tall as its content.
+    const choices = board.choices.slice(0, 4);
+    const columns = Math.max(choices.length, 1);
+    const columnWidth =
+        (CONTENT_WIDTH - (columns - 1) * SIZES.choiceColumnGap) / columns;
+
+    context.font = `${SIZES.choiceValue}px "${TEXT_FONT}"`;
+    const choiceLines = choices.map((choice) =>
+        wrapText(
+            context,
+            choice.values.length > 0 ? choice.values.join(', ') : '—',
+            columnWidth,
+            SIZES.choiceValueLines,
+        ),
+    );
+    const choicesHeight =
+        choices.length > 0
+            ? SIZES.choiceLabel +
+              SIZES.choiceLabelGap +
+              Math.max(...choiceLines.map((lines) => lines.length)) *
+                  SIZES.choiceValueLineHeight
+            : 0;
+
+    const boardTop = MARGIN + SIZES.logoHeight + SIZES.sectionGap;
+    const boardBottom = boardTop + CONTENT_WIDTH;
+    const choicesTop = boardBottom + SIZES.sectionGap;
+    const footerTop =
+        choicesTop +
+        choicesHeight +
+        (choices.length > 0 ? SIZES.sectionGap : 0);
+
+    canvas.height = footerTop + SIZES.footer + MARGIN;
     context.imageSmoothingQuality = 'high';
+    context.textBaseline = 'top';
 
-    // Paper and a fine frame.
     context.fillStyle = COLORS.paper;
-    context.fillRect(0, 0, WIDTH, HEIGHT);
-    context.strokeStyle = COLORS.frame;
-    context.lineWidth = 3;
-    context.strokeRect(60, 60, WIDTH - 120, HEIGHT - 120);
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
-    // Header: logo on the left, edition and date on the right.
-    const logoHeight = 92;
+    // Header: logo on the left, the board name and date on the right.
+    const headerHalf = CONTENT_WIDTH / 2 - 24;
 
-    if (logo) {
-        const logoWidth = (logo.naturalWidth / logo.naturalHeight) * logoHeight;
-        context.drawImage(logo, MARGIN, MARGIN, logoWidth, logoHeight);
+    if (logo && logo.naturalHeight > 0) {
+        const logoWidth = Math.min(
+            (logo.naturalWidth / logo.naturalHeight) * SIZES.logoHeight,
+            headerHalf,
+        );
+        const logoHeight = (logoWidth / logo.naturalWidth) * logo.naturalHeight;
+
+        context.drawImage(
+            logo,
+            MARGIN,
+            MARGIN + (SIZES.logoHeight - logoHeight) / 2,
+            logoWidth,
+            logoHeight,
+        );
     } else {
         context.fillStyle = COLORS.brand;
-        context.font = `64px "${DISPLAY_FONT}"`;
-        context.textBaseline = 'top';
-        context.fillText('HFJE', MARGIN, MARGIN);
+        context.font = `60px "${DISPLAY_FONT}"`;
+        context.fillText('HFJE', MARGIN, MARGIN + 12);
     }
 
+    const headerTextHeight = SIZES.headerDateOffset + SIZES.headerDate;
+    const headerTextTop = MARGIN + (SIZES.logoHeight - headerTextHeight) / 2;
+
     context.textAlign = 'right';
-    context.textBaseline = 'top';
-    context.fillStyle = COLORS.brand;
-    context.font = `30px "${DISPLAY_FONT}"`;
-    context.fillText('THE LIVING EDIT', WIDTH - MARGIN, MARGIN + 6);
-    context.fillStyle = COLORS.muted;
-    context.font = `30px "${TEXT_FONT}"`;
+    context.fillStyle = COLORS.ink;
+    context.font = `600 ${SIZES.headerTitle}px "${TEXT_FONT}"`;
     context.fillText(
-        new Date().toLocaleDateString('en-GB', {
-            day: 'numeric',
-            month: 'long',
-            year: 'numeric',
-        }),
+        fitText(context, board.title.trim() || board.spaceName, headerHalf),
         WIDTH - MARGIN,
-        MARGIN + 56,
+        headerTextTop,
+    );
+    context.fillStyle = COLORS.muted;
+    context.font = `${SIZES.headerDate}px "${TEXT_FONT}"`;
+    context.fillText(
+        fitText(
+            context,
+            `The Living Edit · ${new Date().toLocaleDateString('en-GB', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+            })}`,
+            headerHalf,
+        ),
+        WIDTH - MARGIN,
+        headerTextTop + SIZES.headerDateOffset,
     );
     context.textAlign = 'left';
 
-    // Title.
-    context.fillStyle = COLORS.muted;
-    context.font = `32px "${TEXT_FONT}"`;
-    context.fillText('HFJE LIVING COLLECTIONS  ·  MOOD BOARD', MARGIN, 322);
-
-    context.fillStyle = COLORS.ink;
-    context.font = `72px "${DISPLAY_FONT}"`;
-    const titleLines = wrapTitle(context, board.title, WIDTH - MARGIN * 2);
-    titleLines.forEach((line, index) =>
-        context.fillText(line, MARGIN, 380 + index * 96),
-    );
-
-    // The board, with the same proportions as on the website.
-    const boardTop = 380 + titleLines.length * 96 + 44;
-    const boardSize = Math.min(WIDTH - MARGIN * 2, HEIGHT - 480 - boardTop);
-    const boardLeft = (WIDTH - boardSize) / 2;
-    const gap = 24;
-    const smallGap = 16;
-
-    const leftWidth = ((boardSize - gap) * 1.1) / 2.1;
-    const rightWidth = boardSize - gap - leftWidth;
-    const rightLeft = boardLeft + leftWidth + gap;
-    const rowsHeight = boardSize - gap * 2;
-    const topHeight = (rowsHeight * 1.65) / 3.35;
-    const swatchHeight = rowsHeight / 3.35;
-    const smallHeight = (rowsHeight * 0.7) / 3.35;
-
-    drawCover(
+    // Board.
+    drawBoard(
         context,
-        large,
-        { x: boardLeft, y: boardTop, width: leftWidth, height: boardSize },
-        36,
-    );
-    drawCover(
-        context,
-        topRight,
-        { x: rightLeft, y: boardTop, width: rightWidth, height: topHeight },
-        36,
+        { x: MARGIN, y: boardTop, width: CONTENT_WIDTH, height: CONTENT_WIDTH },
+        [large, topRight, smallLeft, smallMiddle, smallRight],
     );
 
-    const swatchTop = boardTop + topHeight + gap;
-    const darkWidth = ((rightWidth - smallGap) * 2) / 3;
-
-    drawSwatch(
-        context,
-        { x: rightLeft, y: swatchTop, width: darkWidth, height: swatchHeight },
-        (large && dominantColor(large)) || COLORS.defaultDark,
-    );
-    drawSwatch(
-        context,
-        {
-            x: rightLeft + darkWidth + smallGap,
-            y: swatchTop,
-            width: rightWidth - darkWidth - smallGap,
-            height: swatchHeight,
-        },
-        (topRight && dominantColor(topRight)) || COLORS.defaultLight,
-    );
-
-    const smallTop = swatchTop + swatchHeight + gap;
-    const smallWidth = (rightWidth - smallGap * 2) / 3;
-
-    [smallLeft, smallMiddle, smallRight].forEach((image, index) =>
-        drawCover(
-            context,
-            image,
-            {
-                x: rightLeft + index * (smallWidth + smallGap),
-                y: smallTop,
-                width: smallWidth,
-                height: smallHeight,
-            },
-            24,
-        ),
-    );
-
-    // The visitor's choices, two columns of two rows.
-    context.textBaseline = 'top';
-    const choicesTop = boardTop + boardSize + 60;
-    const columnWidth = (WIDTH - MARGIN * 2) / 2;
-
-    board.choices.slice(0, 4).forEach((choice, index) => {
-        const x = MARGIN + (index % 2) * columnWidth;
-        const y = choicesTop + Math.floor(index / 2) * 92;
+    // Choices, one column per step.
+    choices.forEach((choice, index) => {
+        const x = MARGIN + index * (columnWidth + SIZES.choiceColumnGap);
 
         context.fillStyle = COLORS.brand;
-        context.font = `24px "${DISPLAY_FONT}"`;
-        context.fillText(choice.label.toUpperCase(), x, y);
+        context.font = `${SIZES.choiceLabel}px "${DISPLAY_FONT}"`;
+        setLetterSpacing(context, '3px');
+        context.fillText(
+            fitText(context, choice.label.toUpperCase(), columnWidth),
+            x,
+            choicesTop,
+        );
+        setLetterSpacing(context, '0px');
 
         context.fillStyle = COLORS.ink;
-        context.font = `36px "${TEXT_FONT}"`;
-        context.fillText(
-            fitText(
-                context,
-                choice.values.length > 0 ? choice.values.join(', ') : '—',
-                columnWidth - 40,
+        context.font = `${SIZES.choiceValue}px "${TEXT_FONT}"`;
+        choiceLines[index].forEach((line, lineIndex) =>
+            context.fillText(
+                line,
+                x,
+                choicesTop +
+                    SIZES.choiceLabel +
+                    SIZES.choiceLabelGap +
+                    lineIndex * SIZES.choiceValueLineHeight,
             ),
-            x,
-            y + 38,
         );
     });
 
     // Footer.
-    context.strokeStyle = COLORS.frame;
-    context.lineWidth = 2;
-    context.beginPath();
-    context.moveTo(MARGIN, HEIGHT - 190);
-    context.lineTo(WIDTH - MARGIN, HEIGHT - 190);
-    context.stroke();
+    context.font = `${SIZES.footer}px "${TEXT_FONT}"`;
+    const host = fitText(context, window.location.host, CONTENT_WIDTH * 0.4);
+    const hostWidth = context.measureText(host).width;
 
-    context.textBaseline = 'middle';
     context.fillStyle = COLORS.muted;
-    context.font = `30px "${TEXT_FONT}"`;
     context.fillText(
-        `Curated by HFJE for your ${board.spaceName.toLowerCase()}`,
+        fitText(
+            context,
+            `Curated by HFJE for your ${board.spaceName.toLowerCase()}`,
+            CONTENT_WIDTH - hostWidth - 48,
+        ),
         MARGIN,
-        HEIGHT - 130,
+        footerTop,
     );
     context.textAlign = 'right';
     context.fillStyle = COLORS.brand;
-    context.fillText(window.location.host, WIDTH - MARGIN, HEIGHT - 130);
+    context.fillText(host, WIDTH - MARGIN, footerTop);
 
     return new Promise((resolve, reject) =>
         canvas.toBlob(
@@ -380,7 +478,8 @@ export async function saveMoodBoardImage(
     const slug = board.title
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
-        .replace(/^-|-$/g, '');
+        .replace(/^-|-$/g, '')
+        .slice(0, 60);
     const fileName = `hfje-living-edit-${slug || 'mood-board'}.jpg`;
     const file = new File([blob], fileName, { type: blob.type });
 
