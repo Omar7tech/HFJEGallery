@@ -17,6 +17,8 @@ export type MoodBoardImage = {
     url: string;
     /** WebP up to 480px. */
     thumbUrl: string;
+    /** The uploaded file at full resolution, used only for the saved image. */
+    originalUrl: string;
     alt: string;
 };
 

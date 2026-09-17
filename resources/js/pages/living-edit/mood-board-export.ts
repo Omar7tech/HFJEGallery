@@ -297,7 +297,9 @@ export async function renderMoodBoardImage(
                 ...[1, 2, 3, 4, 5].map((slot) => {
                     const image = imageAt(slot);
 
-                    return image ? loadImage(image.url) : Promise.resolve(null);
+                    return image
+                        ? loadImage(image.originalUrl)
+                        : Promise.resolve(null);
                 }),
                 loadImage(LOGO_URL),
             ]),
@@ -462,7 +464,7 @@ export async function renderMoodBoardImage(
             (blob) =>
                 blob ? resolve(blob) : reject(new Error('Export failed.')),
             'image/jpeg',
-            0.95,
+            0.97,
         ),
     );
 }

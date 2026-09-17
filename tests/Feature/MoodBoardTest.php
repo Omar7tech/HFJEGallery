@@ -68,6 +68,7 @@ test('the board fills every position with the image matching the most steps', fu
         ->assertJsonPath('slots.0.slot', MoodBoardImageSlot::Large->value)
         ->assertJsonPath('slots.0.image.url', $warmAndOak->getFirstMediaUrl('image', 'webp'))
         ->assertJsonPath('slots.0.image.thumbUrl', $warmAndOak->getFirstMediaUrl('image', 'thumb'))
+        ->assertJsonPath('slots.0.image.originalUrl', $warmAndOak->getFirstMediaUrl('image'))
         ->assertJsonPath('slots.0.image.alt', $warmAndOak->alt_text);
 
     expect(boardImageId($response, MoodBoardImageSlot::Large))->toBe($warmAndOak->id)

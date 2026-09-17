@@ -12,9 +12,10 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class MoodBoardImageResource extends JsonResource
 {
     /**
-     * Only what the board renders: public WebP URLs and the alt text.
+     * Only what the board needs: public image URLs and the alt text. The original upload is only
+     * downloaded when the visitor saves the board as an image.
      *
-     * @return array{id: int, url: string, thumbUrl: string, alt: string}
+     * @return array{id: int, url: string, thumbUrl: string, originalUrl: string, alt: string}
      */
     public function toArray(Request $request): array
     {
@@ -22,6 +23,7 @@ class MoodBoardImageResource extends JsonResource
             'id' => $this->id,
             'url' => $this->getFirstMediaUrl('image', 'webp'),
             'thumbUrl' => $this->getFirstMediaUrl('image', 'thumb'),
+            'originalUrl' => $this->getFirstMediaUrl('image'),
             'alt' => $this->alt_text ?? '',
         ];
     }
