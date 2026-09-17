@@ -2,6 +2,9 @@
 
 namespace App\Providers\Filament;
 
+use App\Enums\LivingEditStep;
+use App\Filament\Resources\LivingEditOptions\LivingEditOptionResource;
+use App\Filament\Resources\LivingEditOptions\LivingEditOptionResourceConfiguration;
 use Caresome\FilamentAuthDesigner\AuthDesignerPlugin;
 use Caresome\FilamentAuthDesigner\Data\AuthPageConfig;
 use Caresome\FilamentAuthDesigner\Enums\MediaPosition;
@@ -40,6 +43,10 @@ class AdminPanelProvider extends PanelProvider
                 'gray' => Color::Stone,
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\Filament\Resources')
+            ->resources(array_map(
+                fn (LivingEditStep $step): LivingEditOptionResourceConfiguration => LivingEditOptionResource::make($step->key())->step($step),
+                LivingEditStep::cases(),
+            ))
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->pages([
                 Dashboard::class,

@@ -4,7 +4,7 @@ export type LivingSpace = {
     icon: string | null;
 };
 
-/** A selectable option of a Living Edit step (step 1 to 4). */
+/** A selectable option of a Living Edit step. */
 export type LivingEditOption = {
     id: string;
     name: string;

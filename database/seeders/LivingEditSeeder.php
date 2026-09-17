@@ -2,42 +2,43 @@
 
 namespace Database\Seeders;
 
+use App\Enums\LivingEditStep;
+use App\Models\LivingEditOption;
 use App\Models\LivingSpace;
-use App\Models\StepFour;
-use App\Models\StepOne;
-use App\Models\StepThree;
-use App\Models\StepTwo;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 class LivingEditSeeder extends Seeder
 {
+    /** @var list<string> */
+    private const array SPACES = ['Living room', 'Kitchen', 'Bed room', 'Dining room'];
+
     /**
-     * Starter names for each Living Edit model, in display order.
+     * Starter option names, keyed by step number, in display order.
      *
-     * @var array<class-string<Model>, list<string>>
+     * @var array<int, list<string>>
      */
-    private const array RECORDS = [
-        LivingSpace::class => ['Living room', 'Kitchen', 'Bed room', 'Dining room'],
-        StepOne::class => ['Warm', 'Refined', 'Social', 'Grounded', 'Expressive', 'Calm'],
-        StepTwo::class => ['Morning coffee', 'Hosting friends', 'Quiet reading', 'Family dinner', 'Slow weekends', 'Working from home'],
-        StepThree::class => ['Oak', 'Linen', 'Marble', 'Brass', 'Rattan', 'Terracotta'],
-        StepFour::class => ['Earthy', 'Neutral', 'Monochrome', 'Soft pastel', 'Bold', 'Natural'],
+    private const array OPTIONS = [
+        LivingEditStep::One->value => ['Warm', 'Refined', 'Social', 'Grounded', 'Expressive', 'Calm'],
+        LivingEditStep::Two->value => ['Morning coffee', 'Hosting friends', 'Quiet reading', 'Family dinner', 'Slow weekends', 'Working from home'],
+        LivingEditStep::Three->value => ['Oak', 'Linen', 'Marble', 'Brass', 'Rattan', 'Terracotta'],
+        LivingEditStep::Four->value => ['Earthy', 'Neutral', 'Monochrome', 'Soft pastel', 'Bold', 'Natural'],
     ];
 
     public function run(): void
     {
-        foreach (array_keys(self::RECORDS) as $model) {
-            if ($model::exists()) {
-                return;
-            }
+        if (LivingSpace::exists() || LivingEditOption::exists()) {
+            return;
         }
 
         DB::transaction(function () {
-            foreach (self::RECORDS as $model => $names) {
+            foreach (self::SPACES as $order => $name) {
+                LivingSpace::create(['name' => $name, 'sort_order' => $order]);
+            }
+
+            foreach (self::OPTIONS as $step => $names) {
                 foreach ($names as $order => $name) {
-                    $model::create(['name' => $name, 'sort_order' => $order]);
+                    LivingEditOption::create(['step' => $step, 'name' => $name, 'sort_order' => $order]);
                 }
             }
         });

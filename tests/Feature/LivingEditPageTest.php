@@ -1,10 +1,8 @@
 <?php
 
+use App\Enums\LivingEditStep;
+use App\Models\LivingEditOption;
 use App\Models\LivingSpace;
-use App\Models\StepFour;
-use App\Models\StepOne;
-use App\Models\StepThree;
-use App\Models\StepTwo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -29,26 +27,29 @@ test('living edit lists active spaces in order', function () {
         );
 });
 
-test('living edit lists the active options of each step in order', function (string $model, string $prop) {
-    $model::create(['name' => 'Calm', 'sort_order' => 2]);
-    $model::create(['name' => 'Warm', 'sort_order' => 1]);
-    $model::create(['name' => 'Hidden', 'sort_order' => 0, 'is_active' => false]);
+test('living edit groups the active options of each step in order', function () {
+    LivingEditOption::factory()->step(LivingEditStep::Two)->create(['name' => 'Calm', 'sort_order' => 2]);
+    LivingEditOption::factory()->step(LivingEditStep::Two)->create(['name' => 'Warm', 'sort_order' => 1]);
+    LivingEditOption::factory()->step(LivingEditStep::Two)->inactive()->create(['name' => 'Hidden', 'sort_order' => 0]);
+    LivingEditOption::factory()->step(LivingEditStep::Four)->create(['name' => 'Earthy']);
 
     $this->get(route('living-edit'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where($prop, [
-                ['id' => 'warm', 'name' => 'Warm', 'icon' => null],
-                ['id' => 'calm', 'name' => 'Calm', 'icon' => null],
+            ->where('steps', [
+                'step-1' => [],
+                'step-2' => [
+                    ['id' => 'warm', 'name' => 'Warm', 'icon' => null],
+                    ['id' => 'calm', 'name' => 'Calm', 'icon' => null],
+                ],
+                'step-3' => [],
+                'step-4' => [
+                    ['id' => 'earthy', 'name' => 'Earthy', 'icon' => null],
+                ],
             ])
             ->etc()
         );
-})->with([
-    'step 1' => [StepOne::class, 'stepOne'],
-    'step 2' => [StepTwo::class, 'stepTwo'],
-    'step 3' => [StepThree::class, 'stepThree'],
-    'step 4' => [StepFour::class, 'stepFour'],
-]);
+});
 
 test('living edit exposes the webp icon url', function () {
     Storage::fake('public');

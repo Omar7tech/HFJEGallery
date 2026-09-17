@@ -1,31 +1,20 @@
 import { Head } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
-import type { LivingEditOption, LivingSpace } from '@/types';
+import type { LivingSpace } from '@/types';
 import MaskedIcon from './masked-icon';
 import LivingMoodBoard from './mood-board';
 import { LIVING_EDIT_STEPS, useLivingEditFlow } from './use-living-edit-flow';
+import type { LivingEditOptions } from './use-living-edit-flow';
 
 export default function LivingEdit({
     spaces,
-    stepOne,
-    stepTwo,
-    stepThree,
-    stepFour,
+    steps,
 }: {
     spaces: LivingSpace[];
-    stepOne: LivingEditOption[];
-    stepTwo: LivingEditOption[];
-    stepThree: LivingEditOption[];
-    stepFour: LivingEditOption[];
+    steps: LivingEditOptions;
 }) {
-    const options = {
-        'step-1': stepOne,
-        'step-2': stepTwo,
-        'step-3': stepThree,
-        'step-4': stepFour,
-    };
     const { space, step, selections, goTo, selectSpace, toggleOption } =
-        useLivingEditFlow(spaces, options);
+        useLivingEditFlow(spaces, steps);
 
     if (space && step) {
         const stepIndex = LIVING_EDIT_STEPS.indexOf(step);
@@ -38,7 +27,7 @@ export default function LivingEdit({
                 <LivingMoodBoard
                     step={step}
                     space={space}
-                    options={options[step]}
+                    options={steps[step]}
                     selected={selections[step]}
                     onToggle={(id) => toggleOption(step, id)}
                     onBack={() => goTo(previousStep)}
