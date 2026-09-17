@@ -42,9 +42,7 @@ class GalleryImagesTable
                 TextColumn::make('spaces.name')
                     ->label('Spaces')
                     ->badge()
-                    ->color('gray')
-                    ->limitList(2)
-                    ->expandableLimitedList(),
+                    ->color('gray'),
                 ...array_map(
                     fn (LivingEditStep $step): TextColumn => TextColumn::make("step_{$step->value}")
                         ->label($step->getLabel())
@@ -56,8 +54,6 @@ class GalleryImagesTable
                             ->all())
                         ->badge()
                         ->color('gray')
-                        ->limitList(2)
-                        ->expandableLimitedList()
                         ->toggleable(),
                     LivingEditStep::cases(),
                 ),
