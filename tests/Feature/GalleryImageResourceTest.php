@@ -194,20 +194,37 @@ test('syncing a step ignores options that belong to another step', function () {
     expect($image->options()->pluck('living_edit_options.id')->all())->toBe([$stepOneOption->id]);
 });
 
-test('the gallery filters by position, space and step option', function () {
+test('position tabs list only the images of their position and count them', function () {
+    $largeImages = GalleryImage::factory()->slot(MoodBoardImageSlot::Large)->count(2)->create();
+    $smallImage = GalleryImage::factory()->slot(MoodBoardImageSlot::SmallLeft)->create();
+
+    Livewire::test(ListGalleryImages::class)
+        ->assertCanSeeTableRecords([...$largeImages, $smallImage])
+        ->set('activeTab', 'large')
+        ->assertCanSeeTableRecords($largeImages)
+        ->assertCanNotSeeTableRecords([$smallImage])
+        ->set('activeTab', 'small-left')
+        ->assertCanSeeTableRecords([$smallImage])
+        ->assertCanNotSeeTableRecords($largeImages);
+
+    $tabs = Livewire::test(ListGalleryImages::class)->instance()->getTabs();
+
+    expect(array_keys($tabs))->toBe(['all', 'large', 'top-right', 'small-left', 'small-middle', 'small-right'])
+        ->and($tabs['all']->getBadge())->toBe('3')
+        ->and($tabs['large']->getBadge())->toBe('2')
+        ->and($tabs['top-right']->getBadge())->toBe('0');
+});
+
+test('the gallery filters by space and step option', function () {
     $kitchen = LivingSpace::create(['name' => 'Kitchen']);
     $bedroom = LivingSpace::create(['name' => 'Bedroom']);
     $warm = LivingEditOption::factory()->step(LivingEditStep::One)->create(['name' => 'Warm']);
     $calm = LivingEditOption::factory()->step(LivingEditStep::One)->create(['name' => 'Calm']);
 
-    $warmKitchenLarge = GalleryImage::factory()->slot(MoodBoardImageSlot::Large)->hasAttached($kitchen, relationship: 'spaces')->hasAttached($warm, relationship: 'options')->create();
-    $calmBedroomSmall = GalleryImage::factory()->slot(MoodBoardImageSlot::SmallLeft)->hasAttached($bedroom, relationship: 'spaces')->hasAttached($calm, relationship: 'options')->create();
+    $warmKitchenLarge = GalleryImage::factory()->hasAttached($kitchen, relationship: 'spaces')->hasAttached($warm, relationship: 'options')->create();
+    $calmBedroomSmall = GalleryImage::factory()->hasAttached($bedroom, relationship: 'spaces')->hasAttached($calm, relationship: 'options')->create();
 
     Livewire::test(ListGalleryImages::class)
-        ->filterTable('slot', [MoodBoardImageSlot::Large->value])
-        ->assertCanSeeTableRecords([$warmKitchenLarge])
-        ->assertCanNotSeeTableRecords([$calmBedroomSmall])
-        ->resetTableFilters()
         ->filterTable('spaces', [$bedroom->id])
         ->assertCanSeeTableRecords([$calmBedroomSmall])
         ->assertCanNotSeeTableRecords([$warmKitchenLarge])
