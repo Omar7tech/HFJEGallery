@@ -1,4 +1,5 @@
-import { forwardRef, useState } from 'react';
+import { Check, Copy } from 'lucide-react';
+import { forwardRef, useEffect, useRef, useState } from 'react';
 import { dominantColor } from '@/lib/dominant-color';
 import { cn } from '@/lib/utils';
 import type { MoodBoardImage, MoodBoardSlot } from '@/types';
@@ -61,6 +62,107 @@ function BoardImage({
                 />
             )}
         </div>
+    );
+}
+
+/** How long the "Copied" confirmation stays visible. */
+const COPIED_FEEDBACK_MS = 1600;
+
+/** Whether dark text reads better than white text on a hex colour (relative luminance). */
+function prefersDarkText(hex: string): boolean {
+    const [red, green, blue] = [1, 3, 5].map((start) => {
+        const channel = parseInt(hex.slice(start, start + 2), 16) / 255;
+
+        return channel <= 0.03928
+            ? channel / 12.92
+            : ((channel + 0.055) / 1.055) ** 2.4;
+    });
+
+    return 0.2126 * red + 0.7152 * green + 0.0722 * blue > 0.4;
+}
+
+/**
+ * A board colour swatch. Hovering or focusing it reveals the hex code, and clicking copies it.
+ */
+function ColorSwatch({
+    color,
+    isWaiting,
+}: {
+    color: string;
+    isWaiting: boolean;
+}) {
+    const [copiedColor, setCopiedColor] = useState<string | null>(null);
+    const timerRef = useRef<number | null>(null);
+    const hex = color.toUpperCase();
+    const isCopied = copiedColor === color;
+
+    useEffect(
+        () => () => {
+            if (timerRef.current !== null) {
+                window.clearTimeout(timerRef.current);
+            }
+        },
+        [],
+    );
+
+    async function copy() {
+        try {
+            await navigator.clipboard.writeText(hex);
+        } catch {
+            return;
+        }
+
+        setCopiedColor(color);
+
+        if (timerRef.current !== null) {
+            window.clearTimeout(timerRef.current);
+        }
+
+        timerRef.current = window.setTimeout(
+            () => setCopiedColor(null),
+            COPIED_FEEDBACK_MS,
+        );
+    }
+
+    return (
+        <button
+            type="button"
+            onClick={copy}
+            disabled={isWaiting}
+            aria-label={isCopied ? `Copied ${hex}` : `Copy colour ${hex}`}
+            title={isWaiting ? undefined : `Copy ${hex}`}
+            style={{ backgroundColor: color }}
+            className={cn(
+                'group relative min-w-0 overflow-hidden rounded-xl transition-colors duration-700 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default motion-reduce:transition-none',
+                prefersDarkText(color) ? 'text-[#191b17]' : 'text-white',
+                isWaiting ? 'motion-safe:animate-pulse' : 'cursor-copy',
+            )}
+        >
+            <span
+                className={cn(
+                    'absolute inset-0 flex items-center justify-center gap-1 bg-black/10 px-1 text-[10px] font-medium tracking-wide transition-opacity duration-200 motion-reduce:transition-none',
+                    isCopied
+                        ? 'opacity-100'
+                        : 'opacity-0 group-focus-visible:opacity-100 group-hover:group-enabled:opacity-100',
+                )}
+            >
+                {isCopied ? (
+                    <>
+                        <Check aria-hidden="true" size={12} />
+                        Copied
+                    </>
+                ) : (
+                    <>
+                        <Copy
+                            aria-hidden="true"
+                            size={12}
+                            className="shrink-0"
+                        />
+                        <span className="truncate">{hex}</span>
+                    </>
+                )}
+            </span>
+        </button>
     );
 }
 
@@ -130,21 +232,15 @@ const MoodBoardPreview = forwardRef<
                         className="rounded-xl"
                         onColor={rememberColor}
                     />
-                    <div
-                        className="grid grid-cols-[2fr_1fr] gap-1"
-                        aria-hidden="true"
-                    >
-                        {[darkSwatch, lightSwatch].map((swatch, index) => (
-                            <div
-                                key={index}
-                                style={{ backgroundColor: swatch.color }}
-                                className={cn(
-                                    'rounded-xl transition-colors duration-700 ease-out motion-reduce:transition-none',
-                                    swatch.isWaiting &&
-                                        'motion-safe:animate-pulse',
-                                )}
-                            />
-                        ))}
+                    <div className="grid grid-cols-[2fr_1fr] gap-1">
+                        <ColorSwatch
+                            color={darkSwatch.color}
+                            isWaiting={darkSwatch.isWaiting}
+                        />
+                        <ColorSwatch
+                            color={lightSwatch.color}
+                            isWaiting={lightSwatch.isWaiting}
+                        />
                     </div>
                     <div className="grid min-h-0 grid-cols-3 gap-1">
                         {[3, 4, 5].map((slot) => (
