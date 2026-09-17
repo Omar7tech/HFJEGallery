@@ -16,7 +16,11 @@ export default function LivingEdit({
 }) {
     const { space, step, selections, goTo, selectSpace, toggleOption } =
         useLivingEditFlow(spaces, steps);
-    const board = useMoodBoard(space && step ? space.id : null, selections);
+    const board = useMoodBoard(
+        space?.id ?? null,
+        selections,
+        step === LIVING_EDIT_STEPS.at(-1),
+    );
 
     if (space && step) {
         const stepIndex = LIVING_EDIT_STEPS.indexOf(step);

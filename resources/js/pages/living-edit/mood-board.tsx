@@ -11,6 +11,7 @@ import {
     MAX_STEP_SELECTIONS,
 } from './use-living-edit-flow';
 import type { LivingEditStep } from './use-living-edit-flow';
+import type { MoodBoardStatus } from './use-mood-board';
 
 const STEP_COPY: Record<LivingEditStep, { legend: string; pickHint: string }> =
     {
@@ -31,6 +32,14 @@ const STEP_COPY: Record<LivingEditStep, { legend: string; pickHint: string }> =
             pickHint: 'pick a palette',
         },
     };
+
+const REFRESH_LABELS: Record<MoodBoardStatus, string> = {
+    locked: '',
+    loading: 'Updating',
+    ready: 'Refresh Board',
+    stale: 'Update Board',
+    failed: 'Try Again',
+};
 
 /** Joins names as "A", "A & B" or "A, B & C". */
 function joinNames(names: string[]): string {
@@ -58,7 +67,7 @@ export default function LivingMoodBoard({
     onContinue?: () => void;
     board: {
         slots: MoodBoardSlot[] | null;
-        isLoading: boolean;
+        status: MoodBoardStatus;
         refresh: () => void;
     };
 }) {
@@ -201,27 +210,41 @@ export default function LivingMoodBoard({
                                 )}
                             </h2>
                         </div>
-                        <button
-                            type="button"
-                            onClick={board.refresh}
-                            disabled={board.slots === null}
-                            className="flex shrink-0 items-center gap-1 rounded-full bg-[#f4f4f4] px-2 py-1 text-[9px] text-[#ad6844] transition-colors hover:bg-[#ece7e3] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-[#f4f4f4]"
-                        >
-                            <RefreshCw
-                                aria-hidden="true"
-                                size={15}
+                        {board.status !== 'locked' && (
+                            <button
+                                type="button"
+                                onClick={board.refresh}
+                                disabled={board.status === 'loading'}
+                                title={
+                                    board.status === 'ready'
+                                        ? 'Show other matching images'
+                                        : undefined
+                                }
                                 className={cn(
-                                    board.isLoading &&
-                                        'motion-safe:animate-spin',
+                                    'flex shrink-0 items-center gap-1 rounded-full px-2 py-1 text-[9px] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default',
+                                    board.status === 'stale'
+                                        ? 'bg-[#ad6844] text-white hover:bg-brand-hover'
+                                        : 'bg-[#f4f4f4] text-[#ad6844] enabled:hover:bg-[#ece7e3]',
                                 )}
-                            />{' '}
-                            Refresh Board
-                        </button>
+                            >
+                                <RefreshCw
+                                    aria-hidden="true"
+                                    size={15}
+                                    className={cn(
+                                        board.status === 'loading' &&
+                                            'motion-safe:animate-spin',
+                                    )}
+                                />{' '}
+                                {REFRESH_LABELS[board.status]}
+                            </button>
+                        )}
                     </div>
 
                     <MoodBoardPreview
                         slots={board.slots}
-                        isLoading={board.isLoading}
+                        status={board.status}
+                        lastStepNumber={LIVING_EDIT_TOTAL_STEPS}
+                        onRefresh={board.refresh}
                     />
                     <div className="mt-9 flex justify-center">
                         <button

@@ -1,4 +1,4 @@
-import { useEffect, useEffectEvent, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { MoodBoardSlot } from '@/types';
 import {
     LIVING_EDIT_STEP_PARAMS,
@@ -8,21 +8,30 @@ import type { LivingEditSelections } from './use-living-edit-flow';
 
 const ENDPOINT = '/living-edit/mood-board';
 
-/** Waits for a short pause in clicking before asking for a new board. */
-const DEBOUNCE_MS = 200;
+/**
+ * - locked: the visitor has not reached the last step yet
+ * - loading: a board is being built
+ * - ready: the board matches the current choices
+ * - stale: the choices changed since the board was built
+ * - failed: the board could not be loaded
+ */
+export type MoodBoardStatus =
+    'locked' | 'loading' | 'ready' | 'stale' | 'failed';
 
 type Board = {
-    slots: MoodBoardSlot[];
+    spaceId: string;
+    choices: string;
     seed: number;
+    slots: MoodBoardSlot[];
 };
 
 /**
- * The query for a board. Slugs are sorted so the same choices in any order share one cached board.
+ * The choices as a query string. Slugs are sorted, so picking the same options in another
+ * order does not count as a change.
  */
-function boardQuery(
+function choicesQuery(
     spaceId: string,
     selections: LivingEditSelections,
-    seed: number,
 ): string {
     const params = new URLSearchParams({ space: spaceId });
 
@@ -35,88 +44,152 @@ function boardQuery(
         }
     }
 
+    return params.toString();
+}
+
+async function fetchBoard(
+    choices: string,
+    seed: number,
+    keptImageIds: number[],
+    signal: AbortSignal,
+): Promise<MoodBoardSlot[]> {
+    const params = new URLSearchParams(choices);
+
     if (seed > 0) {
         params.set('seed', String(seed));
     }
 
-    return params.toString();
+    for (const id of keptImageIds) {
+        params.append('keep[]', String(id));
+    }
+
+    const response = await fetch(`${ENDPOINT}?${params}`, {
+        headers: { Accept: 'application/json' },
+        signal,
+    });
+
+    if (!response.ok) {
+        throw new Error(`Mood board request failed (${response.status})`);
+    }
+
+    const { slots } = (await response.json()) as { slots: MoodBoardSlot[] };
+
+    return slots;
 }
 
 /**
- * Loads the mood board for a space and the visitor's choices.
- *
- * Boards are cached per choice, so going back and forth never refetches. While a new board
- * loads, the previous one stays on screen, and images that still match best are kept in place.
+ * The mood board of a space. It is built once the visitor reaches the last step, and after that
+ * only when they ask for it: changed choices mark the board as stale instead of replacing it.
  */
 export function useMoodBoard(
     spaceId: string | null,
     selections: LivingEditSelections,
+    isUnlocked: boolean,
 ) {
-    const [seed, setSeed] = useState(0);
-    const [boards, setBoards] = useState<Record<string, Board>>({});
-    const [lastBoard, setLastBoard] = useState<Board | null>(null);
-    const [failedQuery, setFailedQuery] = useState<string | null>(null);
+    const [board, setBoard] = useState<Board | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [hasFailed, setHasFailed] = useState(false);
+    const requestRef = useRef<AbortController | null>(null);
 
-    const query = spaceId ? boardQuery(spaceId, selections, seed) : null;
-    const cachedBoard = query ? boards[query] : undefined;
-    const board = cachedBoard ?? lastBoard;
+    const choices = spaceId ? choicesQuery(spaceId, selections) : null;
+    const spaceBoard = board && board.spaceId === spaceId ? board : null;
+    const isStale = spaceBoard !== null && spaceBoard.choices !== choices;
 
-    /** Images to keep in place. A refresh asks for a new seed, so nothing is kept then. */
-    const keptImageIds = useEffectEvent((): number[] =>
-        board && board.seed === seed
-            ? board.slots.flatMap(({ image }) => (image ? [image.id] : []))
-            : [],
-    );
+    /** Loads a board on request, replacing any board request still in flight. */
+    async function load(nextSeed: number, keptImageIds: number[]) {
+        if (!spaceId || !choices) {
+            return;
+        }
 
+        requestRef.current?.abort();
+        const controller = new AbortController();
+        requestRef.current = controller;
+
+        setIsLoading(true);
+        setHasFailed(false);
+
+        try {
+            const slots = await fetchBoard(
+                choices,
+                nextSeed,
+                keptImageIds,
+                controller.signal,
+            );
+
+            setBoard({ spaceId, choices, seed: nextSeed, slots });
+        } catch {
+            if (!controller.signal.aborted) {
+                setHasFailed(true);
+            }
+        } finally {
+            if (requestRef.current === controller) {
+                requestRef.current = null;
+                setIsLoading(false);
+            }
+        }
+    }
+
+    /**
+     * Updates a stale board, keeping images that still match best, or shows other matching
+     * images when the board is already up to date.
+     */
+    function refresh() {
+        if (!spaceBoard) {
+            void load(0, []);
+
+            return;
+        }
+
+        if (isStale) {
+            void load(
+                spaceBoard.seed,
+                spaceBoard.slots.flatMap(({ image }) =>
+                    image ? [image.id] : [],
+                ),
+            );
+
+            return;
+        }
+
+        void load(spaceBoard.seed + 1, []);
+    }
+
+    const needsFirstBoard = isUnlocked && spaceBoard === null && !hasFailed;
+
+    /** The first board is built as soon as the last step is reached. */
     useEffect(() => {
-        if (!query || cachedBoard) {
+        if (!needsFirstBoard || !spaceId || !choices) {
             return;
         }
 
         const controller = new AbortController();
 
-        const timer = window.setTimeout(async () => {
-            const params = new URLSearchParams(query);
-
-            for (const id of keptImageIds()) {
-                params.append('keep[]', String(id));
-            }
-
-            try {
-                const response = await fetch(`${ENDPOINT}?${params}`, {
-                    headers: { Accept: 'application/json' },
-                    signal: controller.signal,
-                });
-
-                if (!response.ok) {
-                    throw new Error(
-                        `Mood board request failed (${response.status})`,
-                    );
-                }
-
-                const { slots } = (await response.json()) as {
-                    slots: MoodBoardSlot[];
-                };
-                const loaded = { slots, seed };
-
-                setBoards((current) => ({ ...current, [query]: loaded }));
-                setLastBoard(loaded);
-            } catch {
+        fetchBoard(choices, 0, [], controller.signal)
+            .then((slots) => setBoard({ spaceId, choices, seed: 0, slots }))
+            .catch(() => {
                 if (!controller.signal.aborted) {
-                    setFailedQuery(query);
+                    setHasFailed(true);
                 }
-            }
-        }, DEBOUNCE_MS);
+            });
 
-        return () => {
-            window.clearTimeout(timer);
-            controller.abort();
-        };
-    }, [query, cachedBoard, seed]);
+        return () => controller.abort();
+    }, [needsFirstBoard, spaceId, choices]);
+
+    useEffect(() => () => requestRef.current?.abort(), []);
+
+    const status: MoodBoardStatus = !isUnlocked
+        ? 'locked'
+        : isLoading || needsFirstBoard
+          ? 'loading'
+          : hasFailed
+            ? 'failed'
+            : isStale
+              ? 'stale'
+              : 'ready';
 
     return {
-        slots: board?.slots ?? null,
-        isLoading: query !== null && !cachedBoard && failedQuery !== query,
-        refresh: () => setSeed((current) => current + 1),
+        slots: isUnlocked ? (spaceBoard?.slots ?? null) : null,
+        status,
+        refresh,
     };
 }
