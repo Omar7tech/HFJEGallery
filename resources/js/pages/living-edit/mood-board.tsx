@@ -1,10 +1,18 @@
 import { Link } from '@inertiajs/react';
-import { LoaderCircle, RefreshCw, Shuffle, Sparkles } from 'lucide-react';
-import { useRef } from 'react';
+import {
+    Check,
+    Download,
+    LoaderCircle,
+    RefreshCw,
+    Shuffle,
+    Sparkles,
+} from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
 import MarqueeText from '@/components/marquee-text';
 import { cn } from '@/lib/utils';
 import type { LivingEditOption, LivingSpace, MoodBoardSlot } from '@/types';
 import MaskedIcon from './masked-icon';
+import { saveMoodBoardImage } from './mood-board-export';
 import MoodBoardPreview from './mood-board-preview';
 import {
     LIVING_EDIT_STEPS,
@@ -14,25 +22,31 @@ import {
 import type { LivingEditStep } from './use-living-edit-flow';
 import type { MoodBoardStatus } from './use-mood-board';
 
-const STEP_COPY: Record<LivingEditStep, { legend: string; pickHint: string }> =
-    {
-        'step-1': {
-            legend: 'Choose your feelings. Select up to three.',
-            pickHint: 'pick a feeling',
-        },
-        'step-2': {
-            legend: 'Choose your moments. Select up to three.',
-            pickHint: 'pick a moment',
-        },
-        'step-3': {
-            legend: 'Choose your materials. Select up to three.',
-            pickHint: 'pick a material',
-        },
-        'step-4': {
-            legend: 'Choose your palette. Select up to three.',
-            pickHint: 'pick a palette',
-        },
-    };
+const STEP_COPY: Record<
+    LivingEditStep,
+    { title: string; legend: string; pickHint: string }
+> = {
+    'step-1': {
+        title: 'Feelings',
+        legend: 'Choose your feelings. Select up to three.',
+        pickHint: 'pick a feeling',
+    },
+    'step-2': {
+        title: 'Moments',
+        legend: 'Choose your moments. Select up to three.',
+        pickHint: 'pick a moment',
+    },
+    'step-3': {
+        title: 'Materials',
+        legend: 'Choose your materials. Select up to three.',
+        pickHint: 'pick a material',
+    },
+    'step-4': {
+        title: 'Palette',
+        legend: 'Choose your palette. Select up to three.',
+        pickHint: 'pick a palette',
+    },
+};
 
 /**
  * A quiet status line above the board: nothing before the first board, a shuffle once it is
@@ -107,6 +121,100 @@ function BoardStatusControl({
     return null;
 }
 
+type SaveState = 'idle' | 'saving' | 'saved' | 'failed';
+
+/** How long the "Saved" confirmation stays visible. */
+const SAVED_FEEDBACK_MS = 2200;
+
+/**
+ * Saves the board as a branded image. Only a board that matches the current choices can be
+ * saved, so the image never lists choices its pictures do not reflect.
+ */
+function SaveImageButton({
+    status,
+    onSave,
+}: {
+    status: MoodBoardStatus;
+    onSave: () => Promise<void>;
+}) {
+    const [saveState, setSaveState] = useState<SaveState>('idle');
+    const timerRef = useRef<number | null>(null);
+    const isAvailable = status === 'ready';
+
+    useEffect(
+        () => () => {
+            if (timerRef.current !== null) {
+                window.clearTimeout(timerRef.current);
+            }
+        },
+        [],
+    );
+
+    async function save() {
+        setSaveState('saving');
+
+        try {
+            await onSave();
+            setSaveState('saved');
+        } catch {
+            setSaveState('failed');
+        }
+
+        if (timerRef.current !== null) {
+            window.clearTimeout(timerRef.current);
+        }
+
+        timerRef.current = window.setTimeout(
+            () => setSaveState('idle'),
+            SAVED_FEEDBACK_MS,
+        );
+    }
+
+    const hint =
+        status === 'stale'
+            ? 'Update the mood board to save it'
+            : status === 'empty' || status === 'failed'
+              ? 'Show your mood board to save it'
+              : undefined;
+
+    return (
+        <button
+            type="button"
+            onClick={save}
+            disabled={!isAvailable || saveState === 'saving'}
+            title={hint}
+            aria-live="polite"
+            className="inline-flex min-h-9 min-w-40 items-center justify-center gap-1.5 rounded-full bg-[#f4f4f4] px-5 py-1.5 text-xs text-[#ad6844] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-[#ece7e3] disabled:cursor-default disabled:opacity-60"
+        >
+            {saveState === 'saving' ? (
+                <>
+                    <LoaderCircle
+                        aria-hidden="true"
+                        size={14}
+                        className="motion-safe:animate-spin"
+                    />
+                    Preparing…
+                </>
+            ) : saveState === 'saved' ? (
+                <>
+                    <Check aria-hidden="true" size={14} />
+                    Saved
+                </>
+            ) : saveState === 'failed' ? (
+                <>
+                    <RefreshCw aria-hidden="true" size={14} />
+                    Could not save, try again
+                </>
+            ) : (
+                <>
+                    <Download aria-hidden="true" size={14} />
+                    Save Image
+                </>
+            )}
+        </button>
+    );
+}
+
 /** Joins names as "A", "A & B" or "A, B & C". */
 function joinNames(names: string[]): string {
     return names.length > 1
@@ -123,6 +231,7 @@ export default function LivingMoodBoard({
     onBack,
     onContinue,
     isLastStep,
+    choiceNames,
     board,
 }: {
     step: LivingEditStep;
@@ -133,6 +242,8 @@ export default function LivingMoodBoard({
     onBack: () => void;
     onContinue?: () => void;
     isLastStep: boolean;
+    /** Names of the chosen options, per step. */
+    choiceNames: Record<LivingEditStep, string[]>;
     board: {
         slots: MoodBoardSlot[] | null;
         status: MoodBoardStatus;
@@ -153,6 +264,18 @@ export default function LivingMoodBoard({
                 ? 'auto'
                 : 'smooth',
             block: 'nearest',
+        });
+    }
+
+    function saveImage(): Promise<void> {
+        return saveMoodBoardImage({
+            title: `${joinNames(choiceNames['step-1'])} ${space.name}`.trim(),
+            spaceName: space.name,
+            choices: LIVING_EDIT_STEPS.map((key) => ({
+                label: STEP_COPY[key].title,
+                values: choiceNames[key],
+            })),
+            slots: board.slots ?? [],
         });
     }
 
@@ -342,14 +465,10 @@ export default function LivingMoodBoard({
                         </p>
                     )}
                     <div className="mt-9 flex justify-center">
-                        <button
-                            type="button"
-                            disabled
-                            title="Saving the board is coming soon"
-                            className="w-[136px] rounded-full bg-[#f4f4f4] py-0.5 text-xs text-[#ad6844] disabled:cursor-default"
-                        >
-                            Save Image
-                        </button>
+                        <SaveImageButton
+                            status={board.status}
+                            onSave={saveImage}
+                        />
                     </div>
                 </div>
             </div>

@@ -4,7 +4,7 @@ import type { LivingSpace } from '@/types';
 import MaskedIcon from './masked-icon';
 import LivingMoodBoard from './mood-board';
 import { LIVING_EDIT_STEPS, useLivingEditFlow } from './use-living-edit-flow';
-import type { LivingEditOptions } from './use-living-edit-flow';
+import type { LivingEditOptions, LivingEditStep } from './use-living-edit-flow';
 import { useMoodBoard } from './use-mood-board';
 
 export default function LivingEdit({
@@ -17,6 +17,16 @@ export default function LivingEdit({
     const { space, step, selections, goTo, selectSpace, toggleOption } =
         useLivingEditFlow(spaces, steps);
     const board = useMoodBoard(space?.id ?? null, selections);
+    const choiceNames = Object.fromEntries(
+        LIVING_EDIT_STEPS.map((key) => [
+            key,
+            selections[key].flatMap((id) => {
+                const option = steps[key].find((entry) => entry.id === id);
+
+                return option ? [option.name] : [];
+            }),
+        ]),
+    ) as Record<LivingEditStep, string[]>;
 
     if (space && step) {
         const stepIndex = LIVING_EDIT_STEPS.indexOf(step);
@@ -35,6 +45,7 @@ export default function LivingEdit({
                     onBack={() => goTo(previousStep)}
                     onContinue={nextStep ? () => goTo(nextStep) : undefined}
                     isLastStep={!nextStep}
+                    choiceNames={choiceNames}
                     board={board}
                 />
             </>
