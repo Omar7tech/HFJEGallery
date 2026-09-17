@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\LivingFeelings\Tables;
+namespace App\Filament\Resources\StepTwos\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
@@ -9,11 +9,10 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Columns\SpatieMediaLibraryImageColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
-use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
-class LivingFeelingsTable
+class StepTwosTable
 {
     public static function configure(Table $table): Table
     {
@@ -30,12 +29,6 @@ class LivingFeelingsTable
                     ->searchable()
                     ->sortable()
                     ->weight('medium'),
-                TextColumn::make('spaces_count')
-                    ->label('Spaces')
-                    ->counts('spaces')
-                    ->badge()
-                    ->color(fn (int $state): string => $state > 0 ? 'success' : 'gray')
-                    ->sortable(),
                 ToggleColumn::make('is_active')
                     ->label('Active')
                     ->sortable(),
@@ -49,10 +42,6 @@ class LivingFeelingsTable
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                SelectFilter::make('spaces')
-                    ->relationship('spaces', 'name')
-                    ->multiple()
-                    ->preload(),
                 TernaryFilter::make('is_active')
                     ->label('Active'),
             ])

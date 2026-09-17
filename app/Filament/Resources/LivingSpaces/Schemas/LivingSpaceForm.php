@@ -2,13 +2,11 @@
 
 namespace App\Filament\Resources\LivingSpaces\Schemas;
 
-use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
-use Illuminate\Database\Eloquent\Builder;
 
 class LivingSpaceForm
 {
@@ -47,23 +45,6 @@ class LivingSpaceForm
                             ->imageEditor()
                             ->imageEditorAspectRatioOptions(['1:1'])
                             ->helperText('Square PNG or WebP with a transparent background.'),
-                    ]),
-
-                Section::make('Feelings')
-                    ->description('Feelings available when this space is selected.')
-                    ->columnSpanFull()
-                    ->components([
-                        Select::make('feelings')
-                            ->hiddenLabel()
-                            ->relationship(
-                                titleAttribute: 'name',
-                                modifyQueryUsing: fn (Builder $query): Builder => $query->orderBy('sort_order'),
-                            )
-                            ->multiple()
-                            ->searchable()
-                            ->placeholder('Search feelings to add')
-                            ->searchPrompt('Type to search feelings')
-                            ->noSearchResultsMessage('No feelings found.'),
                     ]),
             ]);
     }

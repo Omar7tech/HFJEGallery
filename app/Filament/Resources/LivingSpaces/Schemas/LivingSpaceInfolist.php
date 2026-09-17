@@ -35,15 +35,6 @@ class LivingSpaceInfolist
                             ->placeholder('-'),
                     ]),
 
-                Section::make('Feelings')
-                    ->columnSpanFull()
-                    ->components([
-                        TextEntry::make('feelings.name')
-                            ->hiddenLabel()
-                            ->badge()
-                            ->placeholder('No feelings linked.'),
-                    ]),
-
                 Section::make('Meta')
                     ->columnSpanFull()
                     ->columns(2)

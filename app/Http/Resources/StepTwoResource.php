@@ -2,14 +2,14 @@
 
 namespace App\Http\Resources;
 
-use App\Models\LivingFeeling;
+use App\Models\StepTwo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * @mixin LivingFeeling
+ * @mixin StepTwo
  */
-class LivingFeelingResource extends JsonResource
+class StepTwoResource extends JsonResource
 {
     /**
      * Transform the resource into an array.

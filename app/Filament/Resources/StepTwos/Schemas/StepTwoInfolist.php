@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Filament\Resources\LivingFeelings\Schemas;
+namespace App\Filament\Resources\StepTwos\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\SpatieMediaLibraryImageEntry;
@@ -8,7 +8,7 @@ use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
-class LivingFeelingInfolist
+class StepTwoInfolist
 {
     public static function configure(Schema $schema): Schema
     {
@@ -33,15 +33,6 @@ class LivingFeelingInfolist
                             ->conversion('webp')
                             ->imageHeight(64)
                             ->placeholder('-'),
-                    ]),
-
-                Section::make('Spaces')
-                    ->columnSpanFull()
-                    ->components([
-                        TextEntry::make('spaces.name')
-                            ->hiddenLabel()
-                            ->badge()
-                            ->placeholder('No spaces linked.'),
                     ]),
 
                 Section::make('Meta')

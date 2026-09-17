@@ -14,7 +14,7 @@ class LivingSpaceResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @return array{id: string, name: string, icon: string|null, feelings?: array<int, array{id: string, name: string, icon: string|null}>}
+     * @return array{id: string, name: string, icon: string|null}
      */
     public function toArray(Request $request): array
     {
@@ -22,7 +22,6 @@ class LivingSpaceResource extends JsonResource
             'id' => $this->slug,
             'name' => $this->name,
             'icon' => $this->getFirstMediaUrl('icon', 'webp') ?: null,
-            'feelings' => $this->whenLoaded('feelings', fn (): array => LivingFeelingResource::collection($this->feelings)->resolve($request)),
         ];
     }
 }

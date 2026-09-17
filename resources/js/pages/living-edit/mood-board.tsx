@@ -2,15 +2,15 @@ import { Link } from '@inertiajs/react';
 import { RefreshCw } from 'lucide-react';
 import MarqueeText from '@/components/marquee-text';
 import { cn } from '@/lib/utils';
-import type { LivingSpace } from '@/types';
+import type { LivingSpace, StepTwoOption } from '@/types';
 import MaskedIcon from './masked-icon';
 import {
     LIVING_EDIT_STEPS,
     LIVING_EDIT_TOTAL_STEPS,
-    MAX_FEELINGS,
+    MAX_STEP_TWO_SELECTIONS,
 } from './use-living-edit-flow';
 
-const STEP_NUMBER = LIVING_EDIT_STEPS.indexOf('feelings') + 1;
+const STEP_NUMBER = LIVING_EDIT_STEPS.indexOf('step-2') + 1;
 
 /** Joins names as "A", "A & B" or "A, B & C". */
 function joinNames(names: string[]): string {
@@ -21,18 +21,19 @@ function joinNames(names: string[]): string {
 
 export default function LivingMoodBoard({
     space,
+    options,
     selected,
     onToggle,
     onBack,
 }: {
     space: LivingSpace;
+    options: StepTwoOption[];
     selected: string[];
     onToggle: (id: string) => void;
     onBack: () => void;
 }) {
-    const { feelings } = space;
     const selectedNames = selected
-        .map((id) => feelings.find((feeling) => feeling.id === id)?.name)
+        .map((id) => options.find((option) => option.id === id)?.name)
         .filter((name): name is string => Boolean(name));
 
     return (
@@ -81,20 +82,21 @@ export default function LivingMoodBoard({
                         <legend className="sr-only">
                             Choose your feelings. Select up to three.
                         </legend>
-                        {feelings.length === 0 && (
+                        {options.length === 0 && (
                             <p className="text-[10px] text-[#777]">
-                                Feelings for this space are coming soon.
+                                Options for this step are coming soon.
                             </p>
                         )}
                         <div className="grid grid-cols-4 gap-2">
-                            {feelings.map(({ id, name, icon }) => (
+                            {options.map(({ id, name, icon }) => (
                                 <button
                                     key={id}
                                     type="button"
                                     aria-pressed={selected.includes(id)}
                                     disabled={
                                         !selected.includes(id) &&
-                                        selected.length >= MAX_FEELINGS
+                                        selected.length >=
+                                            MAX_STEP_TWO_SELECTIONS
                                     }
                                     onClick={() => onToggle(id)}
                                     className={cn(
@@ -118,7 +120,7 @@ export default function LivingMoodBoard({
                         </div>
                     </fieldset>
                     <p className="mt-8 border-b border-[#bd7959] pb-2 text-[clamp(0.75rem,1.4cqi,0.875rem)]">
-                        Select Up To {MAX_FEELINGS}
+                        Select Up To {MAX_STEP_TWO_SELECTIONS}
                     </p>
                     <div className="mt-5 flex items-center justify-between px-2">
                         <button

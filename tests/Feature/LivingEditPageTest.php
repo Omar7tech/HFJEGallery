@@ -1,7 +1,7 @@
 <?php
 
-use App\Models\LivingFeeling;
 use App\Models\LivingSpace;
+use App\Models\StepTwo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -9,29 +9,27 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
 
-test('living edit lists active spaces in order with their active feelings', function () {
-    $calm = LivingFeeling::create(['name' => 'Calm', 'sort_order' => 2]);
-    $warm = LivingFeeling::create(['name' => 'Warm', 'sort_order' => 1]);
-    $hidden = LivingFeeling::create(['name' => 'Hidden', 'sort_order' => 0, 'is_active' => false]);
+test('living edit lists active spaces and active step 2 options in order', function () {
+    StepTwo::create(['name' => 'Calm', 'sort_order' => 2]);
+    StepTwo::create(['name' => 'Warm', 'sort_order' => 1]);
+    StepTwo::create(['name' => 'Hidden', 'sort_order' => 0, 'is_active' => false]);
 
-    LivingSpace::create(['name' => 'Kitchen', 'sort_order' => 2])->feelings()->attach($warm);
-    LivingSpace::create(['name' => 'Living room', 'sort_order' => 1])->feelings()->attach([$calm->id, $warm->id, $hidden->id]);
+    LivingSpace::create(['name' => 'Kitchen', 'sort_order' => 2]);
+    LivingSpace::create(['name' => 'Living room', 'sort_order' => 1]);
     LivingSpace::create(['name' => 'Garage', 'sort_order' => 0, 'is_active' => false]);
 
     $this->get(route('living-edit'))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
             ->component('living-edit/index')
-            ->has('spaces', 2)
-            ->where('spaces.0.id', 'living-room')
-            ->where('spaces.0.name', 'Living room')
-            ->where('spaces.0.icon', null)
-            ->where('spaces.0.feelings', [
+            ->where('spaces', [
+                ['id' => 'living-room', 'name' => 'Living room', 'icon' => null],
+                ['id' => 'kitchen', 'name' => 'Kitchen', 'icon' => null],
+            ])
+            ->where('stepTwo', [
                 ['id' => 'warm', 'name' => 'Warm', 'icon' => null],
                 ['id' => 'calm', 'name' => 'Calm', 'icon' => null],
             ])
-            ->where('spaces.1.id', 'kitchen')
-            ->has('spaces.1.feelings', 1)
         );
 });
 

@@ -1,22 +1,29 @@
 import { Head } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
-import type { LivingSpace } from '@/types';
+import type { LivingSpace, StepTwoOption } from '@/types';
 import MaskedIcon from './masked-icon';
 import LivingMoodBoard from './mood-board';
 import { useLivingEditFlow } from './use-living-edit-flow';
 
-export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
-    const { space, step, feelingIds, goTo, selectSpace, toggleFeeling } =
-        useLivingEditFlow(spaces);
+export default function LivingEdit({
+    spaces,
+    stepTwo,
+}: {
+    spaces: LivingSpace[];
+    stepTwo: StepTwoOption[];
+}) {
+    const { space, step, stepTwoIds, goTo, selectSpace, toggleStepTwo } =
+        useLivingEditFlow(spaces, stepTwo);
 
-    if (space && step === 'feelings') {
+    if (space && step === 'step-2') {
         return (
             <>
                 <Head title="Living Edit" />
                 <LivingMoodBoard
                     space={space}
-                    selected={feelingIds}
-                    onToggle={toggleFeeling}
+                    options={stepTwo}
+                    selected={stepTwoIds}
+                    onToggle={toggleStepTwo}
                     onBack={() => goTo(null)}
                 />
             </>
@@ -93,7 +100,7 @@ export default function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
 
                     <button
                         type="button"
-                        onClick={() => goTo('feelings')}
+                        onClick={() => goTo('step-2')}
                         disabled={!space}
                         className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-[#ad6844] px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-[#ad6844] motion-safe:active:scale-[0.98] motion-reduce:transition-none max-sm:mt-10"
                     >

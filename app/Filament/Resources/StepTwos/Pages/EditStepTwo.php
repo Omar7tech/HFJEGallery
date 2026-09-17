@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\LivingFeelings\Pages;
+namespace App\Filament\Resources\StepTwos\Pages;
 
-use App\Filament\Resources\LivingFeelings\LivingFeelingResource;
+use App\Filament\Resources\StepTwos\StepTwoResource;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
 use Filament\Resources\Pages\EditRecord;
 
-class EditLivingFeeling extends EditRecord
+class EditStepTwo extends EditRecord
 {
-    protected static string $resource = LivingFeelingResource::class;
+    protected static string $resource = StepTwoResource::class;
 
     protected function getHeaderActions(): array
     {

@@ -4,7 +4,6 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -12,7 +11,7 @@ use Spatie\Sluggable\Attributes\Sluggable;
 
 #[Fillable(['name', 'slug', 'sort_order', 'is_active'])]
 #[Sluggable(from: 'name', to: 'slug')]
-class LivingFeeling extends Model implements HasMedia
+class StepTwo extends Model implements HasMedia
 {
     use InteractsWithMedia;
 
@@ -35,12 +34,6 @@ class LivingFeeling extends Model implements HasMedia
     protected function casts(): array
     {
         return ['sort_order' => 'integer', 'is_active' => 'boolean'];
-    }
-
-    /** @return BelongsToMany<LivingSpace, $this> */
-    public function spaces(): BelongsToMany
-    {
-        return $this->belongsToMany(LivingSpace::class)->withTimestamps();
     }
 
     public function getRouteKeyName(): string

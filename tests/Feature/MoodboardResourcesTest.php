@@ -1,14 +1,14 @@
 <?php
 
-use App\Filament\Resources\LivingFeelings\LivingFeelingResource;
-use App\Filament\Resources\LivingFeelings\Pages\CreateLivingFeeling;
-use App\Filament\Resources\LivingFeelings\Pages\ListLivingFeelings;
 use App\Filament\Resources\LivingSpaces\LivingSpaceResource;
 use App\Filament\Resources\LivingSpaces\Pages\CreateLivingSpace;
 use App\Filament\Resources\LivingSpaces\Pages\EditLivingSpace;
 use App\Filament\Resources\LivingSpaces\Pages\ListLivingSpaces;
-use App\Models\LivingFeeling;
+use App\Filament\Resources\StepTwos\Pages\CreateStepTwo;
+use App\Filament\Resources\StepTwos\Pages\ListStepTwos;
+use App\Filament\Resources\StepTwos\StepTwoResource;
 use App\Models\LivingSpace;
+use App\Models\StepTwo;
 use App\Models\User;
 use Database\Seeders\LivingEditSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,29 +30,27 @@ test('moodboard resource pages render', function (string $url) {
     'spaces create' => fn () => LivingSpaceResource::getUrl('create'),
     'spaces view' => fn () => LivingSpaceResource::getUrl('view', ['record' => LivingSpace::firstOrFail()]),
     'spaces edit' => fn () => LivingSpaceResource::getUrl('edit', ['record' => LivingSpace::firstOrFail()]),
-    'feelings index' => fn () => LivingFeelingResource::getUrl('index'),
-    'feelings create' => fn () => LivingFeelingResource::getUrl('create'),
-    'feelings view' => fn () => LivingFeelingResource::getUrl('view', ['record' => LivingFeeling::firstOrFail()]),
-    'feelings edit' => fn () => LivingFeelingResource::getUrl('edit', ['record' => LivingFeeling::firstOrFail()]),
+    'step 2 index' => fn () => StepTwoResource::getUrl('index'),
+    'step 2 create' => fn () => StepTwoResource::getUrl('create'),
+    'step 2 view' => fn () => StepTwoResource::getUrl('view', ['record' => StepTwo::firstOrFail()]),
+    'step 2 edit' => fn () => StepTwoResource::getUrl('edit', ['record' => StepTwo::firstOrFail()]),
 ]);
 
 test('tables list records in sort order', function () {
     Livewire::test(ListLivingSpaces::class)
         ->assertCanSeeTableRecords(LivingSpace::orderBy('sort_order')->get(), inOrder: true);
 
-    Livewire::test(ListLivingFeelings::class)
-        ->assertCanSeeTableRecords(LivingFeeling::orderBy('sort_order')->get(), inOrder: true);
+    Livewire::test(ListStepTwos::class)
+        ->assertCanSeeTableRecords(StepTwo::orderBy('sort_order')->get(), inOrder: true);
 });
 
-test('a space can be created with feelings and an icon', function () {
+test('a space can be created with an icon', function () {
     Storage::fake('public');
-    $feelingIds = LivingFeeling::orderBy('id')->limit(2)->pluck('id')->all();
 
     Livewire::test(CreateLivingSpace::class)
         ->fillForm([
             'name' => 'Home office',
             'is_active' => true,
-            'feelings' => $feelingIds,
             'icon' => [UploadedFile::fake()->image('icon.png', 64, 64)],
         ])
         ->call('create')
@@ -60,22 +58,16 @@ test('a space can be created with feelings and an icon', function () {
 
     $space = LivingSpace::where('slug', 'home-office')->firstOrFail();
 
-    expect($space->feelings()->pluck('living_feelings.id')->sort()->values()->all())->toBe($feelingIds)
-        ->and($space->getFirstMedia('icon'))->not->toBeNull();
+    expect($space->getFirstMedia('icon'))->not->toBeNull();
 });
 
-test('a feeling can be created and linked to spaces', function () {
-    $spaceIds = LivingSpace::pluck('id')->all();
-
-    Livewire::test(CreateLivingFeeling::class)
-        ->fillForm([
-            'name' => 'Playful',
-            'spaces' => $spaceIds,
-        ])
+test('a step 2 option can be created', function () {
+    Livewire::test(CreateStepTwo::class)
+        ->fillForm(['name' => 'Playful'])
         ->call('create')
         ->assertHasNoFormErrors();
 
-    expect(LivingFeeling::where('slug', 'playful')->firstOrFail()->spaces()->count())->toBe(count($spaceIds));
+    $this->assertDatabaseHas('step_twos', ['name' => 'Playful', 'slug' => 'playful', 'is_active' => true]);
 });
 
 test('names must be unique and present', function () {
