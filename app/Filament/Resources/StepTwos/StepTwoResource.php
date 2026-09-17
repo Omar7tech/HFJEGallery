@@ -29,9 +29,11 @@ class StepTwoResource extends Resource
 
     protected static ?string $navigationLabel = 'Step 2';
 
-    protected static ?string $modelLabel = 'step 2 option';
+    protected static ?string $modelLabel = 'Step 2 Option';
 
-    protected static ?string $pluralModelLabel = 'step 2 options';
+    protected static ?string $pluralModelLabel = 'Step 2 Options';
+
+    protected static ?string $slug = 'step-2-options';
 
     protected static ?string $recordTitleAttribute = 'name';
 

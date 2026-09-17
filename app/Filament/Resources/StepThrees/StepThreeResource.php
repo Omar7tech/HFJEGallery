@@ -29,9 +29,11 @@ class StepThreeResource extends Resource
 
     protected static ?string $navigationLabel = 'Step 3';
 
-    protected static ?string $modelLabel = 'step 3 option';
+    protected static ?string $modelLabel = 'Step 3 Option';
 
-    protected static ?string $pluralModelLabel = 'step 3 options';
+    protected static ?string $pluralModelLabel = 'Step 3 Options';
+
+    protected static ?string $slug = 'step-3-options';
 
     protected static ?string $recordTitleAttribute = 'name';
 

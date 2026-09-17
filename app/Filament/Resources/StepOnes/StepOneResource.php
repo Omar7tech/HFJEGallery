@@ -29,9 +29,11 @@ class StepOneResource extends Resource
 
     protected static ?string $navigationLabel = 'Step 1';
 
-    protected static ?string $modelLabel = 'step 1 option';
+    protected static ?string $modelLabel = 'Step 1 Option';
 
-    protected static ?string $pluralModelLabel = 'step 1 options';
+    protected static ?string $pluralModelLabel = 'Step 1 Options';
+
+    protected static ?string $slug = 'step-1-options';
 
     protected static ?string $recordTitleAttribute = 'name';
 

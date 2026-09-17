@@ -29,9 +29,11 @@ class StepFourResource extends Resource
 
     protected static ?string $navigationLabel = 'Step 4';
 
-    protected static ?string $modelLabel = 'step 4 option';
+    protected static ?string $modelLabel = 'Step 4 Option';
 
-    protected static ?string $pluralModelLabel = 'step 4 options';
+    protected static ?string $pluralModelLabel = 'Step 4 Options';
+
+    protected static ?string $slug = 'step-4-options';
 
     protected static ?string $recordTitleAttribute = 'name';
 
