@@ -14,6 +14,9 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
+/**
+ * @property LivingEditStep $step
+ */
 #[Fillable(['step', 'name', 'slug', 'sort_order', 'is_active'])]
 class LivingEditOption extends Model implements HasMedia
 {

@@ -58,8 +58,10 @@ class LivingEditOptionResource extends Resource
      */
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()
-            ->when(static::getStep(), fn (Builder $query, LivingEditStep $step): Builder => $query->where('step', $step));
+        /** @var Builder<LivingEditOption> $query */
+        $query = parent::getEloquentQuery();
+
+        return $query->when(static::getStep(), fn (Builder $query, LivingEditStep $step): Builder => $query->where('step', $step));
     }
 
     public static function getNavigationLabel(): string
