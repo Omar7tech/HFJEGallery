@@ -1,15 +1,15 @@
 import { router, usePage } from '@inertiajs/react';
-import type { LivingSpace, StepOneOption } from '@/types';
+import type { LivingSpace, StepOneOption, StepTwoOption } from '@/types';
 
 /**
  * The steps after choosing a space, in order. Add later steps here
- * (e.g. 'moments', 'materials') and render them in the page.
+ * and render them in the page.
  */
-export const LIVING_EDIT_STEPS = ['step-1'] as const;
+export const LIVING_EDIT_STEPS = ['step-1', 'step-2'] as const;
 
 export const LIVING_EDIT_TOTAL_STEPS = 4;
 
-export const MAX_STEP_ONE_SELECTIONS = 3;
+export const MAX_STEP_SELECTIONS = 3;
 
 export type LivingEditStep = (typeof LIVING_EDIT_STEPS)[number];
 
@@ -17,13 +17,37 @@ type FlowState = {
     spaceId: string | null;
     step: LivingEditStep | null;
     stepOneIds: string[];
+    stepTwoIds: string[];
 };
 
 function isStep(value: string | null): value is LivingEditStep {
     return LIVING_EDIT_STEPS.includes(value as LivingEditStep);
 }
 
-function buildUrl({ spaceId, step, stepOneIds }: FlowState): string {
+/** Reads a comma separated list of ids, keeping only known ones. */
+function parseIds(value: string | null, options: { id: string }[]): string[] {
+    const allowedIds = options.map(({ id }) => id);
+
+    return [...new Set((value ?? '').split(','))]
+        .filter((id) => allowedIds.includes(id))
+        .slice(0, MAX_STEP_SELECTIONS);
+}
+
+/** Adds or removes an id, up to the selection limit. */
+function toggleId(ids: string[], id: string): string[] {
+    if (ids.includes(id)) {
+        return ids.filter((value) => value !== id);
+    }
+
+    return ids.length < MAX_STEP_SELECTIONS ? [...ids, id] : ids;
+}
+
+function buildUrl({
+    spaceId,
+    step,
+    stepOneIds,
+    stepTwoIds,
+}: FlowState): string {
     const params = new URLSearchParams();
 
     if (spaceId) {
@@ -38,6 +62,10 @@ function buildUrl({ spaceId, step, stepOneIds }: FlowState): string {
         params.set('step1', stepOneIds.join(','));
     }
 
+    if (stepTwoIds.length > 0) {
+        params.set('step2', stepTwoIds.join(','));
+    }
+
     const query = params.toString().replaceAll('%2C', ',');
 
     return query ? `/living-edit?${query}` : '/living-edit';
@@ -50,6 +78,7 @@ function buildUrl({ spaceId, step, stepOneIds }: FlowState): string {
 export function useLivingEditFlow(
     spaces: LivingSpace[],
     stepOneOptions: StepOneOption[],
+    stepTwoOptions: StepTwoOption[],
 ) {
     const { url } = usePage();
     const params = new URL(url, 'http://localhost').searchParams;
@@ -58,12 +87,15 @@ export function useLivingEditFlow(
         spaces.find(({ id }) => id === params.get('space')) ?? spaces[0];
     const requestedStep = params.get('step');
     const step = space && isStep(requestedStep) ? requestedStep : null;
-    const allowedStepOneIds = stepOneOptions.map(({ id }) => id);
-    const stepOneIds = [...new Set((params.get('step1') ?? '').split(','))]
-        .filter((id) => allowedStepOneIds.includes(id))
-        .slice(0, MAX_STEP_ONE_SELECTIONS);
+    const stepOneIds = parseIds(params.get('step1'), stepOneOptions);
+    const stepTwoIds = parseIds(params.get('step2'), stepTwoOptions);
 
-    const state: FlowState = { spaceId: space?.id ?? null, step, stepOneIds };
+    const state: FlowState = {
+        spaceId: space?.id ?? null,
+        step,
+        stepOneIds,
+        stepTwoIds,
+    };
 
     /** Moves to another step and adds a browser history entry. */
     function goTo(nextStep: LivingEditStep | null) {
@@ -84,24 +116,26 @@ export function useLivingEditFlow(
 
     function selectSpace(spaceId: string) {
         if (spaceId !== state.spaceId) {
-            update({ spaceId, stepOneIds: [] });
+            update({ spaceId, stepOneIds: [], stepTwoIds: [] });
         }
     }
 
     function toggleStepOne(id: string) {
-        if (stepOneIds.includes(id)) {
-            update({ stepOneIds: stepOneIds.filter((value) => value !== id) });
-        } else if (stepOneIds.length < MAX_STEP_ONE_SELECTIONS) {
-            update({ stepOneIds: [...stepOneIds, id] });
-        }
+        update({ stepOneIds: toggleId(stepOneIds, id) });
+    }
+
+    function toggleStepTwo(id: string) {
+        update({ stepTwoIds: toggleId(stepTwoIds, id) });
     }
 
     return {
         space,
         step,
         stepOneIds,
+        stepTwoIds,
         goTo,
         selectSpace,
         toggleStepOne,
+        toggleStepTwo,
     };
 }

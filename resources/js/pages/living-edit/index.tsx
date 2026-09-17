@@ -1,6 +1,6 @@
 import { Head } from '@inertiajs/react';
 import { cn } from '@/lib/utils';
-import type { LivingSpace, StepOneOption } from '@/types';
+import type { LivingSpace, StepOneOption, StepTwoOption } from '@/types';
 import MaskedIcon from './masked-icon';
 import LivingMoodBoard from './mood-board';
 import { useLivingEditFlow } from './use-living-edit-flow';
@@ -8,23 +8,51 @@ import { useLivingEditFlow } from './use-living-edit-flow';
 export default function LivingEdit({
     spaces,
     stepOne,
+    stepTwo,
 }: {
     spaces: LivingSpace[];
     stepOne: StepOneOption[];
+    stepTwo: StepTwoOption[];
 }) {
-    const { space, step, stepOneIds, goTo, selectSpace, toggleStepOne } =
-        useLivingEditFlow(spaces, stepOne);
+    const {
+        space,
+        step,
+        stepOneIds,
+        stepTwoIds,
+        goTo,
+        selectSpace,
+        toggleStepOne,
+        toggleStepTwo,
+    } = useLivingEditFlow(spaces, stepOne, stepTwo);
 
     if (space && step === 'step-1') {
         return (
             <>
                 <Head title="Living Edit" />
                 <LivingMoodBoard
+                    step={step}
                     space={space}
                     options={stepOne}
                     selected={stepOneIds}
                     onToggle={toggleStepOne}
                     onBack={() => goTo(null)}
+                    onContinue={() => goTo('step-2')}
+                />
+            </>
+        );
+    }
+
+    if (space && step === 'step-2') {
+        return (
+            <>
+                <Head title="Living Edit" />
+                <LivingMoodBoard
+                    step={step}
+                    space={space}
+                    options={stepTwo}
+                    selected={stepTwoIds}
+                    onToggle={toggleStepTwo}
+                    onBack={() => goTo('step-1')}
                 />
             </>
         );

@@ -7,8 +7,12 @@ use App\Filament\Resources\LivingSpaces\Pages\ListLivingSpaces;
 use App\Filament\Resources\StepOnes\Pages\CreateStepOne;
 use App\Filament\Resources\StepOnes\Pages\ListStepOnes;
 use App\Filament\Resources\StepOnes\StepOneResource;
+use App\Filament\Resources\StepTwos\Pages\CreateStepTwo;
+use App\Filament\Resources\StepTwos\Pages\ListStepTwos;
+use App\Filament\Resources\StepTwos\StepTwoResource;
 use App\Models\LivingSpace;
 use App\Models\StepOne;
+use App\Models\StepTwo;
 use App\Models\User;
 use Database\Seeders\LivingEditSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -34,6 +38,10 @@ test('moodboard resource pages render', function (string $url) {
     'step 1 create' => fn () => StepOneResource::getUrl('create'),
     'step 1 view' => fn () => StepOneResource::getUrl('view', ['record' => StepOne::firstOrFail()]),
     'step 1 edit' => fn () => StepOneResource::getUrl('edit', ['record' => StepOne::firstOrFail()]),
+    'step 2 index' => fn () => StepTwoResource::getUrl('index'),
+    'step 2 create' => fn () => StepTwoResource::getUrl('create'),
+    'step 2 view' => fn () => StepTwoResource::getUrl('view', ['record' => StepTwo::firstOrFail()]),
+    'step 2 edit' => fn () => StepTwoResource::getUrl('edit', ['record' => StepTwo::firstOrFail()]),
 ]);
 
 test('tables list records in sort order', function () {
@@ -42,6 +50,9 @@ test('tables list records in sort order', function () {
 
     Livewire::test(ListStepOnes::class)
         ->assertCanSeeTableRecords(StepOne::orderBy('sort_order')->get(), inOrder: true);
+
+    Livewire::test(ListStepTwos::class)
+        ->assertCanSeeTableRecords(StepTwo::orderBy('sort_order')->get(), inOrder: true);
 });
 
 test('a space can be created with an icon', function () {
@@ -68,6 +79,15 @@ test('a step 1 option can be created', function () {
         ->assertHasNoFormErrors();
 
     $this->assertDatabaseHas('step_ones', ['name' => 'Playful', 'slug' => 'playful', 'is_active' => true]);
+});
+
+test('a step 2 option can be created', function () {
+    Livewire::test(CreateStepTwo::class)
+        ->fillForm(['name' => 'Game night'])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    $this->assertDatabaseHas('step_twos', ['name' => 'Game night', 'slug' => 'game-night', 'is_active' => true]);
 });
 
 test('names must be unique and present', function () {
