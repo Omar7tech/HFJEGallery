@@ -1,6 +1,7 @@
 import { Link, usePage } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
 import FooterMonogram from '@/components/footer-monogram';
+import SilkBackground from '@/components/silk-background';
 import { cn } from '@/lib/utils';
 
 type FooterLink = { label: string; href: string; external?: boolean };
@@ -97,104 +98,115 @@ export default function SiteFooter({ className }: { className?: string }) {
     return (
         <footer
             className={cn(
-                'flex min-h-dvh flex-col overflow-hidden bg-brand text-cream',
+                'relative flex min-h-dvh flex-col overflow-hidden bg-brand text-cream',
                 className,
             )}
         >
-            {/* Warm hairline marks the top edge of the footer. */}
+            {/* Terracotta silk weave drifting behind the whole footer; the
+                solid brand fill stays as its fallback. */}
+            <SilkBackground noiseIntensity={1} speed={8} color="#a65e3c" />
+            {/* Steadies the contrast under the copy as the folds pass. */}
             <div
                 aria-hidden
-                className="h-0.5 w-full bg-gradient-to-r from-cream/0 via-cream/60 to-cream/0"
+                className="pointer-events-none absolute inset-0 bg-brand/45"
             />
 
-            <div className="mx-auto grid w-full max-w-7xl gap-12 px-6 pt-16 pb-12 sm:px-10 md:grid-cols-2 md:gap-16">
-                {/* CTA */}
-                <div className="max-w-md">
-                    <p className="font-display text-2xl leading-snug text-white sm:text-3xl">
-                        Let&rsquo;s craft something around you.
-                    </p>
-                    <p className="mt-4 text-sm leading-relaxed text-cream/70">
-                        Homes designed around the people who live in them.
-                    </p>
-                    <Link
-                        href="/contact"
-                        className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors hover:text-cream"
-                    >
-                        Start a project
-                        <ArrowRight
-                            className="size-4 transition-transform duration-300 ease-out group-hover:translate-x-1"
-                            strokeWidth={2.5}
-                        />
-                    </Link>
-                </div>
+            <div className="relative z-10 flex grow flex-col">
+                {/* Warm hairline marks the top edge of the footer. */}
+                <div
+                    aria-hidden
+                    className="h-0.5 w-full bg-gradient-to-r from-cream/0 via-cream/60 to-cream/0"
+                />
 
-                {/* Link columns */}
-                <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
-                    {columns.map((column) => (
-                        <div key={column.title}>
-                            <h3 className="font-display text-sm tracking-[0.2em] text-white uppercase">
-                                {column.title}
-                            </h3>
-                            <ul className="mt-4 flex flex-col gap-3">
-                                {column.links.map((link) => (
-                                    <li key={link.label}>
-                                        <FooterLinkItem link={link} />
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Flexible spacer pushes the legal bar + monogram to the bottom of
-                the full-height footer. */}
-            <div className="grow" />
-
-            <div className="border-t border-cream/20">
-                <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 text-sm text-cream/60 sm:flex-row sm:items-end sm:justify-between sm:gap-6 sm:px-10">
-                    <div className="flex flex-col gap-2">
-                        <p>
-                            © {year} Home Fashion Jamaleddine. All rights
-                            reserved.
+                <div className="mx-auto grid w-full max-w-7xl gap-12 px-6 pt-16 pb-12 sm:px-10 md:grid-cols-2 md:gap-16">
+                    {/* CTA */}
+                    <div className="max-w-md">
+                        <p className="font-display text-2xl leading-snug text-white sm:text-3xl">
+                            Let&rsquo;s craft something around you.
                         </p>
-
-                        {/* Credit — studio wordmark sits inline with the label. */}
-                        <a
-                            href="https://yamencreates.com"
-                            target="_blank"
-                            rel="noreferrer"
-                            className="group flex w-fit items-center gap-2.5 text-xs tracking-[0.2em] uppercase transition-colors hover:text-white"
+                        <p className="mt-4 text-sm leading-relaxed text-cream/70">
+                            Homes designed around the people who live in them.
+                        </p>
+                        <Link
+                            href="/contact"
+                            className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors hover:text-cream"
                         >
-                            Crafted by
-                            <img
-                                src="/logos/yamenlogo.svg"
-                                alt="Yamen"
-                                className="h-3 w-auto"
+                            Start a project
+                            <ArrowRight
+                                className="size-4 transition-transform duration-300 ease-out group-hover:translate-x-1"
+                                strokeWidth={2.5}
                             />
-                        </a>
+                        </Link>
                     </div>
 
-                    <div className="flex gap-5">
-                        <Link
-                            href="/privacy"
-                            className="transition-colors hover:text-white"
-                        >
-                            Privacy
-                        </Link>
-                        <Link
-                            href="/terms"
-                            className="transition-colors hover:text-white"
-                        >
-                            Terms
-                        </Link>
+                    {/* Link columns */}
+                    <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+                        {columns.map((column) => (
+                            <div key={column.title}>
+                                <h3 className="font-display text-sm tracking-[0.2em] text-white uppercase">
+                                    {column.title}
+                                </h3>
+                                <ul className="mt-4 flex flex-col gap-3">
+                                    {column.links.map((link) => (
+                                        <li key={link.label}>
+                                            <FooterLinkItem link={link} />
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        ))}
                     </div>
                 </div>
-            </div>
 
-            {/* Oversized HFJE monogram — draws itself in as the footer appears. */}
-            <div className="px-6 pt-8 pb-8 sm:px-10 sm:pb-10">
-                <FooterMonogram />
+                {/* Flexible spacer pushes the legal bar + monogram to the bottom of
+                the full-height footer. */}
+                <div className="grow" />
+
+                <div className="border-t border-cream/20">
+                    <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 text-sm text-cream/60 sm:flex-row sm:items-end sm:justify-between sm:gap-6 sm:px-10">
+                        <div className="flex flex-col gap-2">
+                            <p>
+                                © {year} Home Fashion Jamaleddine. All rights
+                                reserved.
+                            </p>
+
+                            {/* Credit — studio wordmark sits inline with the label. */}
+                            <a
+                                href="https://yamencreates.com"
+                                target="_blank"
+                                rel="noreferrer"
+                                className="group flex w-fit items-center gap-2.5 text-xs tracking-[0.2em] uppercase transition-colors hover:text-white"
+                            >
+                                Crafted by
+                                <img
+                                    src="/logos/yamenlogo.svg"
+                                    alt="Yamen"
+                                    className="h-3 w-auto"
+                                />
+                            </a>
+                        </div>
+
+                        <div className="flex gap-5">
+                            <Link
+                                href="/privacy"
+                                className="transition-colors hover:text-white"
+                            >
+                                Privacy
+                            </Link>
+                            <Link
+                                href="/terms"
+                                className="transition-colors hover:text-white"
+                            >
+                                Terms
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Oversized HFJE monogram — draws itself in as the footer appears. */}
+                <div className="px-6 pt-8 pb-8 sm:px-10 sm:pb-10">
+                    <FooterMonogram />
+                </div>
             </div>
         </footer>
     );
