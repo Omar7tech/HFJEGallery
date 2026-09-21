@@ -1,6 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { Play, X } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
 
@@ -93,7 +92,7 @@ const pill =
     'inline-flex min-h-11 items-center justify-center rounded-full bg-[#ad6844] px-7 py-2 font-display text-[clamp(0.7rem,1.8cqi,1.1rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
 export default function Curtains() {
-    const [playing, setPlaying] = useState(false);
+    const heroVideo = useRef<HTMLVideoElement>(null);
     const [filter, setFilter] = useState('Complete');
     const [expanded, setExpanded] = useState(false);
     const [activeStyle, setActiveStyle] = useState(0);
@@ -102,57 +101,35 @@ export default function Curtains() {
         (item) => filter === 'Complete' || item.type === filter,
     );
 
+    // The hero film loops on its own, so hold it on the poster frame for
+    // anyone who asked for less motion.
+    useEffect(() => {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            heroVideo.current?.pause();
+        }
+    }, []);
+
     return (
         <>
             <Head title="Curtains & Textiles" />
             <div className="@container px-5 pt-6 pb-24 md:px-8 lg:pr-7 lg:pl-0 @lg:pb-[50cqi]">
                 <section aria-label="Curtains and textiles">
+                    {/* The film carries the hero; the heading stays for
+                        screen readers and search. */}
+                    <h1 className="sr-only">Curtains &amp; Textiles</h1>
                     <div className="relative aspect-[1.52] overflow-hidden rounded-[24px] bg-cream md:rounded-[36px]">
-                        <CurtainImage
-                            name="curtain-hero"
-                            alt="Warm ochre, linen and gray curtain fabrics arranged on a rail"
-                            eager
+                        <video
+                            ref={heroVideo}
+                            className="size-full object-cover"
+                            src="/videos/curtains/curtain-film.mp4"
+                            poster="/images/curtains/curtain-hero.webp"
+                            autoPlay
+                            muted
+                            loop
+                            playsInline
+                            preload="auto"
+                            aria-label="Curtains moving in natural light"
                         />
-                        <div className="absolute inset-0 bg-black/10" />
-                        <h1 className="absolute inset-x-4 top-[21%] text-center font-display text-[clamp(1.5rem,6.6cqi,4.5rem)] leading-[1.05] tracking-[-0.055em] text-white">
-                            CURTAINS
-                            <br />
-                            &amp;TEXTILES
-                        </h1>
-                        {!playing ? (
-                            <button
-                                type="button"
-                                onClick={() => setPlaying(true)}
-                                aria-label="Play curtain video"
-                                className="absolute inset-x-0 top-[62%] mx-auto flex w-fit items-center gap-3 rounded-lg px-5 py-3 font-display text-[clamp(1.1rem,5.4cqi,3.5rem)] leading-none text-white focus-visible:outline-2 focus-visible:outline-white"
-                            >
-                                <Play
-                                    className="size-5 @lg:size-8"
-                                    strokeWidth={1.2}
-                                    aria-hidden="true"
-                                />
-                                VIDEO
-                            </button>
-                        ) : (
-                            <div className="absolute inset-0 bg-black">
-                                <video
-                                    className="h-full w-full object-contain"
-                                    src="/videos/curtains/curtain-film.mp4"
-                                    controls
-                                    autoPlay
-                                    playsInline
-                                    aria-label="Curtains moving in natural light"
-                                />
-                                <button
-                                    type="button"
-                                    onClick={() => setPlaying(false)}
-                                    aria-label="Close curtain video"
-                                    className="absolute top-4 right-4 rounded-full bg-black/60 p-3 text-white focus-visible:outline-2 focus-visible:outline-white"
-                                >
-                                    <X size={22} />
-                                </button>
-                            </div>
-                        )}
                     </div>
                     <div className="mt-8 flex flex-wrap justify-center gap-4 @lg:gap-6">
                         <a
