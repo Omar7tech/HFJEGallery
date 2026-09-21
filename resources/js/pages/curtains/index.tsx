@@ -117,7 +117,7 @@ export default function Curtains() {
                     {/* The film carries the hero; the heading stays for
                         screen readers and search. */}
                     <h1 className="sr-only">Curtains &amp; Textiles</h1>
-                    <div className="relative aspect-[1.52] overflow-hidden rounded-3xl bg-cream md:rounded-[36px] @lg:aspect-[1.85] @lg:max-h-[70svh]">
+                    <div className="relative aspect-[1.52] overflow-hidden rounded-3xl bg-cream md:rounded-[36px] @lg:aspect-[1.68] @lg:max-h-[78svh]">
                         <video
                             ref={heroVideo}
                             className="size-full object-cover"
