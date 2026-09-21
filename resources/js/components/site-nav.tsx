@@ -26,6 +26,7 @@ const navItems: NavItem[] = [
         label: 'Work',
         href: '/work',
     },
+    { label: 'Curtains', href: '/curtains' },
     { label: 'BAYTÉ', href: '/bayte' },
     { label: 'Living Edit', href: '/living-edit' },
     { label: 'About', href: '/about' },

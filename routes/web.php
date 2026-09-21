@@ -13,6 +13,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 Route::inertia('/', 'home/index')->name('home');
 Route::inertia('/about', 'about/index')->name('about');
+Route::inertia('/curtains', 'curtains/index')->name('curtains');
 Route::get('/living-edit', LivingEditController::class)->name('living-edit');
 Route::get('/living-edit/mood-board', MoodBoardController::class)
     ->middleware('throttle:mood-board')
