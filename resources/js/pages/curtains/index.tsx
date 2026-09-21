@@ -159,17 +159,21 @@ export default function Curtains() {
                             <br />
                             Spaces.
                         </h2>
-                        <p className="max-w-[290px] font-display text-[clamp(0.6rem,1.15cqi,0.8rem)] leading-[1.6] @lg:w-[42%] @lg:text-right">
-                            Curtains define more than privacy. They shape the
-                            light, soften the architecture, and complete the
+                        {/* Desktop keeps a fixed three-line shape against the
+                            heading, so the breaks are set rather than wrapped. */}
+                        <p className="max-w-[290px] font-display text-[clamp(0.6rem,1.15cqi,0.8rem)] leading-[1.6] @lg:w-auto @lg:max-w-[52ch] @lg:text-right">
+                            Curtains define more than privacy. They shape the{' '}
+                            <br className="hidden @lg:inline" />
+                            light, soften the architecture, and complete the{' '}
+                            <br className="hidden @lg:inline" />
                             atmosphere of a room.
                         </p>
                     </div>
                     <div className="mt-10 flex flex-wrap items-center justify-between gap-3 @lg:mt-12">
-                        <h3 className="font-sans text-xs uppercase @lg:text-base">
+                        <h3 className="font-sans text-sm uppercase @lg:text-lg">
                             Our curtains work{' '}
-                            <sup className="text-[9px]">
-                                ({portfolio.length})
+                            <sup className="text-[10px]">
+                                {portfolio.length}
                             </sup>
                         </h3>
                         <div
@@ -186,7 +190,7 @@ export default function Curtains() {
                                         setExpanded(false);
                                     }}
                                     className={cn(
-                                        'min-h-11 px-1 font-sans text-xs underline-offset-4 focus-visible:outline-brand',
+                                        'min-h-11 px-1 font-sans text-sm underline-offset-4 focus-visible:outline-brand @lg:text-base',
                                         filter === item
                                             ? 'text-brand underline'
                                             : 'text-ink hover:text-brand',
