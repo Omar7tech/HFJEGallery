@@ -89,7 +89,7 @@ const portfolio = [
     },
 ];
 const pill =
-    'inline-flex min-h-11 items-center justify-center rounded-full bg-[#ad6844] px-7 py-2 font-display text-[clamp(0.7rem,1.8cqi,1.1rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
+    'inline-flex min-h-11 items-center justify-center rounded-full bg-[#ad6844] px-7 py-2 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
 export default function Curtains() {
     const heroVideo = useRef<HTMLVideoElement>(null);
@@ -190,7 +190,7 @@ export default function Curtains() {
                                         setExpanded(false);
                                     }}
                                     className={cn(
-                                        'min-h-11 px-1 font-sans text-sm underline-offset-4 focus-visible:outline-brand @lg:text-base',
+                                        'min-h-11 px-1 font-sans text-base underline-offset-4 focus-visible:outline-brand @lg:text-lg',
                                         filter === item
                                             ? 'text-brand underline'
                                             : 'text-ink hover:text-brand',
@@ -234,10 +234,10 @@ export default function Curtains() {
                     id="curtain-styles"
                     className="scroll-mt-24 px-1 pt-24 @lg:pt-[18cqi]"
                 >
-                    <h2 className="font-display text-[clamp(1.1rem,3.1cqi,2.2rem)] leading-tight tracking-[-0.04em] uppercase">
+                    <h2 className="font-display text-[clamp(1.25rem,3.5cqi,2.5rem)] leading-tight tracking-[-0.04em] uppercase">
                         Designed for Every Window
                     </h2>
-                    <p className="mt-2 font-display text-[clamp(0.65rem,1.9cqi,1.25rem)]">
+                    <p className="mt-2 font-display text-[clamp(0.75rem,2.15cqi,1.4rem)]">
                         From Soft Sheers To Complete Light Control.
                     </p>
                     <div className="mt-5 flex h-[360px] gap-2 @lg:h-[min(46cqi,620px)] @lg:gap-2.5">
@@ -267,7 +267,7 @@ export default function Curtains() {
                                     )}
                                 />
                                 {activeStyle === index ? (
-                                    <span className="absolute bottom-5 left-3 max-w-[80%] rounded-xl bg-[#ad6844] px-3 py-2 font-display text-[clamp(0.6rem,1.8cqi,1.2rem)] leading-tight text-white uppercase">
+                                    <span className="absolute bottom-5 left-3 max-w-[80%] rounded-xl bg-[#ad6844] px-3 py-2 font-display text-[clamp(0.7rem,2cqi,1.35rem)] leading-tight text-white uppercase">
                                         {style.name}
                                     </span>
                                 ) : (
@@ -288,7 +288,7 @@ export default function Curtains() {
                             type="button"
                             className={cn(
                                 pill,
-                                'min-w-[64%] text-[clamp(0.6rem,1.5cqi,1rem)] uppercase',
+                                'min-w-[64%] text-[clamp(0.7rem,1.7cqi,1.15rem)] uppercase',
                             )}
                             aria-expanded={allStyles}
                             aria-controls="all-curtain-styles"
@@ -324,7 +324,7 @@ export default function Curtains() {
                                             alt={style.description}
                                         />
                                     </div>
-                                    <h3 className="mt-3 font-display text-xs text-brand">
+                                    <h3 className="mt-3 font-display text-sm text-brand">
                                         {style.name}
                                     </h3>
                                     <p className="mt-2 font-sans text-sm text-ink/70">
