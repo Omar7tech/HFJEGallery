@@ -248,6 +248,8 @@ export default function Curtains() {
                                 aria-label={style.name}
                                 aria-pressed={activeStyle === index}
                                 onClick={() => setActiveStyle(index)}
+                                onMouseEnter={() => setActiveStyle(index)}
+                                onFocus={() => setActiveStyle(index)}
                                 className={cn(
                                     'relative min-w-0 overflow-hidden rounded-full bg-[#d9d9d9] text-left transition-[flex-grow] duration-500 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
                                     activeStyle === index
