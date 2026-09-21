@@ -1,6 +1,7 @@
 import { Head } from '@inertiajs/react';
 import { Play, X } from 'lucide-react';
 import { useState } from 'react';
+import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
 
 type CurtainImageProps = {
@@ -9,6 +10,8 @@ type CurtainImageProps = {
     className?: string;
     eager?: boolean;
 };
+
+/** A curtain photo filling its parent box, through the shared image loader. */
 function CurtainImage({
     name,
     alt,
@@ -16,19 +19,13 @@ function CurtainImage({
     eager = false,
 }: CurtainImageProps) {
     return (
-        <img
-            src={`/images/curtains/${name}-1440.webp`}
-            srcSet={`/images/curtains/${name}-640.webp 640w, /images/curtains/${name}-1440.webp 1440w`}
-            sizes={
-                eager
-                    ? '(min-width: 1024px) 75vw, 100vw'
-                    : '(min-width: 1024px) 40vw, 90vw'
-            }
+        <SmartImage
+            src={`/images/curtains/${name}.webp`}
             alt={alt}
+            className={cn('size-full', className)}
+            imgClassName="object-cover"
             loading={eager ? 'eager' : 'lazy'}
-            fetchPriority={eager ? 'high' : 'auto'}
-            decoding="async"
-            className={cn('h-full w-full object-cover', className)}
+            fetchPriority={eager ? 'high' : undefined}
         />
     );
 }
