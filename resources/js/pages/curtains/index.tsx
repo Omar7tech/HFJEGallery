@@ -89,7 +89,7 @@ const portfolio = [
     },
 ];
 const pill =
-    'inline-flex min-h-11 items-center justify-center rounded-full bg-[#ad6844] px-7 py-2 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
+    'inline-flex min-h-11 items-center justify-center rounded-full bg-[#ad6844] px-10 py-3.5 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
 export default function Curtains() {
     const heroVideo = useRef<HTMLVideoElement>(null);
@@ -117,7 +117,7 @@ export default function Curtains() {
                     {/* The film carries the hero; the heading stays for
                         screen readers and search. */}
                     <h1 className="sr-only">Curtains &amp; Textiles</h1>
-                    <div className="relative aspect-[1.52] overflow-hidden rounded-[24px] bg-cream md:rounded-[36px]">
+                    <div className="relative aspect-[1.52] overflow-hidden rounded-3xl bg-cream md:rounded-[36px] @lg:aspect-[1.85] @lg:max-h-[70svh]">
                         <video
                             ref={heroVideo}
                             className="size-full object-cover"
@@ -134,13 +134,13 @@ export default function Curtains() {
                     <div className="mt-8 flex flex-wrap justify-center gap-4 @lg:gap-6">
                         <a
                             href="#curtains-portfolio"
-                            className={cn(pill, 'min-w-[44%]')}
+                            className={cn(pill, 'min-w-[38%]')}
                         >
                             Curtains Portfolio
                         </a>
                         <a
                             href="#curtain-styles"
-                            className={cn(pill, 'min-w-[36%]')}
+                            className={cn(pill, 'min-w-[30%]')}
                         >
                             Curtains Style
                         </a>
@@ -222,7 +222,7 @@ export default function Curtains() {
                                 type="button"
                                 onClick={() => setExpanded((value) => !value)}
                                 aria-expanded={expanded}
-                                className={cn(pill, 'min-w-[40%]')}
+                                className={cn(pill, 'min-w-[34%]')}
                             >
                                 {expanded ? 'View Less' : 'View More'}
                             </button>
@@ -288,7 +288,7 @@ export default function Curtains() {
                             type="button"
                             className={cn(
                                 pill,
-                                'min-w-[64%] text-[clamp(0.7rem,1.7cqi,1.15rem)] uppercase',
+                                'min-w-[56%] text-[clamp(0.7rem,1.7cqi,1.15rem)] uppercase',
                             )}
                             aria-expanded={allStyles}
                             aria-controls="all-curtain-styles"
