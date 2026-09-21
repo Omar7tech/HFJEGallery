@@ -173,7 +173,7 @@ export default function Curtains() {
                         <h3 className="font-sans text-sm uppercase @lg:text-lg">
                             Our curtains work{' '}
                             <sup className="text-[10px]">
-                                {portfolio.length}
+                                ({portfolio.length})
                             </sup>
                         </h3>
                         <div
