@@ -262,7 +262,7 @@ export default function Curtains() {
                     <p className="mt-2 font-display text-[clamp(0.75rem,2.15cqi,1.4rem)]">
                         From Soft Sheers To Complete Light Control.
                     </p>
-                    <div className="mt-5 flex h-[360px] gap-2 @lg:h-[min(46cqi,620px)] @lg:gap-2.5">
+                    <div className="curtain-style-gallery mt-5 flex h-[360px] gap-2 @lg:h-[min(46cqi,620px)] @lg:gap-2.5">
                         {styles.map((style, index) => (
                             <button
                                 key={style.name}

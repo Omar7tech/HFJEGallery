@@ -11,10 +11,14 @@
     color-scheme: light;
 }
 
-/* Keep the frame and type undistorted while each curtain panel expands.
-   The label's full-size surface is revealed from its centered orange dot. */
+/* Measure corners against the stable row, never the expanding card.
+   Half a collapsed panel's width keeps it pill-shaped without a radius morph. */
+.curtain-style-gallery {
+    container-type: inline-size;
+}
+
 .curtain-style-card {
-    border-radius: 28px;
+    border-radius: max(28px, calc(100cqw / 23));
     transition: flex-grow 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -36,7 +40,7 @@
     inset: 0;
     content: '';
     background: #ad6844;
-    clip-path: inset(calc(50% - 10px) calc(50% - 10px) round 999px);
+    clip-path: inset(calc(50% - 13px) calc(50% - 13px) round 999px);
     transition: clip-path 550ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
