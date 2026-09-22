@@ -183,7 +183,7 @@ export default function BayteProductCard({
                     style={
                         reducedMotion ? undefined : { x: productX, y: productY }
                     }
-                    className="absolute inset-0 transition-transform duration-500 ease-out group-hover:translate-z-[72px] group-hover:scale-[1.06] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-100"
+                    className="absolute inset-0 scale-[0.84] transition-transform duration-500 ease-out group-hover:translate-z-[72px] group-hover:scale-100 motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.84]"
                 >
                     <SmartImage
                         src={src}
