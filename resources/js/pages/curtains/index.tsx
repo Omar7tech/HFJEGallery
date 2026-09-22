@@ -270,12 +270,16 @@ export default function Curtains() {
                                 aria-label={style.name}
                                 aria-pressed={activeStyle === index}
                                 onClick={() => setActiveStyle(index)}
-                                onMouseEnter={() => setActiveStyle(index)}
+                                onPointerEnter={(event) => {
+                                    if (event.pointerType === 'mouse') {
+                                        setActiveStyle(index);
+                                    }
+                                }}
                                 onFocus={() => setActiveStyle(index)}
                                 className={cn(
-                                    'relative min-w-0 overflow-hidden rounded-full bg-[#d9d9d9] text-left transition-[flex-grow] duration-500 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
+                                    'curtain-style-card relative min-w-0 overflow-hidden bg-[#d9d9d9] text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
                                     activeStyle === index
-                                        ? 'flex-[6.5] rounded-[28px]'
+                                        ? 'flex-[6.5]'
                                         : 'flex-1',
                                 )}
                             >
@@ -290,20 +294,14 @@ export default function Curtains() {
                                             : 'opacity-100',
                                     )}
                                 />
-                                {activeStyle === index ? (
-                                    <span className="absolute bottom-5 left-3 max-w-[80%] rounded-xl bg-[#ad6844] px-3 py-2 font-display text-[clamp(0.7rem,2cqi,1.35rem)] leading-tight text-white uppercase">
+                                <span
+                                    aria-hidden="true"
+                                    className="curtain-style-label absolute bottom-3 left-1/2 -translate-x-1/2 px-3 py-3 font-display text-[clamp(0.55rem,1.45cqi,1rem)] leading-tight whitespace-nowrap text-white uppercase"
+                                >
+                                    <span className="curtain-style-label-text relative">
                                         {style.name}
                                     </span>
-                                ) : (
-                                    <span
-                                        aria-hidden="true"
-                                        className={cn(
-                                            'absolute bottom-3 left-1/2 size-5 -translate-x-1/2 rounded-full bg-[#ad6844] @lg:size-7',
-                                            [2, 4, 5].includes(index) &&
-                                                'opacity-0',
-                                        )}
-                                    />
-                                )}
+                                </span>
                             </button>
                         ))}
                     </div>
