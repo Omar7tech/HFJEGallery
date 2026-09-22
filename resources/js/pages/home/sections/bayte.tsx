@@ -13,19 +13,19 @@ const products: Product[] = [
     {
         name: 'Name',
         description: 'Description',
-        src: '/images/bayte/brown-leather-chair-nobg-w1000.webp',
+        src: '/images/bayte/brown-leather-chair-nobg.webp',
         alt: 'Oversized brown leather bean bag with two cushions',
     },
     {
         name: 'Name',
         description: 'Description',
-        src: '/images/bayte/caramel-long-chair-nobg-w1000.webp',
+        src: '/images/bayte/caramel-long-chair-nobg.webp',
         alt: 'Caramel leather chaise longue on tapered wooden legs',
     },
     {
         name: 'Name',
         description: 'Description',
-        src: '/images/bayte/chair-with-white-cushion-that-says-word-it-nobg-w1000.webp',
+        src: '/images/bayte/chair-with-white-cushion-that-says-word-it-nobg.webp',
         alt: 'Round wooden lounge chair with white cushions',
     },
 ];
