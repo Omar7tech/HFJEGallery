@@ -296,7 +296,7 @@ export default function Curtains() {
                                 />
                                 <span
                                     aria-hidden="true"
-                                    className="curtain-style-label absolute bottom-3 px-3 py-3 font-display text-[clamp(0.55rem,1.45cqi,1rem)] leading-tight whitespace-nowrap text-white uppercase"
+                                    className="curtain-style-label absolute bottom-5 px-4 py-3 font-display text-[clamp(0.55rem,1.45cqi,1rem)] leading-tight whitespace-nowrap text-white uppercase"
                                 >
                                     <span className="curtain-style-label-text relative">
                                         {style.name}

@@ -31,7 +31,7 @@
 }
 
 .curtain-style-card[aria-pressed='true'] .curtain-style-label {
-    left: 12px;
+    left: 20px;
     transform: translateX(0);
 }
 
@@ -54,7 +54,7 @@
 }
 
 .curtain-style-card[aria-pressed='true'] .curtain-style-label::before {
-    clip-path: inset(0 round 12px);
+    clip-path: inset(0 round 999px);
     transition-delay: 180ms;
 }
 
