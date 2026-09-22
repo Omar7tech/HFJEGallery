@@ -23,6 +23,7 @@
 }
 
 .curtain-style-label {
+    --curtain-label-height: calc(clamp(0.55rem, 1.45cqi, 1rem) * 1.25 + 1.5rem);
     left: 50%;
     transform: translateX(-50%);
     transition:
@@ -40,7 +41,7 @@
     inset: 0;
     content: '';
     background: #ad6844;
-    clip-path: inset(calc(50% - 13px) calc(50% - 13px) round 999px);
+    clip-path: inset(0 calc(50% - var(--curtain-label-height) / 2) round 999px);
     transition: clip-path 550ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
