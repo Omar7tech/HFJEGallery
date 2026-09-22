@@ -1,5 +1,5 @@
 import { Head } from '@inertiajs/react';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
 
@@ -93,6 +93,7 @@ const pill =
 
 export default function Curtains() {
     const heroVideo = useRef<HTMLVideoElement>(null);
+    const [heroReady, setHeroReady] = useState(false);
     const [filter, setFilter] = useState('Complete');
     const [expanded, setExpanded] = useState(false);
     const [activeStyle, setActiveStyle] = useState(0);
@@ -101,33 +102,54 @@ export default function Curtains() {
         (item) => filter === 'Complete' || item.type === filter,
     );
 
-    // The hero film loops on its own, so hold it on the poster frame for
-    // anyone who asked for less motion.
-    useEffect(() => {
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-            heroVideo.current?.pause();
-        }
-    }, []);
-
     return (
         <>
-            <Head title="Curtains & Textiles" />
+            <Head title="Curtains & Textiles">
+                {/* The film is the hero on its own, so start fetching it with
+                    the page instead of waiting on the video element. */}
+                <link
+                    key="curtain-film-preload"
+                    rel="preload"
+                    as="video"
+                    type="video/mp4"
+                    href="/videos/curtains/curtain-film.mp4"
+                />
+            </Head>
             <div className="@container px-5 pt-6 pb-24 md:px-8 lg:pr-7 lg:pl-0 @lg:pb-[50cqi]">
                 <section aria-label="Curtains and textiles">
                     {/* The film carries the hero; the heading stays for
                         screen readers and search. */}
                     <h1 className="sr-only">Curtains &amp; Textiles</h1>
                     <div className="relative aspect-[1.52] overflow-hidden rounded-3xl bg-cream md:rounded-[36px] @lg:aspect-[1.68] @lg:max-h-[78svh]">
+                        {/* No poster: the photo is framed differently from
+                            the film, so showing it first jumped on the swap.
+                            The film fades up from the empty box once it has a
+                            frame to show. */}
                         <video
                             ref={heroVideo}
-                            className="size-full object-cover"
+                            className={cn(
+                                'size-full object-cover transition-opacity duration-500 ease-out motion-reduce:transition-none',
+                                heroReady ? 'opacity-100' : 'opacity-0',
+                            )}
                             src="/videos/curtains/curtain-film.mp4"
-                            poster="/images/curtains/curtain-hero.webp"
                             autoPlay
                             muted
                             loop
                             playsInline
                             preload="auto"
+                            onLoadedData={() => {
+                                // Anyone who asked for less motion holds on
+                                // the first frame instead of the loop.
+                                if (
+                                    window.matchMedia(
+                                        '(prefers-reduced-motion: reduce)',
+                                    ).matches
+                                ) {
+                                    heroVideo.current?.pause();
+                                }
+
+                                setHeroReady(true);
+                            }}
                             aria-label="Curtains moving in natural light"
                         />
                     </div>
