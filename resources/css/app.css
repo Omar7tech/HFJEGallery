@@ -18,6 +18,19 @@
     transition: flex-grow 900ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.curtain-style-label {
+    left: 50%;
+    transform: translateX(-50%);
+    transition:
+        left 900ms cubic-bezier(0.22, 1, 0.36, 1),
+        transform 900ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.curtain-style-card[aria-pressed='true'] .curtain-style-label {
+    left: 12px;
+    transform: translateX(0);
+}
+
 .curtain-style-label::before {
     position: absolute;
     inset: 0;
@@ -51,6 +64,7 @@
 
 @media (prefers-reduced-motion: reduce) {
     .curtain-style-card,
+    .curtain-style-label,
     .curtain-style-label::before,
     .curtain-style-label-text,
     .curtain-style-card[aria-pressed='true'] .curtain-style-label::before,
