@@ -76,9 +76,14 @@ export default function BayteProductCard({
     const sheenY = useTransform(smoothY, (value) => `${value * 100}%`);
     const sheen = useMotionTemplate`radial-gradient(420px circle at ${sheenX} ${sheenY}, rgba(255,255,255,0.85), rgba(255,255,255,0) 62%)`;
 
+    // The cast shadow belongs to the lift, so it fades in with the hover
+    // rather than sitting under the card at rest.
+    const lift = useMotionValue(0);
+    const smoothLift = useSpring(lift, SPRING);
     const shadowX = useTransform(smoothX, [0, 1], [24, -24]);
     const shadowY = useTransform(smoothY, [0, 1], [28, 6]);
-    const shadow = useMotionTemplate`${shadowX}px ${shadowY}px 54px -30px rgba(74, 48, 32, 0.55)`;
+    const shadowAlpha = useTransform(smoothLift, [0, 1], [0, 0.5]);
+    const shadow = useMotionTemplate`${shadowX}px ${shadowY}px 54px -30px rgba(74, 48, 32, ${shadowAlpha})`;
 
     const trackPointer = (event: PointerEvent<HTMLElement>) => {
         if (reducedMotion || event.pointerType !== 'mouse') {
@@ -89,11 +94,13 @@ export default function BayteProductCard({
 
         pointerX.set((event.clientX - bounds.left) / bounds.width);
         pointerY.set((event.clientY - bounds.top) / bounds.height);
+        lift.set(1);
     };
 
     const releasePointer = () => {
         pointerX.set(0.5);
         pointerY.set(0.5);
+        lift.set(0);
     };
 
     const badgeClassName =
