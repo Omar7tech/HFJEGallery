@@ -120,7 +120,12 @@ export default function Curtains() {
                     {/* The film carries the hero; the heading stays for
                         screen readers and search. */}
                     <h1 className="sr-only">Curtains &amp; Textiles</h1>
-                    <div className="relative aspect-[1.52] overflow-hidden rounded-3xl bg-cream md:rounded-[36px] @lg:aspect-[1.68] @lg:max-h-[78svh]">
+                    {/* Fills the screen inside the page gutters: one viewport
+                        less the fixed brand bar, the top padding and the same
+                        gap again underneath, so the film sits inset on all
+                        four sides. Capped so it stops growing on a large
+                        display. */}
+                    <div className="relative h-[calc(100svh-7rem-max(0.75rem,env(safe-area-inset-top)))] max-h-230 overflow-hidden rounded-3xl bg-cream md:rounded-[36px] lg:h-[calc(100svh-3rem)]">
                         {/* No poster: the photo is framed differently from
                             the film, so showing it first jumped on the swap.
                             The film fades up from the empty box once it has a
@@ -152,20 +157,6 @@ export default function Curtains() {
                             }}
                             aria-label="Curtains moving in natural light"
                         />
-                    </div>
-                    <div className="mt-8 flex flex-wrap justify-center gap-4 @lg:gap-6">
-                        <a
-                            href="#curtains-portfolio"
-                            className={cn(pill, 'min-w-[38%]')}
-                        >
-                            Curtains Portfolio
-                        </a>
-                        <a
-                            href="#curtain-styles"
-                            className={cn(pill, 'min-w-[30%]')}
-                        >
-                            Curtains Style
-                        </a>
                     </div>
                 </section>
 
