@@ -1,4 +1,4 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link, progress, router } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { ReactNode } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -33,14 +33,17 @@ interface BaytePageProps {
 const PARTIAL_PROPS = ['products', 'activeCategory'];
 
 /**
- * Shared by every in-page link: a partial reload with no progress bar, since
- * the grid reports the wait itself.
+ * Shared by every in-page link: a partial reload that keeps the top progress
+ * bar away, since the grid reports the wait itself.
+ *
+ * `async` is what carries that — Inertia turns an async visit into
+ * `showProgress: false`, and `<Link>` has no `showProgress` prop of its own.
  */
 const VISIT_OPTIONS = {
     only: PARTIAL_PROPS,
     preserveScroll: true,
     preserveState: true,
-    showProgress: false,
+    async: true,
     prefetch: true,
 } as const;
 
@@ -94,6 +97,12 @@ export default function BayteIndex({
             clearTimeout(timer);
             setPending(false);
             setTapped(null);
+
+            // Inertia hides the bar for a no-progress visit and never puts it
+            // back, so clear it out and reset the flag — the rest of the site
+            // keeps its progress bar.
+            progress.remove();
+            progress.reveal(true);
         });
 
         return () => {

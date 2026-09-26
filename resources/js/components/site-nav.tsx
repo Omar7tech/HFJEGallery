@@ -30,7 +30,6 @@ const navItems: NavItem[] = [
     { label: 'BAYTÉ', href: '/bayte' },
     { label: 'Living Edit', href: '/living-edit' },
     { label: 'About', href: '/about' },
-    { label: 'Contact', href: '/contact' },
 ];
 
 /** Above this many sub-links, the group becomes a capped scroll area instead
