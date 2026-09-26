@@ -1,6 +1,7 @@
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, router } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import type { ReactNode } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import BayteCatalogueCard from '@/components/bayte-catalogue-card';
 import BayteWordmarkDraw from '@/components/bayte-wordmark-draw';
 import { cn } from '@/lib/utils';
@@ -31,6 +32,21 @@ interface BaytePageProps {
 /** The props the controller recomputes on every filter or page change. */
 const PARTIAL_PROPS = ['products', 'activeCategory'];
 
+/**
+ * Shared by every in-page link: a partial reload with no progress bar, since
+ * the grid reports the wait itself.
+ */
+const VISIT_OPTIONS = {
+    only: PARTIAL_PROPS,
+    preserveScroll: true,
+    preserveState: true,
+    showProgress: false,
+    prefetch: true,
+} as const;
+
+/** Long enough that a quick response never flashes the dimmed grid. */
+const PENDING_DELAY = 180;
+
 function buildUrl(category: string | null, page = 1): string {
     const params = new URLSearchParams();
 
@@ -52,7 +68,64 @@ export default function BayteIndex({
     activeCategory,
     products,
 }: BaytePageProps) {
-    const { data, currentPage, lastPage } = products;
+    const { data, currentPage, lastPage, total } = products;
+
+    const [pending, setPending] = useState(false);
+    // The pill the visitor just tapped, shown as active before the response
+    // lands so the filter never feels like it ignored the tap.
+    const [tapped, setTapped] = useState<string | null>(null);
+    const heading = useRef<HTMLDivElement>(null);
+
+    const selected = tapped ?? activeCategory;
+    const selectedName = categories.find(
+        (category) => category.slug === selected,
+    )?.name;
+
+    useEffect(() => {
+        let timer: ReturnType<typeof setTimeout> | undefined;
+
+        const stopStart = router.on('start', (event) => {
+            if (event.detail.visit.url?.pathname === '/bayte') {
+                timer = setTimeout(() => setPending(true), PENDING_DELAY);
+            }
+        });
+
+        const stopFinish = router.on('finish', () => {
+            clearTimeout(timer);
+            setPending(false);
+            setTapped(null);
+        });
+
+        return () => {
+            clearTimeout(timer);
+            stopStart();
+            stopFinish();
+        };
+    }, []);
+
+    /**
+     * Bring the results back into view when they have scrolled off the top —
+     * paging from the foot of a long grid otherwise leaves you at the bottom.
+     */
+    const keepResultsInView = useCallback(() => {
+        // Measure after the new grid has been painted: a shorter page can
+        // change where the heading sits.
+        requestAnimationFrame(() => {
+            const top = heading.current?.getBoundingClientRect().top ?? 0;
+
+            if (top >= 0) {
+                return;
+            }
+
+            heading.current?.scrollIntoView({
+                behavior: window.matchMedia('(prefers-reduced-motion: reduce)')
+                    .matches
+                    ? 'auto'
+                    : 'smooth',
+                block: 'start',
+            });
+        });
+    }, []);
 
     return (
         <>
@@ -82,22 +155,21 @@ export default function BayteIndex({
                     className="nav-scroll mt-10 -mr-5 -ml-5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-2 md:-mr-8 md:-ml-8 md:px-8 lg:-mr-7 lg:ml-0 lg:pr-7 lg:pl-0 @3xl:mx-0 @3xl:flex-wrap @3xl:overflow-visible @3xl:px-0"
                 >
                     {categories.map((category) => {
-                        const active = category.slug === activeCategory;
+                        const active = category.slug === selected;
 
                         return (
                             <Link
                                 key={category.slug}
                                 href={buildUrl(category.slug)}
-                                only={PARTIAL_PROPS}
-                                preserveScroll
-                                preserveState
-                                prefetch
+                                {...VISIT_OPTIONS}
+                                onClick={() => setTapped(category.slug)}
+                                onSuccess={keepResultsInView}
                                 aria-current={active ? 'true' : undefined}
                                 className={cn(
-                                    'inline-flex min-h-11 shrink-0 snap-start items-center rounded-full border px-5 font-display text-xs tracking-[0.1em] uppercase transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none @lg:text-sm',
+                                    'inline-flex h-10 shrink-0 snap-start items-center rounded-full border px-4 text-sm whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
                                     active
                                         ? 'border-brand bg-brand text-brand-foreground'
-                                        : 'border-ink/15 text-ink hover:border-brand hover:text-brand',
+                                        : 'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
                                 )}
                             >
                                 {category.name}
@@ -106,8 +178,28 @@ export default function BayteIndex({
                     })}
                 </nav>
 
+                <div
+                    ref={heading}
+                    className="mt-8 flex scroll-mt-24 flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-b border-ink/10 pb-4 lg:scroll-mt-8"
+                >
+                    <h2 className="font-display text-[clamp(1.1rem,2.6cqi,1.75rem)] leading-tight text-ink">
+                        {selectedName ?? 'The Collection'}
+                    </h2>
+                    <p className="text-sm text-ink/50">
+                        {total} {total === 1 ? 'piece' : 'pieces'}
+                        {lastPage > 1 &&
+                            ` · page ${currentPage} of ${lastPage}`}
+                    </p>
+                </div>
+
                 {data.length > 0 ? (
-                    <div className="mt-6 grid gap-4 @xl:grid-cols-2 @2xl:gap-5 @3xl:grid-cols-3">
+                    <div
+                        aria-busy={pending}
+                        className={cn(
+                            'mt-6 grid gap-4 transition-opacity duration-200 ease-out @xl:grid-cols-2 @2xl:gap-5 @3xl:grid-cols-3',
+                            pending && 'pointer-events-none opacity-40',
+                        )}
+                    >
                         {data.map((product) => (
                             <BayteCatalogueCard
                                 key={product.slug}
@@ -133,6 +225,7 @@ export default function BayteIndex({
                             page={currentPage - 1}
                             disabled={currentPage === 1}
                             label="Previous page"
+                            onNavigate={keepResultsInView}
                         >
                             <ChevronLeft
                                 className="size-4"
@@ -140,7 +233,7 @@ export default function BayteIndex({
                             />
                         </PageLink>
 
-                        <p className="min-w-24 text-center font-display text-xs tracking-[0.1em] text-ink/60 uppercase">
+                        <p className="min-w-20 text-center text-sm text-ink/50">
                             {currentPage} / {lastPage}
                         </p>
 
@@ -149,6 +242,7 @@ export default function BayteIndex({
                             page={currentPage + 1}
                             disabled={currentPage === lastPage}
                             label="Next page"
+                            onNavigate={keepResultsInView}
                         >
                             <ChevronRight
                                 className="size-4"
@@ -167,6 +261,7 @@ interface PageLinkProps {
     page: number;
     label: string;
     disabled: boolean;
+    onNavigate: () => void;
     children: ReactNode;
 }
 
@@ -175,10 +270,11 @@ function PageLink({
     page,
     label,
     disabled,
+    onNavigate,
     children,
 }: PageLinkProps) {
     const shared =
-        'inline-flex size-11 items-center justify-center rounded-full border transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none';
+        'inline-flex size-10 items-center justify-center rounded-full border transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none';
 
     if (disabled) {
         return (
@@ -194,14 +290,12 @@ function PageLink({
     return (
         <Link
             href={buildUrl(category, page)}
-            only={PARTIAL_PROPS}
-            preserveScroll
-            preserveState
-            prefetch
+            {...VISIT_OPTIONS}
+            onSuccess={onNavigate}
             aria-label={label}
             className={cn(
                 shared,
-                'border-ink/15 text-ink hover:border-brand hover:text-brand',
+                'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
             )}
         >
             {children}
