@@ -18,12 +18,17 @@ class BayteController extends Controller
      */
     public function __invoke(Request $request): Response
     {
+        // An empty shelf has nothing to show, so it never becomes a pill.
+        // Ties in the dashboard order fall back to the order the categories
+        // were added, so the first pill never changes shape on its own.
         $categories = BayteCategory::query()
+            ->has('products')
             ->orderBy('sort_order')
-            ->orderBy('name')
+            ->orderBy('id')
             ->get();
 
-        // No category in the URL — or an unknown one — opens the first shelf.
+        // No category in the URL — or one that is unknown or empty — opens
+        // the first shelf.
         $active = $categories->firstWhere('slug', $request->query('category'))
             ?? $categories->first();
 
@@ -31,7 +36,7 @@ class BayteController extends Controller
             ->where('bayte_category_id', $active?->id)
             ->with('media')
             ->orderBy('sort_order')
-            ->orderBy('name')
+            ->orderBy('id')
             ->paginate(self::PER_PAGE)
             ->withQueryString();
 

@@ -119,7 +119,7 @@ export default function BayteIndex({
                     </div>
                 ) : (
                     <p className="mt-6 rounded-2xl bg-[#f2f1ef] px-6 py-16 text-center font-display text-base text-ink/60">
-                        No pieces in this category yet.
+                        The collection is being photographed. Check back soon.
                     </p>
                 )}
 

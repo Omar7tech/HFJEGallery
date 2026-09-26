@@ -93,6 +93,33 @@ test('a piece without an upload falls back to the placeholder image', function (
         );
 });
 
+test('a category with no pieces is not offered as a filter', function () {
+    $lounge = BayteCategory::factory()->create(['name' => 'Lounge Chairs', 'sort_order' => 1]);
+    BayteCategory::factory()->create(['name' => 'Lighting', 'sort_order' => 2]);
+    BayteProduct::factory()->for($lounge, 'category')->create(['name' => 'Sannine']);
+
+    $this->get(route('bayte'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('categories', [
+                ['slug' => 'lounge-chairs', 'name' => 'Lounge Chairs'],
+            ])
+            ->where('activeCategory', 'lounge-chairs')
+        );
+});
+
+test('asking for an empty category falls back to one that has pieces', function () {
+    $lounge = BayteCategory::factory()->create(['name' => 'Lounge Chairs', 'sort_order' => 1]);
+    BayteCategory::factory()->create(['name' => 'Lighting', 'sort_order' => 2]);
+    BayteProduct::factory()->for($lounge, 'category')->create(['name' => 'Sannine']);
+
+    $this->get(route('bayte', ['category' => 'lighting']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('activeCategory', 'lounge-chairs')
+            ->has('products.data', 1)
+        );
+});
+
 test('an empty collection renders the page without a category', function () {
     $this->get(route('bayte'))
         ->assertOk()

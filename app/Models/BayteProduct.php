@@ -25,7 +25,7 @@ class BayteProduct extends Model implements HasMedia
 
     use InteractsWithMedia;
 
-    /** Stand-in cutout for seeded pieces and for any piece without an upload. */
+    /** Stand-in cutout shown for any piece without an uploaded image. */
     public const string PLACEHOLDER_IMAGE = 'images/bayte/placeholder.webp';
 
     /**
@@ -35,14 +35,6 @@ class BayteProduct extends Model implements HasMedia
     {
         return $this->getFirstMediaUrl('image', 'webp')
             ?: asset(self::PLACEHOLDER_IMAGE);
-    }
-
-    /**
-     * Absolute path of the placeholder file, for factories and seeders.
-     */
-    public static function placeholderImagePath(): string
-    {
-        return public_path(self::PLACEHOLDER_IMAGE);
     }
 
     /** @return BelongsTo<BayteCategory, $this> */

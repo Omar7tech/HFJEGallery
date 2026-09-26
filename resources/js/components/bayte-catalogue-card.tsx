@@ -54,6 +54,7 @@ export default function BayteCatalogueCard({
                     className="absolute inset-0 scale-[0.84] transition-transform duration-500 ease-out group-hover:scale-[0.93] motion-reduce:transition-none motion-reduce:group-hover:scale-[0.84]"
                     imgClassName="object-contain"
                     placeholderClassName="bg-transparent"
+                    loading="lazy"
                 />
             </div>
 
