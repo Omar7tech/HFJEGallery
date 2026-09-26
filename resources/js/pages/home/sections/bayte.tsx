@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
 import BayteProductCard from '@/components/bayte-product-card';
 import BayteWordmarkDraw from '@/components/bayte-wordmark-draw';
@@ -70,8 +71,9 @@ function Bayte() {
             </div>
 
             <div className="mt-8 flex justify-center">
-                <button
-                    type="button"
+                <Link
+                    href="/bayte"
+                    prefetch
                     className="group flex items-center gap-3 rounded-full bg-brand px-12 py-3.5 text-base text-brand-foreground transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-lg"
                 >
                     Discover BAYTÉ
@@ -79,7 +81,7 @@ function Bayte() {
                         className="size-5 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none"
                         strokeWidth={1.5}
                     />
-                </button>
+                </Link>
             </div>
         </section>
     );

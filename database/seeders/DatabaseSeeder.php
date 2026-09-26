@@ -13,6 +13,7 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call(LivingEditSeeder::class);
+        $this->call(BayteSeeder::class);
 
         if (app()->isLocal()) {
             $this->call(GalleryImageSeeder::class);

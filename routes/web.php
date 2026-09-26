@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BayteController;
 use App\Http\Controllers\LivingEditController;
 use App\Http\Controllers\MoodBoardController;
 use App\Http\Middleware\HandleInertiaRequests;
@@ -14,6 +15,7 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 Route::inertia('/', 'home/index')->name('home');
 Route::inertia('/about', 'about/index')->name('about');
 Route::inertia('/curtains', 'curtains/index')->name('curtains');
+Route::get('/bayte', BayteController::class)->name('bayte');
 Route::get('/living-edit', LivingEditController::class)->name('living-edit');
 Route::get('/living-edit/mood-board', MoodBoardController::class)
     ->middleware('throttle:mood-board')
