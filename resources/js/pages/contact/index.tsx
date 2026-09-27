@@ -33,7 +33,7 @@ export default function Contact() {
                     Let&rsquo;s talk.
                 </h1>
 
-                <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-ink/75 @lg:text-lg">
+                <p className="mt-4 max-w-xl font-sans text-base leading-relaxed text-ink/75">
                     Tell us about the space you want to transform. We reply
                     within two working days.
                 </p>

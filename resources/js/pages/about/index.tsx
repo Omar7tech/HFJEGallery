@@ -33,7 +33,7 @@ export default function About() {
                     Crafted around living.
                 </h1>
 
-                <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-ink/75 @lg:text-lg">
+                <p className="mt-4 max-w-xl font-sans text-base leading-relaxed text-ink/75">
                     Home Fashion Jamaleddine is a family studio working between
                     fabric, furniture and the rooms they belong to. Placeholder
                     copy — replace before launch.

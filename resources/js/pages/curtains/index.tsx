@@ -174,7 +174,7 @@ export default function Curtains() {
                         </h2>
                         {/* Desktop keeps a fixed three-line shape against the
                             heading, so the breaks are set rather than wrapped. */}
-                        <p className="max-w-[290px] font-display text-[clamp(0.6rem,1.15cqi,0.8rem)] leading-[1.6] @lg:w-auto @lg:max-w-[52ch] @lg:text-right">
+                        <p className="max-w-[290px] font-sans text-base leading-relaxed @lg:w-auto @lg:max-w-[52ch] @lg:text-right">
                             Curtains define more than privacy. They shape the{' '}
                             <br className="hidden @lg:inline" />
                             light, soften the architecture, and complete the{' '}

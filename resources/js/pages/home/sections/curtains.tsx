@@ -45,7 +45,7 @@ function Curtains() {
                 The Finishing Layer Of Every Room.
             </p>
 
-            <p className="mt-5 max-w-3xl text-sm leading-[1.7] text-brand @lg:text-base">
+            <p className="mt-4 max-w-2xl font-sans text-base leading-relaxed text-brand">
                 From Fabric Selection And Precise Measurements To Tailoring And
                 Installation, HFJE Creates Custom Curtain Solutions Designed
                 Around The Light, Proportions, And Character Of Each Space.

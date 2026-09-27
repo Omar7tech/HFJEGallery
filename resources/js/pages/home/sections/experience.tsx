@@ -36,7 +36,7 @@ function Experience() {
                         {years} Years of Craftsmanship
                     </h2>
 
-                    <p className="mt-6 max-w-xl text-base leading-relaxed font-bold text-ink @lg:text-lg">
+                    <p className="mt-4 max-w-xl font-sans text-base leading-relaxed font-semibold text-ink">
                         More than two decades of transforming houses into homes
                         through exceptional craftsmanship, premium materials,
                         and personalized design.

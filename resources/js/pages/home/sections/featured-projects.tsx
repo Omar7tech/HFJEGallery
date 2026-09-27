@@ -92,7 +92,7 @@ function FeaturedProjects() {
                     Spaces That Tell Their Own Story
                 </h2>
 
-                <p className="mt-6 max-w-2xl text-base leading-relaxed font-medium text-brand @lg:text-lg">
+                <p className="mt-4 max-w-2xl font-sans text-base leading-relaxed font-medium text-brand">
                     Every project is unique because every family lives
                     differently. Explore a portfolio of homes, apartments,
                     restaurants, and commercial spaces crafted around each

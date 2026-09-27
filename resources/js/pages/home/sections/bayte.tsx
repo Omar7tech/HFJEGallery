@@ -50,7 +50,7 @@ function Bayte() {
                     Better Living.
                 </h2>
 
-                <p className="text-sm leading-[1.6] text-ink @lg:text-base @2xl:text-right">
+                <p className="font-sans text-base leading-relaxed text-ink @2xl:text-right">
                     A Curated Collection Of Ready-To-Purchase Furniture Designed
                     For Modern Lebanese Homes. Every Piece Solves A Real Living
                     Need Through Thoughtful Function, Lasting Materials, And The
