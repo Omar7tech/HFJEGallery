@@ -283,13 +283,6 @@ export default function Curtains() {
                                 <CurtainImage
                                     name={style.image}
                                     alt={style.description}
-                                    className={cn(
-                                        'transition-opacity duration-300 motion-reduce:transition-none',
-                                        activeStyle !== index &&
-                                            [2, 4, 5].includes(index)
-                                            ? 'opacity-0'
-                                            : 'opacity-100',
-                                    )}
                                 />
                                 <span
                                     aria-hidden="true"
