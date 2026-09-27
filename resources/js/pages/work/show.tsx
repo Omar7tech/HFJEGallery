@@ -1,6 +1,7 @@
 import { Head, InfiniteScroll, Link } from '@inertiajs/react';
 import { ArrowDown, ArrowLeft } from 'lucide-react';
 import { useRef } from 'react';
+import MarqueeText from '@/components/marquee-text';
 import ProjectCard from '@/components/project-card';
 import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
@@ -52,7 +53,7 @@ export default function WorkShow({
                         aria-hidden="true"
                         className="pointer-events-none absolute inset-0 bg-linear-to-t from-ink/70 via-ink/15 to-transparent"
                     />
-                    <span className="absolute inset-x-0 bottom-0 p-6 @lg:p-10">
+                    <span className="absolute inset-x-0 bottom-0 block min-w-0 p-6 @lg:p-10">
                         <Link
                             href="/work"
                             className="inline-flex items-center gap-2 text-sm tracking-[0.15em] text-cream uppercase transition-colors hover:text-white"
@@ -60,8 +61,12 @@ export default function WorkShow({
                             <ArrowLeft className="size-4" strokeWidth={1.75} />
                             All work
                         </Link>
+                        {/* One line always: a long name loops like the
+                            category cards instead of wrapping. */}
                         <h1 className="mt-3 font-display text-[clamp(2rem,7.5cqi,5.5rem)] leading-[1.05] tracking-[-0.02em] text-white uppercase">
-                            {category.name}
+                            <MarqueeText speed={60}>
+                                {category.name}
+                            </MarqueeText>
                         </h1>
                         {category.description && (
                             <p className="mt-3 max-w-xl font-sans text-base leading-relaxed text-cream/90">
