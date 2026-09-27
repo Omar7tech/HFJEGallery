@@ -1,5 +1,6 @@
 import { Head, router } from '@inertiajs/react';
 import {
+    Check,
     ChevronDown,
     Loader2,
     Search,
@@ -183,22 +184,44 @@ export default function BayteIndex({
     };
 
     /** "All" and every category, as rows of a list. */
+    /** "All" across the top, then the categories two by two. */
     const categoryList = (
-        <ul className="flex flex-col gap-0.5">
+        <ul className="grid grid-cols-2 gap-1">
             {[{ slug: null, name: 'All pieces' }, ...categories].map(
-                (category) => (
-                    <li key={category.slug ?? 'all'}>
-                        <FilterPill
-                            variant="list"
-                            href={catalogueHref(category.slug, query)}
-                            active={category.slug === filter.selected}
-                            onSelect={() => pick(category.slug)}
-                            onPrefetch={() => filter.prefetch(category.slug)}
+                (category) => {
+                    const active = category.slug === filter.selected;
+
+                    return (
+                        <li
+                            key={category.slug ?? 'all'}
+                            className={cn(
+                                'min-w-0',
+                                category.slug === null && 'col-span-2',
+                            )}
                         >
-                            {category.name}
-                        </FilterPill>
-                    </li>
-                ),
+                            <FilterPill
+                                variant="list"
+                                href={catalogueHref(category.slug, query)}
+                                active={active}
+                                onSelect={() => pick(category.slug)}
+                                onPrefetch={() =>
+                                    filter.prefetch(category.slug)
+                                }
+                            >
+                                <span className="truncate">
+                                    {category.name}
+                                </span>
+                                {active && (
+                                    <Check
+                                        aria-hidden="true"
+                                        className="size-4 shrink-0"
+                                        strokeWidth={2.25}
+                                    />
+                                )}
+                            </FilterPill>
+                        </li>
+                    );
+                },
             )}
         </ul>
     );
@@ -311,8 +334,13 @@ export default function BayteIndex({
                             {menuOpen && (
                                 <nav
                                     aria-label="Product categories"
-                                    className="absolute top-full right-0 z-30 mt-2 max-h-[min(26rem,60vh)] w-64 overflow-y-auto rounded-2xl bg-white p-2 shadow-[0_18px_40px_-16px_rgb(74_48_32/0.35)] ring-1 ring-ink/10"
+                                    // Two columns fit every category without
+                                    // a scrollbar; it eases in from the button.
+                                    className="absolute top-full right-0 z-30 mt-3 w-[min(30rem,calc(100vw-4rem))] origin-top-right rounded-3xl bg-white/95 p-3 shadow-[0_24px_60px_-24px_rgb(74_48_32/0.4)] ring-1 ring-ink/8 backdrop-blur-xl transition-[opacity,scale,translate] duration-200 ease-out motion-reduce:transition-none starting:-translate-y-1 starting:scale-95 starting:opacity-0"
                                 >
+                                    <p className="px-3.5 pt-1 pb-2.5 font-sans text-xs tracking-[0.15em] text-ink/45 uppercase">
+                                        Browse by category
+                                    </p>
                                     {categoryList}
                                 </nav>
                             )}

@@ -25,9 +25,9 @@ const VARIANTS = {
         idle: 'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
     },
     list: {
-        base: 'min-h-11 w-full justify-between gap-3 rounded-xl px-3.5 text-[15px]',
+        base: 'min-h-11 w-full justify-between gap-3 rounded-2xl px-3.5 text-[15px]',
         active: 'bg-brand/10 font-medium text-brand',
-        idle: 'text-ink/70 hover:bg-ink/5 hover:text-ink',
+        idle: 'text-ink/75 hover:bg-surface hover:text-ink',
     },
 };
 

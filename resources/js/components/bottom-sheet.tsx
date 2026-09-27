@@ -45,7 +45,12 @@ export default function BottomSheet({
             }}
             className="fixed inset-x-0 top-auto bottom-0 m-0 max-h-[80dvh] w-full max-w-none translate-y-0 rounded-t-3xl bg-white p-0 text-ink shadow-[0_-20px_50px_-30px_rgb(26_22_20/0.5)] transition-[translate,display,overlay] transition-discrete duration-300 ease-out backdrop:bg-ink/40 motion-reduce:transition-none starting:open:translate-y-full"
         >
-            <div className="flex items-center justify-between border-b border-ink/10 px-5 py-4">
+            {/* The grab handle every phone sheet shows. */}
+            <span
+                aria-hidden="true"
+                className="mx-auto mt-2.5 block h-1 w-10 rounded-full bg-ink/15"
+            />
+            <div className="flex items-center justify-between px-5 pt-2 pb-1">
                 <h2 className="font-display text-base text-ink">{title}</h2>
                 <button
                     type="button"
@@ -56,7 +61,7 @@ export default function BottomSheet({
                     <X className="size-5" strokeWidth={1.75} />
                 </button>
             </div>
-            <div className="overflow-y-auto px-3 py-3 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <div className="[scrollbar-width:none] overflow-y-auto px-3 py-3 pb-[max(1rem,env(safe-area-inset-bottom))] [&::-webkit-scrollbar]:hidden">
                 {children}
             </div>
         </dialog>
