@@ -9,8 +9,8 @@ interface FilterPillProps {
     onSelect: () => void;
     /** Warm the cache for this filter before it is picked. */
     onPrefetch: () => void;
-    /** A rounded pill in a row, or a full-width row in a vertical list. */
-    variant?: 'pill' | 'list';
+    /** A rounded pill in a row, an underlined tab, or a full-width row in a vertical list. */
+    variant?: 'pill' | 'tab' | 'list';
     className?: string;
     children: ReactNode;
 }
@@ -23,6 +23,11 @@ const VARIANTS = {
         base: 'h-10 shrink-0 rounded-full border px-4 text-sm whitespace-nowrap @lg:px-5 @lg:text-[15px]',
         active: 'border-brand bg-brand text-brand-foreground',
         idle: 'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
+    },
+    tab: {
+        base: '-mb-px min-h-11 border-b-2 text-base whitespace-nowrap @lg:text-lg',
+        active: 'border-brand text-brand',
+        idle: 'border-transparent text-ink/55 hover:text-ink',
     },
     list: {
         base: 'min-h-11 w-full justify-between gap-3 rounded-2xl px-3.5 text-[15px]',

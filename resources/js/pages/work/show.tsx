@@ -1,12 +1,10 @@
-import { Head, Link, router } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
-import { useState } from 'react';
 import FilterPill from '@/components/filter-pill';
 import MarqueeText from '@/components/marquee-text';
 import ProjectGrid from '@/components/project-grid';
 import { SmartImage } from '@/components/smart-image';
 import { useFilterVisit } from '@/lib/use-filter-visit';
-import { cn, isPlainClick } from '@/lib/utils';
 import type {
     ProjectCard as Project,
     WorkCategoryLink,
@@ -18,6 +16,8 @@ interface WorkShowProps {
         description: string | null;
         image: string;
     };
+    /** Slug of the category shown. */
+    activeCategory: string;
     /** Slug of the tag the grid is narrowed to, or null for every project. */
     activeTag: string | null;
     categories: WorkCategoryNavItem[];
@@ -31,18 +31,15 @@ function tagHref(categorySlug: string, tagSlug?: string | null): string {
         : `/work/${categorySlug}`;
 }
 
-/** The underlined look of the category tabs. */
-function tabClassName(active: boolean): string {
-    return cn(
-        '-mb-px inline-flex min-h-11 items-center border-b-2 font-sans whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
-        active
-            ? 'border-brand text-brand'
-            : 'border-transparent text-ink/55 hover:text-ink',
-    );
+/** Starts downloading an image, so it is cached before it is shown. */
+function preloadImage(src: string): void {
+    const image = new Image();
+    image.src = src;
 }
 
 export default function WorkShow({
     category,
+    activeCategory,
     activeTag,
     categories,
     projects,
@@ -57,38 +54,24 @@ export default function WorkShow({
         reset: ['projects'],
     });
     const shownTag = tagFilter.selected;
-    // The category being opened, underlined straight away while it loads.
-    const [pendingCategory, setPendingCategory] = useState<string | null>(null);
-    const shownCategory = pendingCategory ?? category.slug;
-    const loading = tagFilter.loading || pendingCategory !== null;
+    // Category tabs swap the page in place too, without remounting it: the
+    // tab moves at once, the grid gives way to skeletons, and the photo and
+    // name follow as soon as the category lands. Hovering a tab also fetches
+    // its photo, so the swap shows no empty frame.
+    const categoryFilter = useFilterVisit({
+        active: activeCategory,
+        activeProp: 'activeCategory',
+        href: (categorySlug) => tagHref(categorySlug ?? activeCategory),
+        only: ['category', 'activeCategory', 'activeTag', 'projects'],
+        reset: ['projects'],
+    });
+    const loading = tagFilter.loading || categoryFilter.loading;
 
     const current = categories.find((item) => item.slug === category.slug);
     const tags = current?.tags ?? [];
     const shownTagDetails = tags.find((tag) => tag.slug === shownTag);
     // The tag of the projects on screen, which lags the pills while loading.
     const activeTagName = tags.find((tag) => tag.slug === activeTag)?.name;
-
-    /** Opens another category quietly, without the top progress bar. */
-    const openCategory = (categorySlug: string) => {
-        if (categorySlug === shownCategory) {
-            return;
-        }
-
-        setPendingCategory(categorySlug);
-        router.get(
-            tagHref(categorySlug),
-            {},
-            {
-                preserveScroll: true,
-                showProgress: false,
-                // A category opens as a fresh page, so the pending tab clears
-                // itself; letting go on finish instead can flash the old tab
-                // for a frame before the new page is on screen.
-                onError: () => setPendingCategory(null),
-                onCancel: () => setPendingCategory(null),
-            },
-        );
-    };
 
     return (
         <>
@@ -155,33 +138,28 @@ export default function WorkShow({
                         className="nav-scroll -mx-5 mt-8 overflow-x-auto px-5 md:-mx-8 md:px-8 lg:mr-0 lg:ml-0 lg:px-0"
                     >
                         <ul className="flex min-w-max gap-7 border-b border-ink/10 @lg:gap-10">
-                            {categories.map((item) => {
-                                const active = item.slug === shownCategory;
-
-                                return (
-                                    <li key={item.slug}>
-                                        <Link
-                                            href={tagHref(item.slug)}
-                                            prefetch
-                                            onClick={(event) => {
-                                                if (isPlainClick(event)) {
-                                                    event.preventDefault();
-                                                    openCategory(item.slug);
-                                                }
-                                            }}
-                                            aria-current={
-                                                active ? 'page' : undefined
-                                            }
-                                            className={cn(
-                                                tabClassName(active),
-                                                'text-base @lg:text-lg',
-                                            )}
-                                        >
-                                            {item.name}
-                                        </Link>
-                                    </li>
-                                );
-                            })}
+                            {categories.map((item) => (
+                                <li key={item.slug}>
+                                    <FilterPill
+                                        variant="tab"
+                                        href={tagHref(item.slug)}
+                                        active={
+                                            item.slug ===
+                                            categoryFilter.selected
+                                        }
+                                        onSelect={() => {
+                                            preloadImage(item.image);
+                                            categoryFilter.select(item.slug);
+                                        }}
+                                        onPrefetch={() => {
+                                            preloadImage(item.image);
+                                            categoryFilter.prefetch(item.slug);
+                                        }}
+                                    >
+                                        {item.name}
+                                    </FilterPill>
+                                </li>
+                            ))}
                         </ul>
                     </nav>
                 )}

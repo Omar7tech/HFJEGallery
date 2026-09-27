@@ -21,6 +21,8 @@ export interface WorkTagLink {
 
 /** A category in the switcher of a category page, with its tags. */
 export interface WorkCategoryNavItem extends WorkCategoryLink {
+    /** Full-size WebP of the category photo, or the placeholder. */
+    image: string;
     tags: WorkTagLink[];
 }
 

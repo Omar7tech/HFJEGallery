@@ -60,18 +60,22 @@ class WorkController extends Controller
                 'description' => $category->description,
                 'image' => $category->imageUrl('webp'),
             ],
+            'activeCategory' => $category->slug,
             'activeTag' => $tag?->slug,
             // The other shelves with their tags, so the visitor can hop between
             // categories or straight into one of their tags.
             'categories' => fn (): array => WorkCategory::query()
                 ->has('projects')
-                ->with(['tags' => fn (HasMany $query) => $query->has('projects')])
+                ->with(['media', 'tags' => fn (HasMany $query) => $query->has('projects')])
                 ->orderBy('sort_order')
                 ->orderBy('id')
                 ->get(['id', 'slug', 'name'])
                 ->map(fn (WorkCategory $item): array => [
                     'slug' => $item->slug,
                     'name' => $item->name,
+                    // Preloaded when its tab is hovered, so the photo is
+                    // ready the moment the category swaps in.
+                    'image' => $item->imageUrl('webp'),
                     'tags' => $item->tags
                         ->map(fn (WorkTag $tag): array => [
                             'slug' => $tag->slug,

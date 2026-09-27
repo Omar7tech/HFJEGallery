@@ -214,3 +214,22 @@ test('the project story keeps its formatting but strips unsafe html', function (
             ->where('project.description', '<p>Tailored <strong>linen</strong></p><h2>The light</h2>')
         );
 });
+
+test('switching category swaps only its own props', function () {
+    $homes = WorkCategory::factory()->create(['name' => 'Homes', 'sort_order' => 1]);
+    $apartments = WorkCategory::factory()->create(['name' => 'Apartments', 'sort_order' => 2]);
+    Project::factory()->for($homes, 'category')->create();
+    Project::factory()->for($apartments, 'category')->create(['name' => 'Gemmayze Loft']);
+
+    $this->get(route('work.show', $apartments))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('activeCategory', 'apartments')
+            ->where('categories.0.image', asset(WorkCategory::PLACEHOLDER_IMAGE))
+            ->reloadOnly(['category', 'activeCategory', 'activeTag', 'projects'], fn (Assert $reload) => $reload
+                ->where('category.name', 'Apartments')
+                ->where('activeCategory', 'apartments')
+                ->where('projects.data.0.name', 'Gemmayze Loft')
+                ->missing('categories')
+            )
+        );
+});
