@@ -2,8 +2,8 @@ import { Head } from '@inertiajs/react';
 import WorkCategoryCard from '@/components/work-category-card';
 import type { WorkCategory } from '@/types';
 
-/** Cards in the first row fetch with the page; the rest wait for the scroll. */
-const EAGER_CARDS = 2;
+/** The first row (four across on desktop) fetches with the page. */
+const EAGER_CARDS = 4;
 
 export default function WorkIndex({
     categories,
@@ -32,7 +32,7 @@ export default function WorkIndex({
                 </header>
 
                 {categories.length > 0 ? (
-                    <div className="mt-10 grid gap-4 @xl:grid-cols-2 @2xl:gap-5 @6xl:grid-cols-4">
+                    <div className="mt-8 grid grid-cols-2 gap-3 md:gap-4 lg:grid-cols-4 xl:gap-5">
                         {categories.map((category, index) => (
                             <WorkCategoryCard
                                 key={category.slug}

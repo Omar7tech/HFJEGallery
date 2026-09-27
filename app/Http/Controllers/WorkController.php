@@ -20,7 +20,6 @@ class WorkController extends Controller
     {
         $categories = WorkCategory::query()
             ->has('projects')
-            ->withCount('projects')
             ->with('media')
             ->orderBy('sort_order')
             ->orderBy('id')
@@ -33,7 +32,6 @@ class WorkController extends Controller
                     'name' => $category->name,
                     'description' => $category->description,
                     'image' => $category->imageUrl(),
-                    'projectsCount' => $category->projects_count,
                 ])
                 ->all(),
         ]);

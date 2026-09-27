@@ -22,7 +22,6 @@ test('the work page lists categories that have projects in dashboard order', fun
         ->assertInertia(fn (Assert $page) => $page
             ->component('work/index')
             ->where('categories', fn (Collection $categories) => $categories->pluck('slug')->all() === ['homes', 'restaurants'])
-            ->where('categories.0.projectsCount', 2)
             ->where('categories.0.image', asset(WorkCategory::PLACEHOLDER_IMAGE))
         );
 });

@@ -5,7 +5,6 @@ export interface WorkCategory {
     description: string | null;
     /** WebP thumbnail, or the placeholder. */
     image: string;
-    projectsCount: number;
 }
 
 /** A category as linked from its own page and from a project. */
