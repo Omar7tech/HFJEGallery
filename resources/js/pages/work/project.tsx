@@ -1,5 +1,5 @@
 import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowLeft, ArrowRight, CalendarDays, MapPin } from 'lucide-react';
 import ProjectGallery from '@/components/project-gallery';
 import { SmartImage } from '@/components/smart-image';
 import type { ProjectDetail, WorkCategoryLink } from '@/types';
@@ -15,12 +15,12 @@ export default function WorkProject({
     project,
     nextProject,
 }: WorkProjectProps) {
-    const facts = [
-        { label: 'Category', value: category.name },
-        { label: 'Location', value: project.location },
-        { label: 'Year', value: project.year?.toString() },
-    ].filter((fact): fact is { label: string; value: string } =>
-        Boolean(fact.value),
+    // Where and when, shown beside the category pill; either may be blank.
+    const details = [
+        { icon: MapPin, text: project.location },
+        { icon: CalendarDays, text: project.year?.toString() },
+    ].filter((detail): detail is { icon: typeof MapPin; text: string } =>
+        Boolean(detail.text),
     );
 
     // Paragraphs are separated by an empty line in the dashboard.
@@ -54,6 +54,29 @@ export default function WorkProject({
                     {project.name}
                 </h1>
 
+                {/* Category pill, then where and when — one quiet line. */}
+                <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-base text-ink/60">
+                    <Link
+                        href={`/work/${category.slug}`}
+                        className="inline-flex h-8 items-center rounded-full bg-brand/10 px-3.5 text-sm text-brand transition-colors hover:bg-brand hover:text-brand-foreground"
+                    >
+                        {category.name}
+                    </Link>
+                    {details.map(({ icon: Icon, text }) => (
+                        <span
+                            key={text}
+                            className="inline-flex items-center gap-1.5"
+                        >
+                            <Icon
+                                aria-hidden="true"
+                                className="size-4 text-brand/70"
+                                strokeWidth={1.5}
+                            />
+                            {text}
+                        </span>
+                    ))}
+                </div>
+
                 {/* The cover is the LCP image: fetched eagerly at high priority. */}
                 <SmartImage
                     src={project.cover}
@@ -64,33 +87,16 @@ export default function WorkProject({
                     imgClassName="object-cover"
                 />
 
-                {/* The story, kept compact: the facts as one slim strip,
-                    the summary as a lead line, then the paragraphs flowing
-                    in balanced columns so long text never leaves gaps. */}
-                {(facts.length > 0 ||
-                    project.summary ||
-                    paragraphs.length > 0) && (
-                    <section aria-label="About the project" className="mt-10">
-                        {facts.length > 0 && (
-                            <dl className="flex flex-wrap divide-x divide-ink/10 rounded-2xl bg-[#f2f1ef] py-4">
-                                {facts.map((fact) => (
-                                    <div
-                                        key={fact.label}
-                                        className="px-5 md:px-7"
-                                    >
-                                        <dt className="text-[11px] tracking-[0.2em] text-ink/50 uppercase">
-                                            {fact.label}
-                                        </dt>
-                                        <dd className="mt-1 font-sans text-base text-ink">
-                                            {fact.value}
-                                        </dd>
-                                    </div>
-                                ))}
-                            </dl>
-                        )}
-
+                {/* The story, kept compact: the summary as a lead line, then
+                    the paragraphs flowing in balanced columns so long text
+                    never leaves gaps. */}
+                {(project.summary || paragraphs.length > 0) && (
+                    <section
+                        aria-label="About the project"
+                        className="mt-10 @3xl:mt-12"
+                    >
                         {project.summary && (
-                            <p className="mt-8 max-w-4xl font-sans text-[clamp(1.2rem,2.2cqi,1.6rem)] leading-snug font-medium text-ink">
+                            <p className="max-w-4xl font-sans text-[clamp(1.2rem,2.2cqi,1.6rem)] leading-snug font-medium text-ink">
                                 {project.summary}
                             </p>
                         )}
