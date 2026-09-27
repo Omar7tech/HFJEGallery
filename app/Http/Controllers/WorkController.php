@@ -51,21 +51,10 @@ class WorkController extends Controller
             ? $category->tags()->where('slug', $request->string('tag')->value())->firstOrFail()
             : null;
 
-        $projects = $category->projects()
-            ->when($tag, fn (Builder $query, WorkTag $tag) => $query
-                ->whereHas('tags', fn (Builder $query) => $query->whereKey($tag->id)))
-            ->with(['media', 'tags' => fn (BelongsToMany $query) => $query->orderBy('sort_order')->orderBy('id')])
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->paginate(self::PER_PAGE)
-            ->withQueryString()
-            ->through(fn (Project $project): array => [
-                ...$project->toCard(),
-                'tags' => $project->tags->pluck('name')->all(),
-            ]);
-
+        // Closures throughout: "Load more" and the tag pills are partial reloads
+        // asking for the projects alone, so the other props are never built.
         return Inertia::render('work/show', [
-            'category' => [
+            'category' => fn (): array => [
                 'slug' => $category->slug,
                 'name' => $category->name,
                 'description' => $category->description,
@@ -74,7 +63,7 @@ class WorkController extends Controller
             'activeTag' => $tag?->slug,
             // The other shelves with their tags, so the visitor can hop between
             // categories or straight into one of their tags.
-            'categories' => WorkCategory::query()
+            'categories' => fn (): array => WorkCategory::query()
                 ->has('projects')
                 ->with(['tags' => fn (HasMany $query) => $query->has('projects')])
                 ->orderBy('sort_order')
@@ -91,7 +80,18 @@ class WorkController extends Controller
                         ->all(),
                 ])
                 ->all(),
-            'projects' => Inertia::scroll($projects),
+            'projects' => Inertia::scroll(fn () => $category->projects()
+                ->when($tag, fn (Builder $query, WorkTag $tag) => $query
+                    ->whereHas('tags', fn (Builder $query) => $query->whereKey($tag->id)))
+                ->with(['media', 'tags' => fn (BelongsToMany $query) => $query->orderBy('sort_order')->orderBy('id')])
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->paginate(self::PER_PAGE)
+                ->withQueryString()
+                ->through(fn (Project $project): array => [
+                    ...$project->toCard(),
+                    'tags' => $project->tags->pluck('name')->all(),
+                ])),
         ]);
     }
 

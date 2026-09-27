@@ -1,5 +1,5 @@
 import { InfiniteScroll } from '@inertiajs/react';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, ArrowUp } from 'lucide-react';
 import { useRef } from 'react';
 import ProjectCard from '@/components/project-card';
 import { cn } from '@/lib/utils';
@@ -70,6 +70,29 @@ export default function ProjectGrid({
             data={data}
             manual
             itemsElement={grid}
+            // Opened on a later page (a refreshed or shared `?page=3`), the
+            // earlier pages load back in from above.
+            previous={({ loading: fetching, fetch, hasMore }) =>
+                hasMore && (
+                    <div className="mt-8 flex justify-center">
+                        <button
+                            type="button"
+                            onClick={fetch}
+                            disabled={fetching}
+                            className="group inline-flex min-h-11 items-center gap-3 rounded-full border border-brand px-10 py-3.5 text-base text-brand transition-colors duration-300 ease-out hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60 motion-reduce:transition-none"
+                        >
+                            <ArrowUp
+                                className={cn(
+                                    'size-4 transition-transform duration-300 ease-out group-hover:-translate-y-0.5 motion-reduce:transition-none',
+                                    fetching && 'animate-bounce',
+                                )}
+                                strokeWidth={1.75}
+                            />
+                            {fetching ? 'Loading…' : 'Load previous'}
+                        </button>
+                    </div>
+                )
+            }
             next={({ loading: fetching, fetch, hasMore }) =>
                 hasMore && (
                     <div className="mt-12 flex justify-center">

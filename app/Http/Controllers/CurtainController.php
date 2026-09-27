@@ -53,13 +53,11 @@ class CurtainController extends Controller
      */
     public function works(): Response
     {
-        $works = $this->ordered(CurtainWork::query())
-            ->with('media')
-            ->paginate(self::PER_PAGE)
-            ->through(fn (CurtainWork $work): array => $work->toCard());
-
         return Inertia::render('curtains/works', [
-            'works' => Inertia::scroll($works),
+            'works' => Inertia::scroll(fn () => $this->ordered(CurtainWork::query())
+                ->with('media')
+                ->paginate(self::PER_PAGE)
+                ->through(fn (CurtainWork $work): array => $work->toCard())),
         ]);
     }
 

@@ -55,6 +55,20 @@ test('the projects of a category load nine at a time', function () {
         ->assertInertia(fn (Assert $page) => $page->has('projects.data', 2));
 });
 
+test('loading more projects reloads only the projects', function () {
+    $homes = WorkCategory::factory()->create(['name' => 'Homes']);
+    Project::factory()->for($homes, 'category')->count(11)->create();
+
+    $this->get(route('work.show', ['category' => $homes, 'page' => 2]))
+        ->assertInertia(fn (Assert $page) => $page
+            ->reloadOnly('projects', fn (Assert $reload) => $reload
+                ->has('projects.data', 2)
+                ->missing('category')
+                ->missing('categories')
+            )
+        );
+});
+
 test('a tag narrows the category to the projects carrying it', function () {
     $homes = WorkCategory::factory()->create(['name' => 'Homes']);
     $villas = WorkTag::factory()->for($homes, 'category')->create(['name' => 'Villas']);
