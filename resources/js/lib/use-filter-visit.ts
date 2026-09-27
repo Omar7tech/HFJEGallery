@@ -1,4 +1,4 @@
-import { router } from '@inertiajs/react';
+import { progress, router } from '@inertiajs/react';
 import { useRef, useState } from 'react';
 
 interface FilterVisitOptions {
@@ -73,9 +73,22 @@ export function useFilterVisit({
             }
         };
 
+        const url = href(value);
+        // Tapped while its prefetch is still on the way (pressing the pill
+        // starts one), Inertia reuses that request but forces the top bar
+        // into view, whatever `showProgress` says. Hand it back to hidden
+        // for this visit only, balanced so the rest of the site keeps its bar.
+        const reusesPrefetch =
+            router.getPrefetching(url, { method: 'get', ...options }) !== null;
+        const restoreProgress = () => {
+            if (reusesPrefetch) {
+                progress.reveal();
+            }
+        };
+
         setPending(value);
         router.get(
-            href(value),
+            url,
             {},
             {
                 ...options,
@@ -85,8 +98,13 @@ export function useFilterVisit({
                     settle((page.props[activeProp] as string | null) ?? null),
                 onError: () => settle(undefined),
                 onCancel: () => settle(undefined),
+                onFinish: restoreProgress,
             },
         );
+
+        if (reusesPrefetch) {
+            progress.hide();
+        }
     };
 
     const prefetch = (value: string | null) => {
