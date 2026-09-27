@@ -36,12 +36,12 @@ const actions: Action[] = [
 
 function Curtains() {
     return (
-        <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:flex-col lg:py-10 lg:pr-16 lg:pl-0">
             <h2 className="max-w-4xl font-display text-[clamp(2rem,8cqi,3.5rem)] leading-[1.05] text-ink">
                 Curtains &amp; Textiles
             </h2>
 
-            <p className="mt-6 text-lg leading-[1.4] text-ink @lg:text-2xl">
+            <p className="mt-6 text-lg leading-[1.4] text-ink lg:mt-4 @lg:text-2xl">
                 The Finishing Layer Of Every Room.
             </p>
 
@@ -52,14 +52,14 @@ function Curtains() {
             </p>
 
             {/* Narrow portrait beside a wider fabric study — 3 / 4 of a 7-col grid. */}
-            <div className="mt-8 grid gap-3 @2xl:h-110 @2xl:grid-cols-7 @2xl:gap-5">
+            <div className="mt-8 grid gap-3 lg:mt-6 lg:min-h-0 lg:flex-[1_1_0] lg:grid-rows-[minmax(0,1fr)] @2xl:h-110 @2xl:grid-cols-7 @2xl:gap-5">
                 {gallery.map((shot) => (
                     <SmartImage
                         key={shot.src}
                         src={shot.src}
                         alt={shot.alt}
                         className={cn(
-                            'group min-w-0 rounded-2xl @2xl:aspect-auto @2xl:h-full @2xl:rounded-3xl',
+                            'group min-w-0 rounded-2xl lg:aspect-auto lg:h-full @2xl:aspect-auto @2xl:h-full @2xl:rounded-3xl',
                             shot.className,
                         )}
                         imgClassName="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none"
