@@ -83,19 +83,20 @@ const portfolio = [
         alt: 'Gray eyelet curtains on a decorative rail',
     },
 ];
+/** Works shown on this page; the rest will live on their own page. */
+const PREVIEW_WORKS = 8;
+
 const pill =
     'inline-flex min-h-11 items-center justify-center rounded-full bg-brand px-10 py-3.5 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
 export default function Curtains() {
     const heroVideo = useRef<HTMLVideoElement>(null);
     const [heroReady, setHeroReady] = useState(false);
-    const [expanded, setExpanded] = useState(false);
     const [activeStyle, setActiveStyle] = useState(0);
-    const [allStyles, setAllStyles] = useState(false);
-    const visibleWorks = portfolio.slice(0, expanded ? undefined : 8);
-    /** Two full rows fit one desktop screen; a single row or the expanded
-     * grid keeps its natural tile shape instead. */
-    const fitsScreen = !expanded && visibleWorks.length > 4;
+    const visibleWorks = portfolio.slice(0, PREVIEW_WORKS);
+    /** Two full rows fit one desktop screen; a single row keeps its natural
+     * tile shape instead. */
+    const fitsScreen = visibleWorks.length > 4;
 
     return (
         <>
@@ -229,20 +230,20 @@ export default function Curtains() {
                             </div>
                         ))}
                     </div>
-                    {portfolio.length > 8 && (
+                    {portfolio.length > PREVIEW_WORKS && (
                         <div
                             className={cn(
                                 'mt-10 text-center',
                                 fitsScreen && 'lg:mt-6',
                             )}
                         >
+                            {/* Will open the full portfolio page once it
+                                exists; does nothing until then. */}
                             <button
                                 type="button"
-                                onClick={() => setExpanded((value) => !value)}
-                                aria-expanded={expanded}
                                 className={cn(pill, 'min-w-[34%]')}
                             >
-                                {expanded ? 'View Less' : 'View More'}
+                                View More
                             </button>
                         </div>
                     )}
@@ -302,56 +303,18 @@ export default function Curtains() {
                         ))}
                     </div>
                     <div className="mt-5 text-center">
+                        {/* Will open the curtain styles page once it exists;
+                            does nothing until then. */}
                         <button
                             type="button"
                             className={cn(
                                 pill,
                                 'min-w-[56%] text-[clamp(0.7rem,1.7cqi,1.15rem)] uppercase',
                             )}
-                            aria-expanded={allStyles}
-                            aria-controls="all-curtain-styles"
-                            onClick={() => setAllStyles((value) => !value)}
                         >
-                            {allStyles
-                                ? 'Close Curtain Styles'
-                                : 'Explore All Curtain Styles'}
+                            Explore All Curtain Styles
                         </button>
                     </div>
-                    {allStyles && (
-                        <div
-                            id="all-curtain-styles"
-                            className="mt-8 grid grid-cols-2 gap-5 @lg:grid-cols-3"
-                        >
-                            {styles.map((style, index) => (
-                                <button
-                                    key={style.name}
-                                    type="button"
-                                    onClick={() => {
-                                        setActiveStyle(index);
-                                        document
-                                            .getElementById('curtain-styles')
-                                            ?.scrollIntoView({
-                                                block: 'start',
-                                            });
-                                    }}
-                                    className="text-left focus-visible:outline-2 focus-visible:outline-brand"
-                                >
-                                    <div className="aspect-[3/4] overflow-hidden rounded-2xl">
-                                        <CurtainImage
-                                            name={style.image}
-                                            alt={style.description}
-                                        />
-                                    </div>
-                                    <h3 className="mt-3 font-display text-sm text-brand">
-                                        {style.name}
-                                    </h3>
-                                    <p className="mt-2 font-sans text-sm text-ink/70">
-                                        {style.description}
-                                    </p>
-                                </button>
-                            ))}
-                        </div>
-                    )}
                 </section>
             </div>
         </>
