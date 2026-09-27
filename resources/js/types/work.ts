@@ -3,7 +3,7 @@ export interface WorkCategory {
     slug: string;
     name: string;
     description: string | null;
-    /** WebP thumbnail, or the placeholder. */
+    /** Full-size WebP (the cards are wide), or the placeholder. */
     image: string;
 }
 

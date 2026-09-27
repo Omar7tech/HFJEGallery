@@ -10,7 +10,7 @@ interface WorkCategoryCardProps {
 }
 
 /**
- * A category as a tall photo card: the name and project count sit on a soft
+ * A category as a landscape photo card: the name sits on a soft
  * ink gradient at the foot, and a terracotta arrow slides out on hover — the
  * same restrained language as the site's buttons.
  */
@@ -29,7 +29,7 @@ export default function WorkCategoryCard({
                 alt={category.name}
                 loading={eager ? 'eager' : 'lazy'}
                 fetchPriority={eager ? 'high' : undefined}
-                className="aspect-3/4 rounded-2xl md:rounded-3xl"
+                className="aspect-video rounded-2xl md:rounded-3xl lg:aspect-2/1"
                 imgClassName="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
             >
                 <span
@@ -37,22 +37,16 @@ export default function WorkCategoryCard({
                     className="pointer-events-none absolute inset-0 bg-linear-to-t from-ink/70 via-ink/10 to-transparent"
                 />
 
-                {/* Cards are two across on mobile and four on desktop, so the
-                    name stays small enough to keep "Restaurants" on one
-                    line at either width. */}
-                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-2 p-3 md:gap-3 md:p-4 xl:p-5">
-                    <span className="min-w-0 font-display text-[clamp(0.8rem,3.4vw,1.25rem)] leading-tight wrap-break-word text-white lg:text-[clamp(0.9rem,1.35vw,1.3rem)]">
+                <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 @lg:p-7">
+                    <span className="min-w-0 font-display text-[clamp(1.25rem,5.5vw,1.75rem)] leading-tight wrap-break-word text-white sm:text-[clamp(1.1rem,2.6vw,2.25rem)]">
                         {category.name}
                     </span>
 
                     <span
                         aria-hidden="true"
-                        className="grid size-8 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-transform duration-500 ease-out group-hover:rotate-45 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 md:size-10"
+                        className="grid size-10 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-transform duration-500 ease-out group-hover:rotate-45 motion-reduce:transition-none motion-reduce:group-hover:rotate-0 md:size-12"
                     >
-                        <ArrowUpRight
-                            className="size-4 md:size-5"
-                            strokeWidth={1.75}
-                        />
+                        <ArrowUpRight className="size-5" strokeWidth={1.75} />
                     </span>
                 </span>
             </SmartImage>

@@ -31,7 +31,7 @@ class WorkController extends Controller
                     'slug' => $category->slug,
                     'name' => $category->name,
                     'description' => $category->description,
-                    'image' => $category->imageUrl(),
+                    'image' => $category->imageUrl('webp'),
                 ])
                 ->all(),
         ]);
