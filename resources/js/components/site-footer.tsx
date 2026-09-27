@@ -98,7 +98,7 @@ export default function SiteFooter({ className }: { className?: string }) {
     return (
         <footer
             className={cn(
-                'relative flex min-h-dvh flex-col overflow-hidden bg-brand text-cream',
+                'relative flex min-h-dvh flex-col overflow-hidden bg-brand text-cream lg:h-dvh lg:min-h-[640px]',
                 className,
             )}
         >
@@ -111,44 +111,50 @@ export default function SiteFooter({ className }: { className?: string }) {
                 className="pointer-events-none absolute inset-0 bg-brand/45"
             />
 
-            <div className="relative z-10 flex grow flex-col">
-                {/* Warm hairline marks the top edge of the footer. */}
-                <div
-                    aria-hidden
-                    className="h-0.5 w-full bg-gradient-to-r from-cream/0 via-cream/60 to-cream/0"
-                />
+            {/* Warm hairline marks the top edge of the footer. */}
+            <div
+                aria-hidden
+                className="relative z-10 h-0.5 w-full bg-gradient-to-r from-cream/0 via-cream/60 to-cream/0"
+            />
 
-                <div className="mx-auto grid w-full max-w-7xl gap-12 px-6 pt-16 pb-12 sm:px-10 md:grid-cols-2 md:gap-16">
+            <div className="relative z-10 flex min-h-0 grow flex-col px-6 pt-14 pb-6 sm:px-10 lg:px-16 lg:pt-[clamp(2.5rem,7vh,4.5rem)]">
+                <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
                     {/* CTA */}
-                    <div className="max-w-md">
-                        <p className="font-display text-2xl leading-snug text-white sm:text-3xl">
+                    <div className="max-w-xl">
+                        <p className="text-xs font-semibold tracking-[0.25em] text-cream/60 uppercase">
+                            Start a project
+                        </p>
+                        <p className="mt-4 font-display text-[clamp(1.75rem,3.2vw,3rem)] leading-[1.15] text-white">
                             Let&rsquo;s craft something around you.
                         </p>
-                        <p className="mt-4 text-sm leading-relaxed text-cream/70">
+                        <p className="mt-4 text-base leading-relaxed text-cream/75">
                             Homes designed around the people who live in them.
                         </p>
                         <Link
                             href="/contact"
-                            className="group mt-8 inline-flex items-center gap-3 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors hover:text-cream"
+                            className="group mt-8 inline-flex items-center gap-3 rounded-full border border-cream/50 px-7 py-3.5 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors duration-300 ease-out hover:border-cream hover:bg-cream hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream motion-reduce:transition-none"
                         >
-                            Start a project
+                            Get in touch
                             <ArrowRight
-                                className="size-4 transition-transform duration-300 ease-out group-hover:translate-x-1"
+                                className="size-4 transition-transform duration-300 ease-out group-hover:translate-x-1 motion-reduce:transition-none"
                                 strokeWidth={2.5}
                             />
                         </Link>
                     </div>
 
                     {/* Link columns */}
-                    <div className="grid grid-cols-2 gap-8 sm:grid-cols-3">
+                    <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:pt-1">
                         {columns.map((column) => (
-                            <div key={column.title}>
-                                <h3 className="font-display text-sm tracking-[0.2em] text-white uppercase">
+                            <div key={column.title} className="min-w-0">
+                                <h3 className="text-xs font-semibold tracking-[0.25em] text-cream/60 uppercase">
                                     {column.title}
                                 </h3>
-                                <ul className="mt-4 flex flex-col gap-3">
+                                <ul className="mt-5 flex flex-col gap-3">
                                     {column.links.map((link) => (
-                                        <li key={link.label}>
+                                        <li
+                                            key={link.label}
+                                            className="break-words"
+                                        >
                                             <FooterLinkItem link={link} />
                                         </li>
                                     ))}
@@ -158,54 +164,46 @@ export default function SiteFooter({ className }: { className?: string }) {
                     </div>
                 </div>
 
-                {/* Flexible spacer pushes the legal bar + monogram to the bottom of
-                the full-height footer. */}
-                <div className="grow" />
-
-                <div className="border-t border-cream/20">
-                    <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-6 text-sm text-cream/60 sm:flex-row sm:items-end sm:justify-between sm:gap-6 sm:px-10">
-                        <div className="flex flex-col gap-2">
-                            <p>
-                                © {year} Home Fashion Jamaleddine. All rights
-                                reserved.
-                            </p>
-
-                            {/* Credit — studio wordmark sits inline with the label. */}
-                            <a
-                                href="https://yamencreates.com"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="group flex w-fit items-center gap-2.5 text-xs tracking-[0.2em] uppercase transition-colors hover:text-white"
-                            >
-                                Crafted by
-                                <img
-                                    src="/logos/yamenlogo.svg"
-                                    alt="Yamen"
-                                    className="h-3 w-auto"
-                                />
-                            </a>
-                        </div>
-
-                        <div className="flex gap-5">
-                            <Link
-                                href="/privacy"
-                                className="transition-colors hover:text-white"
-                            >
-                                Privacy
-                            </Link>
-                            <Link
-                                href="/terms"
-                                className="transition-colors hover:text-white"
-                            >
-                                Terms
-                            </Link>
-                        </div>
-                    </div>
+                {/* Oversized HFJE monogram — takes whatever height is left on
+                    desktop so the whole footer fits one screen. */}
+                <div className="mt-14 flex grow items-end lg:mt-10 lg:min-h-0">
+                    <FooterMonogram className="lg:h-full lg:max-h-[22rem]" />
                 </div>
 
-                {/* Oversized HFJE monogram — draws itself in as the footer appears. */}
-                <div className="px-6 pt-8 pb-8 sm:px-10 sm:pb-10">
-                    <FooterMonogram />
+                <div className="mt-8 flex flex-col gap-4 border-t border-cream/20 pt-5 text-sm text-cream/60 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+                    <p>
+                        © {year} Home Fashion Jamaleddine. All rights reserved.
+                    </p>
+
+                    <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+                        <Link
+                            href="/privacy"
+                            className="transition-colors hover:text-white"
+                        >
+                            Privacy
+                        </Link>
+                        <Link
+                            href="/terms"
+                            className="transition-colors hover:text-white"
+                        >
+                            Terms
+                        </Link>
+
+                        {/* Credit — studio wordmark sits inline with the label. */}
+                        <a
+                            href="https://yamencreates.com"
+                            target="_blank"
+                            rel="noreferrer"
+                            className="group flex w-fit items-center gap-2.5 text-xs tracking-[0.2em] uppercase transition-colors hover:text-white"
+                        >
+                            Crafted by
+                            <img
+                                src="/logos/yamenlogo.svg"
+                                alt="Yamen"
+                                className="h-3 w-auto"
+                            />
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>
