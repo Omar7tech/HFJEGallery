@@ -2,8 +2,10 @@
 
 use App\Filament\Resources\Projects\Pages\EditProject;
 use App\Filament\Resources\Projects\ProjectResource;
-use App\Filament\Resources\WorkCategories\Pages\EditWorkCategory;
 use App\Filament\Resources\WorkCategories\WorkCategoryResource;
+use App\Filament\Resources\WorkTags\Pages\CreateWorkTag;
+use App\Filament\Resources\WorkTags\Pages\EditWorkTag;
+use App\Filament\Resources\WorkTags\WorkTagResource;
 use App\Models\Project;
 use App\Models\User;
 use App\Models\WorkCategory;
@@ -30,18 +32,76 @@ test('category and project pages render with tags', function () {
     $this->get(ProjectResource::getUrl('edit', ['record' => $project]))->assertSuccessful();
 });
 
-test('a category saves its tags in the order they are listed', function () {
-    $homes = WorkCategory::factory()->create(['name' => 'Homes']);
+test('tag pages render', function () {
+    $tag = WorkTag::factory()->create();
 
-    Livewire::test(EditWorkCategory::class, ['record' => $homes->getRouteKey()])
-        ->set('data.tags', [
-            ['name' => 'Villas'],
-            ['name' => 'Seaside'],
+    $this->get(WorkTagResource::getUrl('index'))->assertSuccessful();
+    $this->get(WorkTagResource::getUrl('create'))->assertSuccessful();
+    $this->get(WorkTagResource::getUrl('edit', ['record' => $tag]))->assertSuccessful();
+});
+
+test('a tag is created under a category with the projects picked for it', function () {
+    $homes = WorkCategory::factory()->create();
+    $project = Project::factory()->for($homes, 'category')->create();
+
+    Livewire::test(CreateWorkTag::class)
+        ->fillForm([
+            'work_category_id' => $homes->id,
+            'name' => 'Villas',
+            'projects' => [$project->id],
         ])
+        ->call('create')
+        ->assertHasNoFormErrors();
+
+    $tag = WorkTag::query()->sole();
+
+    expect($tag->category->is($homes))->toBeTrue()
+        ->and($tag->slug)->toBe('villas')
+        ->and($tag->projects->modelKeys())->toBe([$project->id]);
+});
+
+test('a tag can be renamed and moved to another category', function () {
+    $homes = WorkCategory::factory()->create();
+    $apartments = WorkCategory::factory()->create();
+    $tag = WorkTag::factory()->for($homes, 'category')->create(['name' => 'Villas']);
+    $tag->projects()->attach(Project::factory()->for($homes, 'category')->create());
+
+    Livewire::test(EditWorkTag::class, ['record' => $tag->getRouteKey()])
+        ->set('data.work_category_id', $apartments->id)
+        ->assertSchemaStateSet(['projects' => []])
+        ->fillForm(['name' => 'Lofts'])
         ->call('save')
         ->assertHasNoFormErrors();
 
-    expect($homes->tags()->pluck('name')->all())->toBe(['Villas', 'Seaside']);
+    $tag->refresh();
+
+    expect($tag->name)->toBe('Lofts')
+        ->and($tag->category->is($apartments))->toBeTrue()
+        ->and($tag->projects)->toBeEmpty();
+});
+
+test('a project moved to another category drops the tags of the old one', function () {
+    $homes = WorkCategory::factory()->create();
+    $apartments = WorkCategory::factory()->create();
+    $project = Project::factory()->for($homes, 'category')->create();
+    $project->tags()->attach(WorkTag::factory()->for($homes, 'category')->create());
+
+    Livewire::test(EditProject::class, ['record' => $project->getRouteKey()])
+        ->set('data.work_category_id', $apartments->id)
+        ->call('save')
+        ->assertHasNoFormErrors();
+
+    expect($project->tags()->count())->toBe(0);
+});
+
+test('a category cannot have the same tag twice', function () {
+    $homes = WorkCategory::factory()->create();
+    WorkTag::factory()->for($homes, 'category')->create(['name' => 'Villas']);
+
+    Livewire::test(CreateWorkTag::class)
+        ->fillForm(['work_category_id' => $homes->id, 'name' => 'Villas'])
+        ->call('create')
+        ->assertHasFormErrors(['name' => 'unique']);
 });
 
 test('a project saves the tags picked for it', function () {

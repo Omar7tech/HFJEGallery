@@ -37,6 +37,21 @@ class WorkTag extends Model
     }
 
     /**
+     * A tag only ever holds projects of its own category: moving it to another
+     * category lets go of the projects it carried in the old one.
+     */
+    protected static function booted(): void
+    {
+        static::updated(function (WorkTag $tag): void {
+            if ($tag->wasChanged('work_category_id')) {
+                $tag->projects()->detach(
+                    $tag->projects()->whereNot('work_category_id', $tag->work_category_id)->pluck('projects.id'),
+                );
+            }
+        });
+    }
+
+    /**
      * Slugs only need to be unique within their category: two categories may
      * both have a "Modern" tag.
      */

@@ -40,6 +40,21 @@ class Project extends Model implements HasMedia
     }
 
     /**
+     * A project only carries tags of its own category: moving it to another
+     * category drops the tags of the old one.
+     */
+    protected static function booted(): void
+    {
+        static::updated(function (Project $project): void {
+            if ($project->wasChanged('work_category_id')) {
+                $project->tags()->detach(
+                    $project->tags()->whereNot('work_category_id', $project->work_category_id)->pluck('work_tags.id'),
+                );
+            }
+        });
+    }
+
+    /**
      * The cover in the given conversion, falling back to the placeholder.
      */
     public function coverUrl(string $conversion = 'thumb'): string
