@@ -54,6 +54,7 @@ export default function ProjectGallery({
             <div className="nav-scroll -mx-5 flex snap-x snap-mandatory gap-3 overflow-x-auto px-5 pb-2 md:-mx-8 md:px-8 @3xl:hidden">
                 {images.map((image, index) => (
                     <button
+                        data-no-press
                         key={image.src}
                         type="button"
                         onClick={() => setOpen(index)}
@@ -78,6 +79,7 @@ export default function ProjectGallery({
 
                         return (
                             <button
+                                data-no-press
                                 key={image.src}
                                 type="button"
                                 onClick={() => setOpen(index)}

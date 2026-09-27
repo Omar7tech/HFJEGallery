@@ -46,7 +46,7 @@ const sections: LegalSection[] = [
             },
             {
                 type: 'text',
-                text: 'You may view and print pages for your own reference. Any other use — including reproduction, adaptation, or commercial use of our imagery or designs — requires our prior written consent.',
+                text: 'You may view and print pages for your own reference. Any other use, including reproduction, adaptation, or commercial use of our imagery or designs, requires our prior written consent.',
             },
         ],
     },

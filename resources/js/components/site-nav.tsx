@@ -1,12 +1,13 @@
 import { useGSAP } from '@gsap/react';
 import { Link, usePage } from '@inertiajs/react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useEffect, useRef, useState } from 'react';
 import BrandFooterLogo from '@/components/brand-footer-logo';
 import Logo from '@/components/logo';
 import { cn } from '@/lib/utils';
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 type NavItem = {
     label: string;
@@ -292,8 +293,10 @@ export function NavBar({
     }, [open]);
 
     // Fill the connector line to match page scroll progress (top → bottom).
+    // ScrollTrigger batches the reads and re-measures on resize by itself, and
+    // the context reverts it when the page changes.
     useGSAP(
-        (_, contextSafe) => {
+        () => {
             const fill = progressRef.current;
 
             if (!scrollProgress || !fill) {
@@ -302,21 +305,13 @@ export function NavBar({
 
             gsap.set(fill, { transformOrigin: 'left center' });
             const setScaleX = gsap.quickSetter(fill, 'scaleX');
-            const update = contextSafe!(() => {
-                const doc = document.documentElement;
-                const max = doc.scrollHeight - doc.clientHeight;
-                const progress = max > 0 ? doc.scrollTop / max : 0;
-                setScaleX(gsap.utils.clamp(0, 1, progress));
+
+            const trigger = ScrollTrigger.create({
+                start: 0,
+                end: 'max',
+                onUpdate: (self) => setScaleX(self.progress),
             });
-
-            update();
-            window.addEventListener('scroll', update, { passive: true });
-            window.addEventListener('resize', update);
-
-            return () => {
-                window.removeEventListener('scroll', update);
-                window.removeEventListener('resize', update);
-            };
+            setScaleX(trigger.progress);
         },
         { scope: barRef, dependencies: [url, scrollProgress] },
     );

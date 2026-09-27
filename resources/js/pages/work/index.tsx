@@ -43,7 +43,7 @@ export default function WorkIndex({
                         ))}
                     </div>
                 ) : (
-                    <p className="mt-10 rounded-3xl bg-[#f2f1ef] px-6 py-16 text-center font-sans text-base text-ink/60">
+                    <p className="mt-10 rounded-3xl bg-surface px-6 py-16 text-center font-sans text-base text-ink/60">
                         Our portfolio is being photographed. Check back soon.
                     </p>
                 )}

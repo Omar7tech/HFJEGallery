@@ -57,7 +57,7 @@ export default function LivingEdit({
             <Head title="Living Edit" />
 
             <section className="w-full px-4 pt-9 pb-4 font-display md:px-8 lg:pt-[52px] lg:pr-7 lg:pl-0">
-                <div className="mx-auto flex min-h-[630px] w-full flex-col items-center rounded-[30px] bg-[#f4f4f4] px-5 pt-8 pb-9 text-[#171915] shadow-[0_3px_12px_rgba(0,0,0,0.12)] sm:px-10 sm:pt-10">
+                <div className="mx-auto flex min-h-[630px] w-full flex-col items-center rounded-[30px] bg-pill px-5 pt-8 pb-9 text-[#171915] shadow-[0_3px_12px_rgba(0,0,0,0.12)] sm:px-10 sm:pt-10">
                     <h1 className="text-center text-[clamp(1.5rem,3.4vw,2.25rem)] leading-[1.4] tracking-[-0.045em]">
                         The Living Edit
                     </h1>
@@ -91,8 +91,8 @@ export default function LivingEdit({
                                         className={cn(
                                             '@container flex aspect-[1.6] w-full items-center justify-center rounded-[20px] border border-white/65 shadow-[0_3px_4px_rgba(0,0,0,0.16)] transition-[background-color,border-color,color,scale] duration-300 ease-out peer-focus-visible:outline-2 peer-focus-visible:outline-offset-4 peer-focus-visible:outline-brand motion-safe:group-active:scale-[0.98] motion-reduce:transition-none',
                                             space?.id === id
-                                                ? 'border-[#ad6844] bg-[#ad6844] text-[#f4f4f4]'
-                                                : 'bg-[#f4f4f4] text-[#ad6844] group-hover:bg-[#ece7e3]',
+                                                ? 'border-brand bg-brand text-pill'
+                                                : 'bg-pill text-brand group-hover:bg-pill-hover',
                                         )}
                                     >
                                         {icon ? (
@@ -124,7 +124,7 @@ export default function LivingEdit({
                         type="button"
                         onClick={() => goTo('step-1')}
                         disabled={!space}
-                        className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-[#ad6844] px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-[#ad6844] motion-safe:active:scale-[0.98] motion-reduce:transition-none max-sm:mt-10"
+                        className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-brand px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-brand motion-safe:active:scale-[0.98] motion-reduce:transition-none max-sm:mt-10"
                     >
                         NEXT
                     </button>

@@ -26,6 +26,25 @@ interface WorkShowProps {
 /** Covers in the first row fetch with the page; the rest wait for the scroll. */
 const EAGER_CARDS = 3;
 
+/** Placeholders shown while a switch loads: two rows of the widest grid. */
+const SKELETON_CARDS = 6;
+
+const GRID_CLASS =
+    'grid gap-x-4 gap-y-10 @xl:grid-cols-2 @2xl:gap-x-5 @4xl:grid-cols-3';
+
+/** The outline of a project card: its cover, name and details. */
+function ProjectCardSkeleton() {
+    return (
+        <div>
+            <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-cream/60 @3xl:rounded-3xl">
+                <span className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-white/45 to-transparent motion-reduce:hidden" />
+            </div>
+            <div className="mt-4 h-5 w-3/5 rounded-full bg-cream/60" />
+            <div className="mt-2.5 h-4 w-2/5 rounded-full bg-cream/40" />
+        </div>
+    );
+}
+
 /** A category page, optionally narrowed to one of its tags. */
 function tagHref(categorySlug: string, tagSlug?: string | null): string {
     return tagSlug
@@ -100,6 +119,10 @@ export default function WorkShow({
     const [pendingTag, setPendingTag] = useState<string | null | undefined>();
     const filtering = pendingTag !== undefined;
     const shownTag = filtering ? pendingTag : activeTag;
+    // The category being opened, underlined straight away while it loads.
+    const [pendingCategory, setPendingCategory] = useState<string | null>(null);
+    const shownCategory = pendingCategory ?? category.slug;
+    const loading = filtering || pendingCategory !== null;
 
     const current = categories.find((item) => item.slug === category.slug);
     const tags = current?.tags ?? [];
@@ -124,6 +147,24 @@ export default function WorkShow({
                 preserveScroll: true,
                 showProgress: false,
                 onFinish: () => setPendingTag(undefined),
+            },
+        );
+    };
+
+    /** Opens another category quietly, without the top progress bar. */
+    const openCategory = (categorySlug: string) => {
+        if (categorySlug === shownCategory) {
+            return;
+        }
+
+        setPendingCategory(categorySlug);
+        router.get(
+            tagHref(categorySlug),
+            {},
+            {
+                preserveScroll: true,
+                showProgress: false,
+                onFinish: () => setPendingCategory(null),
             },
         );
     };
@@ -194,27 +235,17 @@ export default function WorkShow({
                     >
                         <ul className="flex min-w-max gap-7 border-b border-ink/10 @lg:gap-10">
                             {categories.map((item) => {
-                                const active = item.slug === category.slug;
+                                const active = item.slug === shownCategory;
 
                                 return (
                                     <li key={item.slug}>
                                         <Link
                                             href={tagHref(item.slug)}
                                             prefetch
-                                            // Visited by hand to hide the
-                                            // progress bar: the page swaps
-                                            // quietly, like the tag pills.
                                             onClick={(event) => {
                                                 if (isPlainClick(event)) {
                                                     event.preventDefault();
-                                                    router.get(
-                                                        tagHref(item.slug),
-                                                        {},
-                                                        {
-                                                            preserveScroll: true,
-                                                            showProgress: false,
-                                                        },
-                                                    );
+                                                    openCategory(item.slug);
                                                 }
                                             }}
                                             aria-current={
@@ -295,32 +326,61 @@ export default function WorkShow({
                             )
                         }
                     >
-                        {/* Dims while a filter loads, so the old projects
-                            don't read as the answer. */}
-                        <div
-                            ref={grid}
-                            aria-busy={filtering}
-                            className={cn(
-                                'mt-8 grid gap-x-4 gap-y-10 transition-opacity duration-300 motion-reduce:transition-none @xl:grid-cols-2 @2xl:gap-x-5 @4xl:grid-cols-3',
-                                filtering && 'pointer-events-none opacity-40',
-                            )}
-                        >
-                            {projects.data.map((project, index) => (
-                                <ProjectCard
-                                    key={project.slug}
-                                    categorySlug={category.slug}
-                                    project={project}
-                                    eager={index < EAGER_CARDS}
-                                    // On a filtered grid, only the tags
-                                    // besides the one filtered by.
-                                    showTags={tags.length > 0}
-                                    hideTag={activeTagName}
-                                />
-                            ))}
+                        {/* While another category or tag loads, the cards
+                            give way to skeletons of the same shape. Both
+                            swaps wait a moment, so a prefetched switch that
+                            lands at once never flashes them. */}
+                        <div className="relative mt-8">
+                            <div
+                                aria-hidden="true"
+                                className={cn(
+                                    'pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-200 motion-reduce:transition-none',
+                                    loading
+                                        ? 'opacity-100 delay-150'
+                                        : 'opacity-0',
+                                )}
+                            >
+                                <div className={GRID_CLASS}>
+                                    {Array.from(
+                                        {
+                                            length: Math.min(
+                                                projects.data.length,
+                                                SKELETON_CARDS,
+                                            ),
+                                        },
+                                        (_, index) => (
+                                            <ProjectCardSkeleton key={index} />
+                                        ),
+                                    )}
+                                </div>
+                            </div>
+                            <div
+                                ref={grid}
+                                aria-busy={loading}
+                                className={cn(
+                                    GRID_CLASS,
+                                    'transition-opacity duration-200 motion-reduce:transition-none',
+                                    loading &&
+                                        'pointer-events-none opacity-0 delay-150',
+                                )}
+                            >
+                                {projects.data.map((project, index) => (
+                                    <ProjectCard
+                                        key={project.slug}
+                                        categorySlug={category.slug}
+                                        project={project}
+                                        eager={index < EAGER_CARDS}
+                                        // On a filtered grid, only the tags
+                                        // besides the one filtered by.
+                                        showTags={tags.length > 0}
+                                        hideTag={activeTagName}
+                                    />
+                                ))}
+                            </div>
                         </div>
                     </InfiniteScroll>
                 ) : (
-                    <p className="mt-6 rounded-3xl bg-[#f2f1ef] px-6 py-16 text-center font-sans text-base text-ink/60">
+                    <p className="mt-6 rounded-3xl bg-surface px-6 py-16 text-center font-sans text-base text-ink/60">
                         {activeTag
                             ? 'No projects under this tag yet.'
                             : 'Projects are being photographed. Check back soon.'}

@@ -314,6 +314,7 @@ function StepZone({
 
     return (
         <button
+            data-no-press
             type="button"
             onClick={(event) => {
                 event.stopPropagation();

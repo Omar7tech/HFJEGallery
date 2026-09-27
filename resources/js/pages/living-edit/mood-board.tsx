@@ -66,7 +66,7 @@ function BoardStatusControl({
 
     if (status === 'loading') {
         return (
-            <span className={cn(pill, 'bg-[#f4f4f4] text-[#ad6844]')}>
+            <span className={cn(pill, 'bg-pill text-brand')}>
                 <LoaderCircle
                     aria-hidden="true"
                     size={13}
@@ -83,10 +83,7 @@ function BoardStatusControl({
                 type="button"
                 onClick={onShuffle}
                 title="Show other matching images"
-                className={cn(
-                    pill,
-                    'bg-[#f4f4f4] text-[#ad6844] hover:bg-[#ece7e3]',
-                )}
+                className={cn(pill, 'bg-pill text-brand hover:bg-pill-hover')}
             >
                 <Shuffle aria-hidden="true" size={13} /> Shuffle
             </button>
@@ -99,7 +96,7 @@ function BoardStatusControl({
                 <span className="flex items-center gap-1">
                     <span
                         aria-hidden="true"
-                        className="size-1.5 rounded-full bg-[#ad6844]"
+                        className="size-1.5 rounded-full bg-brand"
                     />
                     {status === 'stale' ? 'Choices changed' : 'Could not load'}
                 </span>
@@ -108,7 +105,7 @@ function BoardStatusControl({
                     onClick={onShow}
                     className={cn(
                         pill,
-                        'bg-[#ad6844] text-white hover:bg-brand-hover',
+                        'bg-brand text-white hover:bg-brand-hover',
                     )}
                 >
                     <RefreshCw aria-hidden="true" size={13} />
@@ -184,7 +181,7 @@ function SaveImageButton({
             disabled={!isAvailable || saveState === 'saving'}
             title={hint}
             aria-live="polite"
-            className="inline-flex min-h-9 min-w-40 items-center justify-center gap-1.5 rounded-full bg-[#f4f4f4] px-5 py-1.5 text-xs text-[#ad6844] transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-[#ece7e3] disabled:cursor-default disabled:opacity-60"
+            className="inline-flex min-h-9 min-w-40 items-center justify-center gap-1.5 rounded-full bg-pill px-5 py-1.5 text-xs text-brand transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-pill-hover disabled:cursor-default disabled:opacity-60"
         >
             {saveState === 'saving' ? (
                 <>
@@ -293,7 +290,7 @@ export default function LivingMoodBoard({
 
     return (
         <section className="@container px-5 pt-9 pb-8 text-[#191b17] md:px-8 lg:pt-[52px] lg:pr-8 lg:pl-0">
-            <header className="grid gap-5 border-b border-[#bd7959] pb-6 @2xl:grid-cols-[1.04fr_1fr] @2xl:gap-10">
+            <header className="grid gap-5 border-b border-brand/75 pb-6 @2xl:grid-cols-[1.04fr_1fr] @2xl:gap-10">
                 <div className="font-display">
                     <p className="text-[clamp(0.7rem,2.5cqi,1rem)] leading-relaxed whitespace-nowrap">
                         HFJE LIVING COLLECTIONS
@@ -356,8 +353,8 @@ export default function LivingMoodBoard({
                                     className={cn(
                                         'flex aspect-square min-w-0 flex-col items-center justify-center gap-[8%] rounded-xl p-2 text-center text-[clamp(0.625rem,1.5cqi,0.8125rem)] leading-none transition-[background-color,color,opacity,scale] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-60 motion-safe:enabled:active:scale-[0.97] motion-reduce:transition-none',
                                         selected.includes(id)
-                                            ? 'bg-[#ad6844] text-white'
-                                            : 'bg-[#f3f3f3] text-[#ad6844] enabled:hover:bg-[#ece7e3]',
+                                            ? 'bg-brand text-white'
+                                            : 'bg-pill text-brand enabled:hover:bg-pill-hover',
                                     )}
                                 >
                                     <MarqueeText className="w-full leading-normal">
@@ -373,7 +370,7 @@ export default function LivingMoodBoard({
                             ))}
                         </div>
                     </fieldset>
-                    <p className="mt-8 border-b border-[#bd7959] pb-2 text-[clamp(0.75rem,1.4cqi,0.875rem)]">
+                    <p className="mt-8 border-b border-brand/75 pb-2 text-[clamp(0.75rem,1.4cqi,0.875rem)]">
                         Select Up To {MAX_STEP_SELECTIONS}
                     </p>
                     <div className="mt-5 flex items-center justify-between px-2">
@@ -393,7 +390,7 @@ export default function LivingMoodBoard({
                                         : showBoard
                                 }
                                 disabled={selected.length === 0 || isBoardBusy}
-                                className="inline-flex min-h-9 min-w-44 items-center justify-center gap-2 rounded-lg bg-[#ad6844] px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default disabled:opacity-80"
+                                className="inline-flex min-h-9 min-w-44 items-center justify-center gap-2 rounded-lg bg-brand px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default disabled:opacity-80"
                             >
                                 {isBoardBusy ? (
                                     <LoaderCircle
@@ -413,7 +410,7 @@ export default function LivingMoodBoard({
                                 type="button"
                                 onClick={onContinue}
                                 disabled={!onContinue || selected.length === 0}
-                                className="min-h-9 rounded-lg bg-[#ad6844] px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default"
+                                className="min-h-9 rounded-lg bg-brand px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default"
                             >
                                 Continue
                             </button>
@@ -476,7 +473,7 @@ export default function LivingMoodBoard({
             <div className="mt-[50px] flex justify-center">
                 <Link
                     href="/contact"
-                    className="rounded-full bg-[#ad6844] px-6 py-3 font-display text-[11px] text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                    className="rounded-full bg-brand px-6 py-3 font-display text-[11px] text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
                 >
                     Book a Consulting Call
                 </Link>

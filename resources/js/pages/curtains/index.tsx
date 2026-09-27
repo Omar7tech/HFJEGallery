@@ -84,7 +84,7 @@ const portfolio = [
     },
 ];
 const pill =
-    'inline-flex min-h-11 items-center justify-center rounded-full bg-[#ad6844] px-10 py-3.5 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
+    'inline-flex min-h-11 items-center justify-center rounded-full bg-brand px-10 py-3.5 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
 export default function Curtains() {
     const heroVideo = useRef<HTMLVideoElement>(null);
@@ -170,7 +170,7 @@ export default function Curtains() {
                     )}
                 >
                     <div className="flex flex-col justify-between gap-6 @lg:flex-row @lg:items-start">
-                        <h2 className="font-display text-[clamp(1.5rem,3.8cqi,2.6rem)] leading-[1.2] tracking-[-0.045em] text-[#ad6844]">
+                        <h2 className="font-display text-[clamp(1.5rem,3.8cqi,2.6rem)] leading-[1.2] tracking-[-0.045em] text-brand">
                             Shaping Light.
                             <br />
                             Completing

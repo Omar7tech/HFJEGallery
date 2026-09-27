@@ -123,8 +123,8 @@ export default function BayteProductCard({
             whileHover={reducedMotion ? undefined : { scale: 1.025 }}
             transition={SPRING}
             className={cn(
-                'group relative z-0 flex flex-col rounded-2xl bg-[#f2f1ef] p-5 will-change-transform [perspective:1100px] transform-3d hover:z-10',
-                'transition-colors duration-500 ease-out hover:bg-[#f5f4f1] motion-reduce:transition-none',
+                'group relative z-0 flex flex-col rounded-2xl bg-surface p-5 will-change-transform [perspective:1100px] transform-3d hover:z-10',
+                'transition-colors duration-500 ease-out hover:bg-surface-hover motion-reduce:transition-none',
                 className,
             )}
         >

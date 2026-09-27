@@ -326,7 +326,7 @@ export async function renderMoodBoardImage(
     const choiceLines = choices.map((choice) =>
         wrapText(
             context,
-            choice.values.length > 0 ? choice.values.join(', ') : '—',
+            choice.values.length > 0 ? choice.values.join(', ') : '-',
             columnWidth,
             SIZES.choiceValueLines,
         ),

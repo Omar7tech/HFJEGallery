@@ -23,7 +23,7 @@ export default function BayteCatalogueCard({
     src,
 }: BayteCatalogueCardProps) {
     return (
-        <article className="group flex flex-col rounded-2xl bg-[#f2f1ef] p-5 transition-[background-color,box-shadow,transform] duration-500 ease-out hover:-translate-y-1 hover:bg-[#f5f4f1] hover:shadow-[0_26px_50px_-34px_rgba(74,48,32,0.6)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+        <article className="group flex flex-col rounded-2xl bg-surface p-5 transition-[background-color,box-shadow,transform] duration-500 ease-out hover:-translate-y-1 hover:bg-surface-hover hover:shadow-[0_26px_50px_-34px_rgba(74,48,32,0.6)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
             <div className="flex items-start justify-between gap-4">
                 <div className="min-w-0">
                     <h3 className="text-xl leading-tight text-ink">{name}</h3>

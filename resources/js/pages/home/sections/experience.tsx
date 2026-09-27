@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import CountUp from '@/components/count-up';
 import { SmartImage } from '@/components/smart-image';
 import { yearsOfExperience } from '@/lib/experience';
@@ -42,12 +43,12 @@ function Experience() {
                         and personalized design.
                     </p>
 
-                    <button
-                        type="button"
-                        className="mt-8 rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground lg:pr-20"
+                    <Link
+                        href="/contact"
+                        className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand lg:pr-20"
                     >
-                        Contact Us
-                    </button>
+                        Get in touch
+                    </Link>
                 </div>
             </div>
 

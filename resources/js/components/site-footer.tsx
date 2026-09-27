@@ -12,7 +12,6 @@ const staticColumns: { title: string; links: FooterLink[] }[] = [
         links: [
             { label: 'Home', href: '/' },
             { label: 'Work', href: '/work' },
-            { label: 'BAYTÉ', href: '/bayte' },
             { label: 'About', href: '/about' },
             { label: 'Contact', href: '/contact' },
         ],
@@ -20,9 +19,9 @@ const staticColumns: { title: string; links: FooterLink[] }[] = [
     {
         title: 'Studio',
         links: [
-            { label: 'Projects', href: '/work' },
-            { label: 'Craftsmanship', href: '/about' },
-            { label: 'Materials', href: '/about' },
+            { label: 'Curtains', href: '/curtains' },
+            { label: 'BAYTÉ', href: '/bayte' },
+            { label: 'Living Edit', href: '/living-edit' },
         ],
     },
 ];

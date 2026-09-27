@@ -1,4 +1,3 @@
-import { Loader2 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
@@ -19,7 +18,7 @@ interface SmartImageProps {
 }
 
 /**
- * An image that shows a terracotta spinner over a cream placeholder while it
+ * An image that shows a shimmering cream placeholder while it
  * loads, then fades in. The wrapper takes the layout/size classes; the image
  * fills it.
  */
@@ -46,12 +45,14 @@ export function SmartImage({
         <span className={cn('relative block overflow-hidden', className)}>
             {!loaded && (
                 <span
+                    aria-hidden="true"
                     className={cn(
-                        'absolute inset-0 grid place-items-center',
+                        'absolute inset-0 overflow-hidden',
                         placeholderClassName,
                     )}
                 >
-                    <Loader2 className="size-6 animate-spin text-brand/60" />
+                    {/* A band of light sweeping across, still under reduced motion. */}
+                    <span className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-white/45 to-transparent motion-reduce:hidden" />
                 </span>
             )}
 

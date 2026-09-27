@@ -33,9 +33,9 @@ const sections: LegalSection[] = [
             {
                 type: 'list',
                 items: [
-                    'Details you give us — your name, email address, phone number, and anything you write in an enquiry or send us about a project.',
-                    'Project information — measurements, photographs, drawings, and preferences you share while we prepare a proposal.',
-                    'Technical information — IP address, browser and device type, pages viewed, and referring site, collected automatically when you visit.',
+                    'Details you give us: your name, email address, phone number, and anything you write in an enquiry or send us about a project.',
+                    'Project information: measurements, photographs, drawings, and preferences you share while we prepare a proposal.',
+                    'Technical information: IP address, browser and device type, pages viewed, and referring site, collected automatically when you visit.',
                 ],
             },
             {
@@ -134,7 +134,7 @@ const sections: LegalSection[] = [
                     'Confirm what personal information we hold about you and provide a copy.',
                     'Correct information that is inaccurate or incomplete.',
                     'Delete information we no longer need to keep.',
-                    'Stop sending you studio updates — every message includes an unsubscribe link.',
+                    'Stop sending you studio updates. Every message includes an unsubscribe link.',
                 ],
             },
             {

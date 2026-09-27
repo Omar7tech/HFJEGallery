@@ -141,7 +141,7 @@ export default function BayteIndex({
             <Head title="BAYTÉ">
                 <meta
                     name="description"
-                    content="BAYTÉ by HFJE — furniture designed for modern Lebanese homes."
+                    content="BAYTÉ by HFJE: furniture designed for modern Lebanese homes."
                 />
             </Head>
 
@@ -219,7 +219,7 @@ export default function BayteIndex({
                         ))}
                     </div>
                 ) : (
-                    <p className="mt-6 rounded-2xl bg-[#f2f1ef] px-6 py-16 text-center font-display text-base text-ink/60">
+                    <p className="mt-6 rounded-2xl bg-surface px-6 py-16 text-center font-display text-base text-ink/60">
                         The collection is being photographed. Check back soon.
                     </p>
                 )}
