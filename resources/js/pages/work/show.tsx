@@ -50,7 +50,7 @@ export default function WorkShow({
                 >
                     <span
                         aria-hidden="true"
-                        className="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/60 via-ink/5 to-transparent"
+                        className="pointer-events-none absolute inset-0 bg-linear-to-t from-ink/70 via-ink/15 to-transparent"
                     />
                     <span className="absolute inset-x-0 bottom-0 p-6 @lg:p-10">
                         <Link
@@ -63,50 +63,52 @@ export default function WorkShow({
                         <h1 className="mt-3 font-display text-[clamp(2rem,7.5cqi,5.5rem)] leading-[1.05] tracking-[-0.02em] text-white uppercase">
                             {category.name}
                         </h1>
+                        {category.description && (
+                            <p className="mt-3 max-w-xl font-sans text-base leading-relaxed text-cream/90">
+                                {category.description}
+                            </p>
+                        )}
                     </span>
                 </SmartImage>
 
-                <div className="mt-8 flex flex-col gap-6 @3xl:flex-row @3xl:items-start @3xl:justify-between">
-                    {category.description && (
-                        <p className="max-w-xl font-sans text-base leading-relaxed text-brand">
-                            {category.description}
-                        </p>
-                    )}
-
-                    {categories.length > 1 && (
-                        <nav
-                            aria-label="Work categories"
-                            className="nav-scroll -mx-5 flex snap-x gap-2 overflow-x-auto px-5 pb-2 md:-mx-8 md:px-8 @3xl:mx-0 @3xl:flex-wrap @3xl:justify-end @3xl:overflow-visible @3xl:px-0"
-                        >
+                {/* Switch between categories: plain text tabs, the active
+                    one underlined in terracotta. Scrolls sideways on
+                    phones when the names don't fit. */}
+                {categories.length > 1 && (
+                    <nav
+                        aria-label="Work categories"
+                        className="nav-scroll -mx-5 mt-8 overflow-x-auto px-5 md:-mx-8 md:px-8 lg:mr-0 lg:ml-0 lg:px-0"
+                    >
+                        <ul className="flex min-w-max gap-7 border-b border-ink/10 @lg:gap-10">
                             {categories.map((item) => {
                                 const active = item.slug === category.slug;
 
                                 return (
-                                    <Link
-                                        key={item.slug}
-                                        href={`/work/${item.slug}`}
-                                        prefetch
-                                        aria-current={
-                                            active ? 'page' : undefined
-                                        }
-                                        className={cn(
-                                            'inline-flex h-10 shrink-0 snap-start items-center rounded-full border px-4 text-sm whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
-                                            active
-                                                ? 'border-brand bg-brand text-brand-foreground'
-                                                : 'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
-                                        )}
-                                    >
-                                        {item.name}
-                                    </Link>
+                                    <li key={item.slug}>
+                                        <Link
+                                            href={`/work/${item.slug}`}
+                                            prefetch
+                                            preserveScroll
+                                            aria-current={
+                                                active ? 'page' : undefined
+                                            }
+                                            className={cn(
+                                                '-mb-px inline-flex min-h-11 items-center border-b-2 font-sans text-base whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none @lg:text-lg',
+                                                active
+                                                    ? 'border-brand text-brand'
+                                                    : 'border-transparent text-ink/55 hover:text-ink',
+                                            )}
+                                        >
+                                            {item.name}
+                                        </Link>
+                                    </li>
                                 );
                             })}
-                        </nav>
-                    )}
-                </div>
+                        </ul>
+                    </nav>
+                )}
 
-                <h2 className="mt-12 border-b border-ink/10 pb-4 font-sans text-sm tracking-[0.15em] text-ink uppercase @lg:text-base">
-                    Projects
-                </h2>
+                <h2 className="sr-only">Projects</h2>
 
                 {projects.data.length > 0 ? (
                     <InfiniteScroll
@@ -137,7 +139,7 @@ export default function WorkShow({
                     >
                         <div
                             ref={grid}
-                            className="mt-6 grid gap-x-4 gap-y-10 @xl:grid-cols-2 @2xl:gap-x-5 @4xl:grid-cols-3"
+                            className="mt-8 grid gap-x-4 gap-y-10 @xl:grid-cols-2 @2xl:gap-x-5 @4xl:grid-cols-3"
                         >
                             {projects.data.map((project, index) => (
                                 <ProjectCard
