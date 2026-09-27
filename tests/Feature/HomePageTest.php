@@ -4,6 +4,7 @@ use App\Filament\Resources\BayteProducts\Pages\EditBayteProduct;
 use App\Filament\Resources\BayteProducts\Pages\ListBayteProducts;
 use App\Models\BayteCategory;
 use App\Models\BayteProduct;
+use App\Models\LivingSpace;
 use App\Models\User;
 use Filament\Facades\Filament;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -68,4 +69,15 @@ test('a piece already on the home page can still be saved', function () {
         ->assertHasNoFormErrors();
 
     $this->get(ListBayteProducts::getUrl())->assertSuccessful();
+});
+
+test('the home page offers the active living edit spaces in dashboard order', function () {
+    LivingSpace::create(['name' => 'Kitchen', 'sort_order' => 2]);
+    LivingSpace::create(['name' => 'Living room', 'sort_order' => 1]);
+    LivingSpace::create(['name' => 'Garage', 'sort_order' => 0, 'is_active' => false]);
+
+    $this->get(route('home'))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('livingSpaces', fn (Collection $spaces) => $spaces->pluck('name')->all() === ['Living room', 'Kitchen'])
+        );
 });

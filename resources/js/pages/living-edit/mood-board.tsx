@@ -9,9 +9,9 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import MarqueeText from '@/components/marquee-text';
+import MaskedIcon from '@/components/masked-icon';
 import { cn } from '@/lib/utils';
 import type { LivingEditOption, LivingSpace, MoodBoardSlot } from '@/types';
-import MaskedIcon from './masked-icon';
 import { saveMoodBoardImage } from './mood-board-export';
 import MoodBoardPreview from './mood-board-preview';
 import {

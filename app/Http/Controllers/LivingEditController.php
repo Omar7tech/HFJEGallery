@@ -17,11 +17,7 @@ class LivingEditController extends Controller
      */
     public function __invoke(): Response
     {
-        $spaces = LivingSpace::query()
-            ->where('is_active', true)
-            ->orderBy('sort_order')
-            ->with('media')
-            ->get();
+        $spaces = LivingSpace::query()->offered()->get();
 
         $optionsByStep = LivingEditOption::query()
             ->where('is_active', true)

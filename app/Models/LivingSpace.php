@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -14,6 +16,20 @@ use Spatie\Sluggable\Attributes\Sluggable;
 class LivingSpace extends Model implements HasMedia
 {
     use InteractsWithMedia;
+
+    /**
+     * Active spaces in their dashboard order, with their icons, as the
+     * Living Edit and the home page offer them.
+     *
+     * @param  Builder<LivingSpace>  $query
+     */
+    #[Scope]
+    protected function offered(Builder $query): void
+    {
+        $query->where('is_active', true)
+            ->orderBy('sort_order')
+            ->with('media');
+    }
 
     public function registerMediaCollections(): void
     {
