@@ -2,6 +2,7 @@ import { ChevronLeft, ChevronRight, Loader2, X } from 'lucide-react';
 import { AnimatePresence, motion, useReducedMotion } from 'motion/react';
 import type { PanInfo } from 'motion/react';
 import { useEffect, useRef, useState } from 'react';
+import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
 import type { ProjectImage } from '@/types';
 
@@ -230,6 +231,13 @@ export default function ProjectLightbox({
                                             [current.src]: true,
                                         }))
                                     }
+                                    // A broken photo stops the spinner too.
+                                    onError={() =>
+                                        setLoaded((state) => ({
+                                            ...state,
+                                            [current.src]: true,
+                                        }))
+                                    }
                                     className={cn(
                                         'max-h-full max-w-full rounded-xl object-contain shadow-[0_30px_80px_-30px_rgba(0,0,0,0.8)] transition-opacity duration-300 select-none',
                                         !loaded[current.src] && 'opacity-0',
@@ -273,13 +281,12 @@ export default function ProjectLightbox({
                                             : 'opacity-40 hover:opacity-80',
                                     )}
                                 >
-                                    <img
+                                    <SmartImage
                                         src={image.thumb}
                                         alt=""
-                                        loading="lazy"
-                                        decoding="async"
-                                        draggable={false}
-                                        className="size-full object-cover"
+                                        className="size-full"
+                                        imgClassName="object-cover"
+                                        placeholderClassName="bg-white/10"
                                     />
                                 </button>
                             ))}
