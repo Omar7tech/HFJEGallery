@@ -1,11 +1,16 @@
 import { Head } from '@inertiajs/react';
 import Bayte from './sections/bayte';
+import type { BayteHomeProduct } from './sections/bayte';
 import Curtains from './sections/curtains';
 import Experience from './sections/experience';
 import FeaturedProjects from './sections/featured-projects';
 import Hero from './sections/hero';
 
-export default function Home() {
+export default function Home({
+    bayteProducts,
+}: {
+    bayteProducts: BayteHomeProduct[];
+}) {
     return (
         <>
             <Head title="Home">
@@ -20,7 +25,7 @@ export default function Home() {
             <Experience />
             <FeaturedProjects />
             <Curtains />
-            <Bayte />
+            <Bayte products={bayteProducts} />
         </>
     );
 }

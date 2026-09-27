@@ -3,35 +3,16 @@ import { ArrowRight } from 'lucide-react';
 import BayteProductCard from '@/components/bayte-product-card';
 import BayteWordmarkDraw from '@/components/bayte-wordmark-draw';
 
-interface Product {
+export interface BayteHomeProduct {
+    slug: string;
     name: string;
     description: string;
-    src: string;
-    alt: string;
+    /** The cutout, or the placeholder. */
+    image: string;
 }
 
-const products: Product[] = [
-    {
-        name: 'Name',
-        description: 'Description',
-        src: '/images/bayte/brown-leather-chair-nobg.webp',
-        alt: 'Oversized brown leather bean bag with two cushions',
-    },
-    {
-        name: 'Name',
-        description: 'Description',
-        src: '/images/bayte/caramel-long-chair-nobg.webp',
-        alt: 'Caramel leather chaise longue on tapered wooden legs',
-    },
-    {
-        name: 'Name',
-        description: 'Description',
-        src: '/images/bayte/chair-with-white-cushion-that-says-word-it-nobg.webp',
-        alt: 'Round wooden lounge chair with white cushions',
-    },
-];
-
-function Bayte() {
+/** The BAYTÉ teaser, showing the pieces picked for it in the dashboard. */
+function Bayte({ products }: { products: BayteHomeProduct[] }) {
     return (
         <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
             {/* Wordmark, with the "BY HFJE" endorsement tucked under its right edge. */}
@@ -58,17 +39,19 @@ function Bayte() {
                 </p>
             </div>
 
-            <div className="mt-8 grid gap-4 @xl:grid-cols-3 @2xl:gap-5">
-                {products.map((product) => (
-                    <BayteProductCard
-                        key={product.src}
-                        name={product.name}
-                        description={product.description}
-                        src={product.src}
-                        alt={product.alt}
-                    />
-                ))}
-            </div>
+            {products.length > 0 && (
+                <div className="mt-8 grid gap-4 @xl:grid-cols-3 @2xl:gap-5">
+                    {products.map((product) => (
+                        <BayteProductCard
+                            key={product.slug}
+                            name={product.name}
+                            description={product.description}
+                            src={product.image}
+                            alt={product.name}
+                        />
+                    ))}
+                </div>
+            )}
 
             <div className="mt-8 flex justify-center">
                 <Link

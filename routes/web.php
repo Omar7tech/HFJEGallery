@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\BayteController;
 use App\Http\Controllers\CurtainController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LivingEditController;
 use App\Http\Controllers\MoodBoardController;
 use App\Http\Controllers\WorkController;
@@ -14,7 +15,7 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-Route::inertia('/', 'home/index')->name('home');
+Route::get('/', HomeController::class)->name('home');
 Route::inertia('/about', 'about/index')->name('about');
 Route::controller(CurtainController::class)->prefix('curtains')->group(function () {
     Route::get('/', 'index')->name('curtains');

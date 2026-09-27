@@ -2,10 +2,13 @@
 
 namespace App\Filament\Resources\BayteProducts\Schemas;
 
+use App\Models\BayteProduct;
+use App\Rules\HomeHasRoomForBayteProduct;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
@@ -40,6 +43,11 @@ class BayteProductForm
                             ->maxLength(255)
                             ->rows(2)
                             ->helperText('One short line, shown under the name.')
+                            ->columnSpanFull(),
+                        Toggle::make('is_on_home')
+                            ->label('Show on home page')
+                            ->helperText('Up to '.BayteProduct::HOME_LIMIT.' pieces fill the BAYTÉ section of the home page, in the order of the product list. Until any are picked, it shows the first ones.')
+                            ->rule(fn (?BayteProduct $record): HomeHasRoomForBayteProduct => new HomeHasRoomForBayteProduct($record))
                             ->columnSpanFull(),
                     ]),
 
