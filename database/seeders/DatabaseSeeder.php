@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(LivingEditSeeder::class);
         $this->call(BayteSeeder::class);
+        $this->call(CurtainStyleSeeder::class);
 
         if (app()->isLocal()) {
             $this->call(GalleryImageSeeder::class);

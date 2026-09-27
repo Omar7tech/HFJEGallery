@@ -1,7 +1,9 @@
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 import { useRef, useState } from 'react';
+import CurtainStyleCard from '@/components/curtain-style-card';
 import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
+import type { CurtainStyle } from '@/types';
 
 type CurtainImageProps = {
     name: string;
@@ -29,38 +31,6 @@ function CurtainImage({
     );
 }
 
-const styles = [
-    {
-        name: 'Sheer curtains',
-        image: 'layered-curtains',
-        description: 'Soft daylight, filtered through sheer fabric.',
-    },
-    {
-        name: 'Blackout curtains',
-        image: 'blackout-curtains',
-        description: 'Privacy and complete light control.',
-    },
-    {
-        name: 'Eyelet curtains',
-        image: 'eyelet-curtains',
-        description: 'Clean folds with a contemporary finish.',
-    },
-    {
-        name: 'Layered curtains',
-        image: 'sheer-curtains',
-        description: 'Sheer and heavier fabrics, working together.',
-    },
-    {
-        name: 'Pleated curtains',
-        image: 'pleated-curtains',
-        description: 'Tailored pleats and a structured drape.',
-    },
-    {
-        name: 'Decorative fabrics',
-        image: 'curtain-fabrics',
-        description: 'Texture and warmth for the finishing layer.',
-    },
-];
 const portfolio = [
     ...Array.from({ length: 8 }, () => ({
         image: 'curtain-portfolio',
@@ -83,13 +53,24 @@ const portfolio = [
         alt: 'Gray eyelet curtains on a decorative rail',
     },
 ];
+/** From this many styles on, the section becomes the hover gallery. */
+const GALLERY_FROM = 5;
+
+/** Card columns on desktop for one to four styles, so they fill the row. */
+const STYLE_COLUMNS: Record<number, string> = {
+    1: '@lg:grid-cols-2',
+    2: '@lg:grid-cols-2',
+    3: '@lg:grid-cols-3',
+    4: '@lg:grid-cols-4',
+};
+
 /** Works shown on this page; the rest will live on their own page. */
 const PREVIEW_WORKS = 8;
 
 const pill =
     'inline-flex min-h-11 items-center justify-center rounded-full bg-brand px-10 py-3.5 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
-export default function Curtains() {
+export default function Curtains({ styles }: { styles: CurtainStyle[] }) {
     const heroVideo = useRef<HTMLVideoElement>(null);
     const [heroReady, setHeroReady] = useState(false);
     const [activeStyle, setActiveStyle] = useState(0);
@@ -249,66 +230,89 @@ export default function Curtains() {
                     )}
                 </section>
 
-                <section
-                    id="curtain-styles"
-                    className="scroll-mt-24 px-1 pt-24 @lg:pt-[18cqi]"
-                >
-                    <h2 className="font-display text-[clamp(1.25rem,3.5cqi,2.5rem)] leading-tight tracking-[-0.04em] uppercase">
-                        Designed for Every Window
-                    </h2>
-                    <p className="mt-2 font-display text-[clamp(0.75rem,2.15cqi,1.4rem)]">
-                        From Soft Sheers To Complete Light Control.
-                    </p>
-                    <div className="curtain-style-gallery mt-5 flex h-[360px] gap-2 @lg:h-[min(46cqi,620px)] @lg:gap-2.5">
-                        {styles.map((style, index) => (
-                            <button
-                                key={style.name}
-                                type="button"
-                                aria-label={style.name}
-                                aria-pressed={activeStyle === index}
-                                onClick={() => setActiveStyle(index)}
-                                onPointerEnter={(event) => {
-                                    if (event.pointerType === 'mouse') {
-                                        setActiveStyle(index);
-                                    }
-                                }}
-                                onFocus={() => setActiveStyle(index)}
+                {styles.length > 0 && (
+                    <section
+                        id="curtain-styles"
+                        className="scroll-mt-24 px-1 pt-24 @lg:pt-[18cqi]"
+                    >
+                        <h2 className="font-display text-[clamp(1.25rem,3.5cqi,2.5rem)] leading-tight tracking-[-0.04em] uppercase">
+                            Designed for Every Window
+                        </h2>
+                        <p className="mt-2 font-display text-[clamp(0.75rem,2.15cqi,1.4rem)]">
+                            From Soft Sheers To Complete Light Control.
+                        </p>
+
+                        {/* A few styles sit side by side as cards; five or
+                            more fold into the hover gallery instead. */}
+                        {styles.length < GALLERY_FROM ? (
+                            <div
                                 className={cn(
-                                    'curtain-style-card relative min-w-0 overflow-hidden bg-[#d9d9d9] text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
-                                    activeStyle === index
-                                        ? 'flex-[6.5]'
-                                        : 'flex-1',
+                                    'mt-5 grid grid-cols-2 gap-x-4 gap-y-10 @lg:gap-x-5',
+                                    STYLE_COLUMNS[styles.length],
                                 )}
                             >
-                                <CurtainImage
-                                    name={style.image}
-                                    alt={style.description}
-                                />
-                                <span
-                                    aria-hidden="true"
-                                    className="curtain-style-label absolute bottom-5 px-4 py-3 font-display text-[clamp(0.55rem,1.45cqi,1rem)] leading-tight whitespace-nowrap text-white uppercase"
-                                >
-                                    <span className="curtain-style-label-text relative">
-                                        {style.name}
-                                    </span>
-                                </span>
-                            </button>
-                        ))}
-                    </div>
-                    <div className="mt-5 text-center">
-                        {/* Will open the curtain styles page once it exists;
-                            does nothing until then. */}
-                        <button
-                            type="button"
-                            className={cn(
-                                pill,
-                                'min-w-[56%] text-[clamp(0.7rem,1.7cqi,1.15rem)] uppercase',
-                            )}
-                        >
-                            Explore All Curtain Styles
-                        </button>
-                    </div>
-                </section>
+                                {styles.map((style) => (
+                                    <CurtainStyleCard
+                                        key={style.slug}
+                                        style={style}
+                                    />
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="curtain-style-gallery mt-5 flex h-[360px] gap-2 @lg:h-[min(46cqi,620px)] @lg:gap-2.5">
+                                {styles.map((style, index) => (
+                                    <button
+                                        key={style.slug}
+                                        type="button"
+                                        aria-label={style.name}
+                                        aria-pressed={activeStyle === index}
+                                        onClick={() => setActiveStyle(index)}
+                                        onPointerEnter={(event) => {
+                                            if (event.pointerType === 'mouse') {
+                                                setActiveStyle(index);
+                                            }
+                                        }}
+                                        onFocus={() => setActiveStyle(index)}
+                                        className={cn(
+                                            'curtain-style-card relative min-w-0 overflow-hidden bg-cream text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+                                            activeStyle === index
+                                                ? 'flex-[6.5]'
+                                                : 'flex-1',
+                                        )}
+                                    >
+                                        <SmartImage
+                                            src={style.image}
+                                            alt={style.description}
+                                            className="size-full"
+                                            imgClassName="object-cover"
+                                        />
+                                        <span
+                                            aria-hidden="true"
+                                            className="curtain-style-label absolute bottom-5 px-4 py-3 font-display text-[clamp(0.55rem,1.45cqi,1rem)] leading-tight whitespace-nowrap text-white uppercase"
+                                        >
+                                            <span className="curtain-style-label-text relative">
+                                                {style.name}
+                                            </span>
+                                        </span>
+                                    </button>
+                                ))}
+                            </div>
+                        )}
+
+                        <div className="mt-5 text-center">
+                            <Link
+                                href="/curtains/styles"
+                                prefetch
+                                className={cn(
+                                    pill,
+                                    'min-w-[56%] text-[clamp(0.7rem,1.7cqi,1.15rem)] uppercase',
+                                )}
+                            >
+                                Explore All Curtain Styles
+                            </Link>
+                        </div>
+                    </section>
+                )}
             </div>
         </>
     );

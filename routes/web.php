@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BayteController;
+use App\Http\Controllers\CurtainController;
 use App\Http\Controllers\LivingEditController;
 use App\Http\Controllers\MoodBoardController;
 use App\Http\Controllers\WorkController;
@@ -15,7 +16,10 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 Route::inertia('/', 'home/index')->name('home');
 Route::inertia('/about', 'about/index')->name('about');
-Route::inertia('/curtains', 'curtains/index')->name('curtains');
+Route::controller(CurtainController::class)->prefix('curtains')->group(function () {
+    Route::get('/', 'index')->name('curtains');
+    Route::get('/styles', 'styles')->name('curtains.styles');
+});
 Route::controller(WorkController::class)->prefix('work')->name('work.')->group(function () {
     Route::get('/', 'index')->name('index');
     Route::get('/{category}', 'show')->name('show');
