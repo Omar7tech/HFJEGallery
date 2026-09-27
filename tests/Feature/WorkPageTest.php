@@ -94,8 +94,8 @@ test('the category switcher lists only tags that have projects, in dashboard ord
     $this->get(route('work.show', $homes))
         ->assertInertia(fn (Assert $page) => $page
             ->where('categories.0.tags', [
-                ['slug' => 'villas', 'name' => 'Villas'],
-                ['slug' => 'seaside', 'name' => 'Seaside'],
+                ['slug' => 'villas', 'name' => 'Villas', 'count' => 1],
+                ['slug' => 'seaside', 'name' => 'Seaside', 'count' => 1],
             ])
         );
 });
