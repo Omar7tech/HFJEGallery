@@ -60,11 +60,7 @@ class WorkController extends Controller
             ->paginate(self::PER_PAGE)
             ->withQueryString()
             ->through(fn (Project $project): array => [
-                'slug' => $project->slug,
-                'name' => $project->name,
-                'location' => $project->location,
-                'year' => $project->year,
-                'image' => $project->coverUrl(),
+                ...$project->toCard(),
                 'tags' => $project->tags->pluck('name')->all(),
             ]);
 
@@ -104,45 +100,15 @@ class WorkController extends Controller
      */
     public function project(WorkCategory $category, Project $project): Response
     {
-        // The project after this one in the dashboard order, wrapping round to
-        // the first; a category with a single project has none.
-        $next = $category->projects()
-            ->with('media')
-            ->where(fn (Builder $query) => $query
-                ->where('sort_order', '>', $project->sort_order)
-                ->orWhere(fn (Builder $query) => $query
-                    ->where('sort_order', $project->sort_order)
-                    ->where('id', '>', $project->id)))
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->first()
-            ?? $category->projects()
-                ->with('media')
-                ->whereKeyNot($project->id)
-                ->orderBy('sort_order')
-                ->orderBy('id')
-                ->first();
+        $next = $project->nextAmong($category->projects());
 
         return Inertia::render('work/project', [
             'category' => [
                 'slug' => $category->slug,
                 'name' => $category->name,
             ],
-            'project' => [
-                'slug' => $project->slug,
-                'name' => $project->name,
-                'location' => $project->location,
-                'year' => $project->year,
-                'summary' => $project->summary,
-                'description' => $project->descriptionHtml(),
-                'cover' => $project->coverUrl('webp'),
-                'gallery' => $project->galleryImages(),
-            ],
-            'nextProject' => $next === null ? null : [
-                'slug' => $next->slug,
-                'name' => $next->name,
-                'image' => $next->coverUrl(),
-            ],
+            'project' => $project->toDetail(),
+            'nextProject' => $next?->toLink(),
         ]);
     }
 }

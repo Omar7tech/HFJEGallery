@@ -3,7 +3,8 @@ import { SmartImage } from '@/components/smart-image';
 import type { ProjectCard as Project } from '@/types';
 
 interface ProjectCardProps {
-    categorySlug: string;
+    /** Where the card opens: the project's own page. */
+    href: string;
     project: Project;
     /** Above the fold: fetch the cover with the page instead of lazily. */
     eager?: boolean;
@@ -17,23 +18,25 @@ interface ProjectCardProps {
 const VISIBLE_TAGS = 2;
 
 /**
- * A project in a category grid: the cover, then the name and where / when
+ * A project in a portfolio grid: the cover, then the name and where / when
  * underneath. The photo leans in slightly on hover.
  */
 export default function ProjectCard({
-    categorySlug,
+    href,
     project,
     eager = false,
     showTags = false,
     hideTag,
 }: ProjectCardProps) {
     const meta = [project.location, project.year].filter(Boolean).join(' · ');
-    const tags = showTags ? project.tags.filter((tag) => tag !== hideTag) : [];
+    const tags = showTags
+        ? (project.tags ?? []).filter((tag) => tag !== hideTag)
+        : [];
     const moreTags = tags.length - VISIBLE_TAGS;
 
     return (
         <Link
-            href={`/work/${categorySlug}/${project.slug}`}
+            href={href}
             prefetch
             className="group block rounded-2xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
         >

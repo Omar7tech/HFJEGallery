@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
 
@@ -23,14 +24,15 @@ const gallery: Shot[] = [
 
 interface Action {
     label: string;
-    /** Solid terracotta instead of soft cream — one per row. */
+    /** Where it leads; a plain button until its page exists. */
+    href?: string;
+    /** Solid terracotta instead of soft cream, one per row. */
     filled?: boolean;
 }
 
-/** Plain buttons for now; behaviour to come. */
 const actions: Action[] = [
-    { label: 'Curtain Styles' },
-    { label: 'Projects', filled: true },
+    { label: 'Curtain Styles', href: '/curtains/styles' },
+    { label: 'Projects', href: '/curtains/work', filled: true },
     { label: 'Fabric Library' },
 ];
 
@@ -70,20 +72,33 @@ function Curtains() {
             {/* The terracotta button sits proud of the row and is sized to its label,
           while the others share the remaining width. */}
             <div className="mt-3 flex flex-col gap-3 @lg:flex-row @lg:items-stretch @lg:gap-4">
-                {actions.map((action) => (
-                    <button
-                        key={action.label}
-                        type="button"
-                        className={cn(
-                            'rounded-2xl tracking-[0.02em] transition-colors duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:rounded-3xl @lg:text-lg',
-                            action.filled
-                                ? 'bg-brand py-6 text-brand-foreground hover:bg-brand-hover @lg:-my-1 @lg:shrink-0 @lg:px-14'
-                                : 'bg-cream/40 py-5 text-brand hover:bg-cream/70 @lg:flex-1',
-                        )}
-                    >
-                        {action.label}
-                    </button>
-                ))}
+                {actions.map((action) => {
+                    const className = cn(
+                        'rounded-2xl text-center tracking-[0.02em] transition-colors duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:rounded-3xl @lg:text-lg',
+                        action.filled
+                            ? 'bg-brand py-6 text-brand-foreground hover:bg-brand-hover @lg:-my-1 @lg:shrink-0 @lg:px-14'
+                            : 'bg-cream/40 py-5 text-brand hover:bg-cream/70 @lg:flex-1',
+                    );
+
+                    return action.href ? (
+                        <Link
+                            key={action.label}
+                            href={action.href}
+                            prefetch
+                            className={className}
+                        >
+                            {action.label}
+                        </Link>
+                    ) : (
+                        <button
+                            key={action.label}
+                            type="button"
+                            className={className}
+                        >
+                            {action.label}
+                        </button>
+                    );
+                })}
             </div>
         </section>
     );

@@ -1,9 +1,9 @@
-import { Head, InfiniteScroll, Link, router } from '@inertiajs/react';
-import { ArrowDown, ArrowLeft } from 'lucide-react';
+import { Head, Link, router } from '@inertiajs/react';
+import { ArrowLeft } from 'lucide-react';
 import type { MouseEvent, ReactNode } from 'react';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import MarqueeText from '@/components/marquee-text';
-import ProjectCard from '@/components/project-card';
+import ProjectGrid from '@/components/project-grid';
 import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
 import type {
@@ -21,28 +21,6 @@ interface WorkShowProps {
     activeTag: string | null;
     categories: WorkCategoryNavItem[];
     projects: { data: Project[] };
-}
-
-/** Covers in the first row fetch with the page; the rest wait for the scroll. */
-const EAGER_CARDS = 3;
-
-/** Placeholders shown while a switch loads: two rows of the widest grid. */
-const SKELETON_CARDS = 6;
-
-const GRID_CLASS =
-    'grid gap-x-4 gap-y-10 @xl:grid-cols-2 @2xl:gap-x-5 @4xl:grid-cols-3';
-
-/** The outline of a project card: its cover, name and details. */
-function ProjectCardSkeleton() {
-    return (
-        <div>
-            <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-cream/60 @3xl:rounded-3xl">
-                <span className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-white/45 to-transparent motion-reduce:hidden" />
-            </div>
-            <div className="mt-4 h-5 w-3/5 rounded-full bg-cream/60" />
-            <div className="mt-2.5 h-4 w-2/5 rounded-full bg-cream/40" />
-        </div>
-    );
 }
 
 /** A category page, optionally narrowed to one of its tags. */
@@ -113,7 +91,6 @@ export default function WorkShow({
     categories,
     projects,
 }: WorkShowProps) {
-    const grid = useRef<HTMLDivElement>(null);
     // The tag picked while its projects are still loading, so the tabs answer
     // the click at once; undefined when nothing is in flight.
     const [pendingTag, setPendingTag] = useState<string | null | undefined>();
@@ -299,93 +276,23 @@ export default function WorkShow({
 
                 <h2 className="sr-only">Projects</h2>
 
-                {projects.data.length > 0 ? (
-                    <InfiniteScroll
-                        data="projects"
-                        manual
-                        itemsElement={grid}
-                        next={({ loading, fetch, hasMore }) =>
-                            hasMore && (
-                                <div className="mt-12 flex justify-center">
-                                    <button
-                                        type="button"
-                                        onClick={fetch}
-                                        disabled={loading}
-                                        className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-brand px-10 py-3.5 text-base text-brand-foreground transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60 motion-reduce:transition-none"
-                                    >
-                                        {loading ? 'Loading…' : 'Load more'}
-                                        <ArrowDown
-                                            className={cn(
-                                                'size-4 transition-transform duration-300 ease-out group-hover:translate-y-0.5 motion-reduce:transition-none',
-                                                loading && 'animate-bounce',
-                                            )}
-                                            strokeWidth={1.75}
-                                        />
-                                    </button>
-                                </div>
-                            )
-                        }
-                    >
-                        {/* While another category or tag loads, the cards
-                            give way to skeletons of the same shape. Both
-                            swaps wait a moment, so a prefetched switch that
-                            lands at once never flashes them. */}
-                        <div className="relative mt-8">
-                            <div
-                                aria-hidden="true"
-                                className={cn(
-                                    'pointer-events-none absolute inset-0 overflow-hidden transition-opacity duration-200 motion-reduce:transition-none',
-                                    loading
-                                        ? 'opacity-100 delay-150'
-                                        : 'opacity-0',
-                                )}
-                            >
-                                <div className={GRID_CLASS}>
-                                    {Array.from(
-                                        {
-                                            length: Math.min(
-                                                projects.data.length,
-                                                SKELETON_CARDS,
-                                            ),
-                                        },
-                                        (_, index) => (
-                                            <ProjectCardSkeleton key={index} />
-                                        ),
-                                    )}
-                                </div>
-                            </div>
-                            <div
-                                ref={grid}
-                                aria-busy={loading}
-                                className={cn(
-                                    GRID_CLASS,
-                                    'transition-opacity duration-200 motion-reduce:transition-none',
-                                    loading &&
-                                        'pointer-events-none opacity-0 delay-150',
-                                )}
-                            >
-                                {projects.data.map((project, index) => (
-                                    <ProjectCard
-                                        key={project.slug}
-                                        categorySlug={category.slug}
-                                        project={project}
-                                        eager={index < EAGER_CARDS}
-                                        // On a filtered grid, only the tags
-                                        // besides the one filtered by.
-                                        showTags={tags.length > 0}
-                                        hideTag={activeTagName}
-                                    />
-                                ))}
-                            </div>
-                        </div>
-                    </InfiniteScroll>
-                ) : (
-                    <p className="mt-6 rounded-3xl bg-surface px-6 py-16 text-center font-sans text-base text-ink/60">
-                        {activeTag
+                <ProjectGrid
+                    data="projects"
+                    projects={projects.data}
+                    hrefFor={(project) =>
+                        `/work/${category.slug}/${project.slug}`
+                    }
+                    loading={loading}
+                    // On a filtered grid, only the tags besides the one
+                    // filtered by.
+                    showTags={tags.length > 0}
+                    hideTag={activeTagName}
+                    emptyMessage={
+                        activeTag
                             ? 'No projects under this tag yet.'
-                            : 'Projects are being photographed. Check back soon.'}
-                    </p>
-                )}
+                            : 'Projects are being photographed. Check back soon.'
+                    }
+                />
             </div>
         </>
     );

@@ -3,56 +3,8 @@ import { useRef, useState } from 'react';
 import CurtainStyleCard from '@/components/curtain-style-card';
 import { SmartImage } from '@/components/smart-image';
 import { cn } from '@/lib/utils';
-import type { CurtainStyle } from '@/types';
+import type { CurtainStyle, ProjectCard } from '@/types';
 
-type CurtainImageProps = {
-    name: string;
-    alt: string;
-    className?: string;
-    eager?: boolean;
-};
-
-/** A curtain photo filling its parent box, through the shared image loader. */
-function CurtainImage({
-    name,
-    alt,
-    className,
-    eager = false,
-}: CurtainImageProps) {
-    return (
-        <SmartImage
-            src={`/images/curtains/${name}.webp`}
-            alt={alt}
-            className={cn('size-full', className)}
-            imgClassName="object-cover"
-            loading={eager ? 'eager' : 'lazy'}
-            fetchPriority={eager ? 'high' : undefined}
-        />
-    );
-}
-
-const portfolio = [
-    ...Array.from({ length: 8 }, () => ({
-        image: 'curtain-portfolio',
-        alt: 'Sculptural vase framed by sheer and textured curtains',
-    })),
-    {
-        image: 'layered-curtains',
-        alt: 'Layered curtains in a contemporary bedroom',
-    },
-    {
-        image: 'blackout-curtains',
-        alt: 'Dark blackout curtains beside a sunlit window',
-    },
-    {
-        image: 'pleated-curtains',
-        alt: 'Tailored pink curtain pleats',
-    },
-    {
-        image: 'eyelet-curtains',
-        alt: 'Gray eyelet curtains on a decorative rail',
-    },
-];
 /** From this many styles on, the section becomes the hover gallery. */
 const GALLERY_FROM = 5;
 
@@ -64,20 +16,24 @@ const STYLE_COLUMNS: Record<number, string> = {
     4: '@lg:grid-cols-4',
 };
 
-/** Works shown on this page; the rest will live on their own page. */
-const PREVIEW_WORKS = 8;
-
 const pill =
     'inline-flex min-h-11 items-center justify-center rounded-full bg-brand px-10 py-3.5 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
-export default function Curtains({ styles }: { styles: CurtainStyle[] }) {
+interface CurtainsProps {
+    styles: CurtainStyle[];
+    /** The first few curtain works, in dashboard order. */
+    works: ProjectCard[];
+    /** How many curtain works there are in all. */
+    worksCount: number;
+}
+
+export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
     const heroVideo = useRef<HTMLVideoElement>(null);
     const [heroReady, setHeroReady] = useState(false);
     const [activeStyle, setActiveStyle] = useState(0);
-    const visibleWorks = portfolio.slice(0, PREVIEW_WORKS);
     /** Two full rows fit one desktop screen; a single row keeps its natural
      * tile shape instead. */
-    const fitsScreen = visibleWorks.length > 4;
+    const fitsScreen = works.length > 4;
 
     return (
         <>
@@ -169,64 +125,71 @@ export default function Curtains({ styles }: { styles: CurtainStyle[] }) {
                             atmosphere of a room.
                         </p>
                     </div>
-                    <div
-                        className={cn(
-                            'mt-10 flex flex-wrap items-center justify-between gap-3 @lg:mt-12',
-                            fitsScreen && 'lg:mt-6!',
-                        )}
-                    >
-                        <h3 className="font-sans text-sm uppercase @lg:text-lg">
-                            Our curtains work{' '}
-                            <sup className="text-[10px]">
-                                ({portfolio.length})
-                            </sup>
-                        </h3>
-                        <ul className="flex gap-3 font-sans text-base text-ink @lg:gap-8 @lg:text-lg">
-                            {['Complete', 'Tailored', 'Layered'].map((item) => (
-                                <li key={item} className="px-1">
-                                    {item}
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-                    <div
-                        className={cn(
-                            'mt-4 grid grid-cols-2 gap-1 @lg:grid-cols-4',
-                            fitsScreen &&
-                                'lg:min-h-0 lg:flex-[1_1_0] lg:auto-rows-[minmax(0,1fr)] lg:grid-cols-4',
-                        )}
-                    >
-                        {visibleWorks.map((item, index) => (
+                    {works.length > 0 && (
+                        <>
                             <div
-                                key={`${item.image}-${index}`}
                                 className={cn(
-                                    'aspect-[1.25] overflow-hidden bg-cream',
-                                    fitsScreen && 'lg:aspect-auto',
+                                    'mt-10 flex flex-wrap items-center justify-between gap-3 @lg:mt-12',
+                                    fitsScreen && 'lg:mt-6!',
                                 )}
                             >
-                                <CurtainImage
-                                    name={item.image}
-                                    alt={item.alt}
-                                />
+                                <h3 className="font-sans text-sm uppercase @lg:text-lg">
+                                    Our curtains work{' '}
+                                    <sup className="text-[10px]">
+                                        ({worksCount})
+                                    </sup>
+                                </h3>
+                                <ul className="flex gap-3 font-sans text-base text-ink @lg:gap-8 @lg:text-lg">
+                                    {['Complete', 'Tailored', 'Layered'].map(
+                                        (item) => (
+                                            <li key={item} className="px-1">
+                                                {item}
+                                            </li>
+                                        ),
+                                    )}
+                                </ul>
                             </div>
-                        ))}
-                    </div>
-                    {portfolio.length > PREVIEW_WORKS && (
-                        <div
-                            className={cn(
-                                'mt-10 text-center',
-                                fitsScreen && 'lg:mt-6',
-                            )}
-                        >
-                            {/* Will open the full portfolio page once it
-                                exists; does nothing until then. */}
-                            <button
-                                type="button"
-                                className={cn(pill, 'min-w-[34%]')}
+                            <div
+                                className={cn(
+                                    'mt-4 grid grid-cols-2 gap-1 @lg:grid-cols-4',
+                                    fitsScreen &&
+                                        'lg:min-h-0 lg:flex-[1_1_0] lg:auto-rows-[minmax(0,1fr)] lg:grid-cols-4',
+                                )}
                             >
-                                View More
-                            </button>
-                        </div>
+                                {works.map((work) => (
+                                    <Link
+                                        key={work.slug}
+                                        href={`/curtains/work/${work.slug}`}
+                                        prefetch
+                                        className={cn(
+                                            'group block aspect-[1.25] overflow-hidden bg-cream focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-brand',
+                                            fitsScreen && 'lg:aspect-auto',
+                                        )}
+                                    >
+                                        <SmartImage
+                                            src={work.image}
+                                            alt={work.name}
+                                            className="size-full"
+                                            imgClassName="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
+                                        />
+                                    </Link>
+                                ))}
+                            </div>
+                            <div
+                                className={cn(
+                                    'mt-10 text-center',
+                                    fitsScreen && 'lg:mt-6',
+                                )}
+                            >
+                                <Link
+                                    href="/curtains/work"
+                                    prefetch
+                                    className={cn(pill, 'min-w-[34%]')}
+                                >
+                                    View More
+                                </Link>
+                            </div>
+                        </>
                     )}
                 </section>
 

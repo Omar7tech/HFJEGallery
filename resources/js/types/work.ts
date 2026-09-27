@@ -32,8 +32,9 @@ export interface ProjectCard {
     year: number | null;
     /** WebP thumbnail of the cover, or the placeholder. */
     image: string;
-    /** Names of the tags the project carries, in dashboard order. */
-    tags: string[];
+    /** Names of the tags the project carries, in dashboard order; work
+     * projects only. */
+    tags?: string[];
 }
 
 /** One gallery photo: the full WebP and a grid thumbnail. */
@@ -54,4 +55,12 @@ export interface ProjectDetail {
     /** Full-size WebP cover, or the placeholder. */
     cover: string;
     gallery: ProjectImage[];
+}
+
+/** Another project, linked at the foot of a project page. */
+export interface ProjectLink {
+    slug: string;
+    name: string;
+    /** WebP thumbnail of the cover, or the placeholder. */
+    image: string;
 }

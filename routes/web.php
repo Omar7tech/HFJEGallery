@@ -19,6 +19,8 @@ Route::inertia('/about', 'about/index')->name('about');
 Route::controller(CurtainController::class)->prefix('curtains')->group(function () {
     Route::get('/', 'index')->name('curtains');
     Route::get('/styles', 'styles')->name('curtains.styles');
+    Route::get('/work', 'works')->name('curtains.works');
+    Route::get('/work/{work}', 'work')->name('curtains.work');
 });
 Route::controller(WorkController::class)->prefix('work')->name('work.')->group(function () {
     Route::get('/', 'index')->name('index');

@@ -1,6 +1,6 @@
-import { Head, Link } from '@inertiajs/react';
-import { ArrowLeft } from 'lucide-react';
+import { Head } from '@inertiajs/react';
 import CurtainStyleCard from '@/components/curtain-style-card';
+import PageHeader from '@/components/page-header';
 import type { CurtainStyle } from '@/types';
 
 /** The first row (four across on desktop) fetches with the page. */
@@ -18,20 +18,11 @@ export default function CurtainStyles({ styles }: { styles: CurtainStyle[] }) {
             </Head>
 
             <div className="@container px-5 pt-6 pb-20 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
-                <Link
-                    href="/curtains"
-                    className="inline-flex min-h-11 items-center gap-2 font-sans text-sm text-ink/60 transition-colors hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                >
-                    <ArrowLeft className="size-4" strokeWidth={1.75} />
-                    Curtains
-                </Link>
-
-                <h1 className="mt-4 font-display text-[clamp(1.75rem,5cqi,3.5rem)] leading-[1.1] tracking-[-0.04em] text-ink uppercase">
-                    Designed for Every Window
-                </h1>
-                <p className="mt-3 max-w-xl font-sans text-base leading-relaxed text-ink/70">
-                    From soft sheers to complete light control.
-                </p>
+                <PageHeader
+                    back={{ label: 'Curtains', href: '/curtains' }}
+                    title="Designed for Every Window"
+                    lead="From soft sheers to complete light control."
+                />
 
                 {styles.length > 0 ? (
                     <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 @3xl:grid-cols-3 @3xl:gap-x-5 @5xl:grid-cols-4">
