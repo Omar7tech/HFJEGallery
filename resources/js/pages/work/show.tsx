@@ -44,7 +44,7 @@ function isPlainClick(event: MouseEvent): boolean {
     );
 }
 
-/** The underlined tab look shared by the category and tag lines. */
+/** The underlined look of the category tabs. */
 function tabClassName(active: boolean): string {
     return cn(
         '-mb-px inline-flex min-h-11 items-center border-b-2 font-sans whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
@@ -54,7 +54,7 @@ function tabClassName(active: boolean): string {
     );
 }
 
-interface TagTabProps {
+interface TagPillProps {
     href: string;
     active: boolean;
     onSelect: () => void;
@@ -62,10 +62,10 @@ interface TagTabProps {
 }
 
 /**
- * A tab narrowing the current category to one tag. A real link, so it can be
+ * A pill narrowing the current category to one tag. A real link, so it can be
  * opened in a new tab, but a plain click swaps the grid in place.
  */
-function TagTab({ href, active, onSelect, children }: TagTabProps) {
+function TagPill({ href, active, onSelect, children }: TagPillProps) {
     return (
         <a
             href={href}
@@ -76,7 +76,12 @@ function TagTab({ href, active, onSelect, children }: TagTabProps) {
                     onSelect();
                 }
             }}
-            className={cn(tabClassName(active), 'text-[15px] @lg:text-base')}
+            className={cn(
+                'inline-flex min-h-10 items-center rounded-full border px-5 font-sans text-sm whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none @lg:text-[15px]',
+                active
+                    ? 'border-brand bg-brand text-brand-foreground'
+                    : 'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
+            )}
         >
             {children}
         </a>
@@ -211,32 +216,32 @@ export default function WorkShow({
                     </nav>
                 )}
 
-                {/* A second line of the same tabs for the category's tags,
-                    "All" first; hidden when the category has none. */}
+                {/* The category's tags as pills under the tabs, "All" first;
+                    hidden when the category has none. */}
                 {tags.length > 0 && (
                     <nav
                         aria-label={`${category.name} tags`}
-                        className="nav-scroll -mx-5 mt-2 overflow-x-auto px-5 md:-mx-8 md:px-8 lg:mr-0 lg:ml-0 lg:px-0"
+                        className="nav-scroll -mx-5 mt-5 overflow-x-auto px-5 pb-1 md:-mx-8 md:px-8 lg:mr-0 lg:ml-0 lg:px-0"
                     >
-                        <ul className="flex min-w-max gap-6 border-b border-ink/10 @lg:gap-8">
+                        <ul className="flex min-w-max gap-2 lg:min-w-0 lg:flex-wrap">
                             <li>
-                                <TagTab
+                                <TagPill
                                     href={tagHref(category.slug)}
                                     active={shownTag === null}
                                     onSelect={() => filterBy(null)}
                                 >
                                     All
-                                </TagTab>
+                                </TagPill>
                             </li>
                             {tags.map((tag) => (
                                 <li key={tag.slug}>
-                                    <TagTab
+                                    <TagPill
                                         href={tagHref(category.slug, tag.slug)}
                                         active={shownTag === tag.slug}
                                         onSelect={() => filterBy(tag.slug)}
                                     >
                                         {tag.name}
-                                    </TagTab>
+                                    </TagPill>
                                 </li>
                             ))}
                         </ul>
