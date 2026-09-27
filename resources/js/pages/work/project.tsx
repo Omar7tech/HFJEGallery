@@ -1,5 +1,6 @@
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, ArrowRight, CalendarDays, MapPin } from 'lucide-react';
+import MarqueeText from '@/components/marquee-text';
 import ProjectGallery from '@/components/project-gallery';
 import { SmartImage } from '@/components/smart-image';
 import type { ProjectDetail, WorkCategoryLink } from '@/types';
@@ -44,8 +45,10 @@ export default function WorkProject({
                     {category.name}
                 </Link>
 
-                <h1 className="mt-5 max-w-5xl font-display text-[clamp(2rem,7cqi,4.5rem)] leading-[1.05] text-ink">
-                    {project.name}
+                {/* One line always: a long name loops like the category
+                    titles instead of wrapping. */}
+                <h1 className="mt-5 font-display text-[clamp(1.5rem,4.2cqi,2.75rem)] leading-[1.15] text-ink">
+                    <MarqueeText speed={40}>{project.name}</MarqueeText>
                 </h1>
 
                 {/* Category pill, then where and when — one quiet line. */}

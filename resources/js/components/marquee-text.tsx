@@ -50,7 +50,10 @@ export default function MarqueeText({
         <span
             ref={containerRef}
             className={cn(
-                'relative block overflow-hidden whitespace-nowrap',
+                // The clip (and the edge fade) would shave off descenders like
+                // "y" and "g", so the box gets breathing room above and below,
+                // cancelled by an equal negative margin to keep the layout.
+                'relative -my-[0.2em] block overflow-hidden py-[0.2em] whitespace-nowrap',
                 isLooping &&
                     'motion-safe:[mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]',
                 className,
