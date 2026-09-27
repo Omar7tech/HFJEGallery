@@ -7,8 +7,10 @@ interface ProjectCardProps {
     project: Project;
     /** Above the fold: fetch the cover with the page instead of lazily. */
     eager?: boolean;
-    /** Lay the project's tags over the cover, e.g. on an unfiltered grid. */
+    /** Lay the project's tags over the cover. */
     showTags?: boolean;
+    /** A tag left off the cover, e.g. the one the grid is filtered by. */
+    hideTag?: string;
 }
 
 /** Tags shown on the cover; any beyond fold into a "+N". */
@@ -23,9 +25,10 @@ export default function ProjectCard({
     project,
     eager = false,
     showTags = false,
+    hideTag,
 }: ProjectCardProps) {
     const meta = [project.location, project.year].filter(Boolean).join(' · ');
-    const tags = showTags ? project.tags : [];
+    const tags = showTags ? project.tags.filter((tag) => tag !== hideTag) : [];
     const moreTags = tags.length - VISIBLE_TAGS;
 
     return (

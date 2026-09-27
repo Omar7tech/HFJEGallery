@@ -104,6 +104,8 @@ export default function WorkShow({
     const current = categories.find((item) => item.slug === category.slug);
     const tags = current?.tags ?? [];
     const shownTagDetails = tags.find((tag) => tag.slug === shownTag);
+    // The tag of the projects on screen, which lags the pills while loading.
+    const activeTagName = tags.find((tag) => tag.slug === activeTag)?.name;
 
     /** Swaps only the grid: the photo and tabs stay put, and so does the scroll. */
     const filterBy = (tagSlug: string | null) => {
@@ -309,9 +311,10 @@ export default function WorkShow({
                                     categorySlug={category.slug}
                                     project={project}
                                     eager={index < EAGER_CARDS}
-                                    showTags={
-                                        activeTag === null && tags.length > 0
-                                    }
+                                    // On a filtered grid, only the tags
+                                    // besides the one filtered by.
+                                    showTags={tags.length > 0}
+                                    hideTag={activeTagName}
                                 />
                             ))}
                         </div>
