@@ -25,7 +25,7 @@ interface BayteProductCardProps {
 }
 
 /** How far the card leans, in degrees, at the far edge of the pointer travel. */
-const TILT = 9;
+const TILT = 11;
 /** Loose enough to feel like weight, tight enough to never lag the cursor. */
 const SPRING = {
     type: 'spring',
@@ -65,11 +65,11 @@ export default function BayteProductCard({
     const rotateX = useTransform(smoothY, [0, 1], [TILT, -TILT]);
 
     // The cutout drifts with the lean — the parallax that sells the depth.
-    const productX = useTransform(smoothX, [0, 1], [-16, 16]);
-    const productY = useTransform(smoothY, [0, 1], [-12, 12]);
+    const productX = useTransform(smoothX, [0, 1], [-22, 22]);
+    const productY = useTransform(smoothY, [0, 1], [-16, 16]);
 
     // The shadow it casts slides the other way, and squashes as the card tips.
-    const contactX = useTransform(smoothX, [0, 1], [14, -14]);
+    const contactX = useTransform(smoothX, [0, 1], [18, -18]);
     const contactScale = useTransform(smoothY, [0, 1], [0.88, 1.12]);
 
     const sheenX = useTransform(smoothX, (value) => `${value * 100}%`);
@@ -82,7 +82,7 @@ export default function BayteProductCard({
     const smoothLift = useSpring(lift, SPRING);
     const shadowX = useTransform(smoothX, [0, 1], [24, -24]);
     const shadowY = useTransform(smoothY, [0, 1], [28, 6]);
-    const shadowAlpha = useTransform(smoothLift, [0, 1], [0, 0.5]);
+    const shadowAlpha = useTransform(smoothLift, [0, 1], [0, 0.6]);
     const shadow = useMotionTemplate`${shadowX}px ${shadowY}px 54px -30px rgba(74, 48, 32, ${shadowAlpha})`;
 
     const trackPointer = (event: PointerEvent<HTMLElement>) => {
@@ -174,7 +174,7 @@ export default function BayteProductCard({
                 )}
             </div>
 
-            <div className="relative mt-4 aspect-3/2 w-full transform-3d">
+            <div className="relative mt-4 aspect-4/3 w-full transform-3d">
                 {/* Ground shadow, kept on a lower plane than the cutout. */}
                 <motion.span
                     aria-hidden="true"
@@ -183,14 +183,14 @@ export default function BayteProductCard({
                             ? undefined
                             : { x: contactX, scaleX: contactScale }
                     }
-                    className="pointer-events-none absolute inset-x-8 bottom-1 h-5 rounded-[50%] bg-ink/25 opacity-0 blur-lg transition-[opacity,transform,translate] duration-500 ease-out group-hover:translate-z-[18px] group-hover:opacity-100 motion-reduce:hidden"
+                    className="pointer-events-none absolute inset-x-8 bottom-1 h-5 rounded-[50%] bg-ink/30 opacity-0 blur-lg transition-[opacity,transform,translate] duration-500 ease-out group-hover:translate-z-[22px] group-hover:opacity-100 motion-reduce:hidden"
                 />
 
                 <motion.div
                     style={
                         reducedMotion ? undefined : { x: productX, y: productY }
                     }
-                    className="absolute inset-0 scale-[0.84] transition-transform duration-500 ease-out group-hover:translate-z-[72px] group-hover:scale-100 motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.84]"
+                    className="absolute inset-0 scale-[0.9] transition-transform duration-500 ease-out group-hover:translate-z-[96px] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.9]"
                 >
                     <SmartImage
                         src={src}
