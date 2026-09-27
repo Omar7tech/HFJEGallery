@@ -6,6 +6,7 @@ use App\Models\Project;
 use App\Models\WorkCategory;
 use App\Models\WorkTag;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -53,7 +54,7 @@ class WorkController extends Controller
         $projects = $category->projects()
             ->when($tag, fn (Builder $query, WorkTag $tag) => $query
                 ->whereHas('tags', fn (Builder $query) => $query->whereKey($tag->id)))
-            ->with('media')
+            ->with(['media', 'tags' => fn (BelongsToMany $query) => $query->orderBy('sort_order')->orderBy('id')])
             ->orderBy('sort_order')
             ->orderBy('id')
             ->paginate(self::PER_PAGE)
@@ -64,6 +65,7 @@ class WorkController extends Controller
                 'location' => $project->location,
                 'year' => $project->year,
                 'image' => $project->coverUrl(),
+                'tags' => $project->tags->pluck('name')->all(),
             ]);
 
         return Inertia::render('work/show', [

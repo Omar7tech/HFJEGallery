@@ -81,6 +81,8 @@ test('a tag narrows the category to the projects carrying it', function () {
         ->assertInertia(fn (Assert $page) => $page
             ->where('activeTag', null)
             ->has('projects.data', 3)
+            ->where('projects.data.0.tags', ['Villas', 'Seaside'])
+            ->where('projects.data.2.tags', [])
         );
 });
 

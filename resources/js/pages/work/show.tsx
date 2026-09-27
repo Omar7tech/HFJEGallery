@@ -309,6 +309,9 @@ export default function WorkShow({
                                     categorySlug={category.slug}
                                     project={project}
                                     eager={index < EAGER_CARDS}
+                                    showTags={
+                                        activeTag === null && tags.length > 0
+                                    }
                                 />
                             ))}
                         </div>

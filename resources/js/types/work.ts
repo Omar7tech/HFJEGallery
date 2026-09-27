@@ -32,6 +32,8 @@ export interface ProjectCard {
     year: number | null;
     /** WebP thumbnail of the cover, or the placeholder. */
     image: string;
+    /** Names of the tags the project carries, in dashboard order. */
+    tags: string[];
 }
 
 /** One gallery photo: the full WebP and a grid thumbnail. */
