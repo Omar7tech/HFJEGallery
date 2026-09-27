@@ -48,14 +48,14 @@ function NavLinks({
     onNavigate?: () => void;
 }) {
     return (
-        <nav className="flex flex-col gap-2">
+        <nav className="flex flex-col gap-[clamp(0.25rem,0.9vh,0.5rem)]">
             {navItems.map((item) => (
                 <div key={item.label} className="flex flex-col">
                     <Link
                         href={item.href}
                         onClick={onNavigate}
                         className={cn(
-                            'w-fit border-b border-ink/30 pt-2 pb-1 font-display text-[1.75rem] tracking-tight transition-colors',
+                            'w-fit border-b border-ink/30 pt-[clamp(0.25rem,0.9vh,0.5rem)] pb-1 font-display text-[clamp(1.25rem,3.2vh,1.75rem)] tracking-tight transition-colors',
                             item.accent || isActive(currentUrl, item.href)
                                 ? 'text-brand'
                                 : 'text-ink hover:text-brand',
@@ -96,7 +96,7 @@ function NavLinks({
 }
 
 function BrandFooter() {
-    return <BrandFooterLogo className="max-w-[90%]" />;
+    return <BrandFooterLogo className="max-w-[80%]" />;
 }
 
 /**
@@ -107,14 +107,14 @@ export function NavSidebar({ className }: { className?: string }) {
     const { url } = usePage();
 
     return (
-        <div className={cn('flex h-full flex-col px-8 py-10', className)}>
+        <div className={cn('flex h-full flex-col px-8 py-[clamp(1.25rem,4vh,2.5rem)]', className)}>
             <Link href="/" className="w-fit shrink-0">
-                <Logo size={56} />
+                <Logo size={48} />
             </Link>
             {/* Nav centers between logo and footer, but scrolls on its own when
                 the viewport is too short to fit it — `my-auto` centers while
                 still allowing scroll to the top (unlike justify/items-center). */}
-            <div className="nav-scroll flex min-h-0 flex-1 flex-col overflow-y-auto py-6">
+            <div className="nav-scroll flex min-h-0 flex-1 flex-col overflow-y-auto py-[clamp(0.75rem,3vh,1.5rem)]">
                 <div className="my-auto">
                     <NavLinks currentUrl={url} />
                 </div>
