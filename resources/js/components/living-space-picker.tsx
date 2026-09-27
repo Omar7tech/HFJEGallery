@@ -1,4 +1,5 @@
-import { useId } from 'react';
+import { Loader2 } from 'lucide-react';
+import { useId, useState } from 'react';
 import MaskedIcon from '@/components/masked-icon';
 import { cn } from '@/lib/utils';
 import type { LivingSpace } from '@/types';
@@ -14,6 +15,9 @@ interface LivingSpacePickerProps {
     titleAs?: 'h1' | 'h2';
 }
 
+/** How long NEXT shows it is preparing, so moving on feels considered. */
+const PREPARE_FOR = 650;
+
 /**
  * The first step of the Living Edit: a card to choose a space, then NEXT.
  * Shared by the Living Edit page and its section on the home page.
@@ -27,6 +31,23 @@ export default function LivingSpacePicker({
 }: LivingSpacePickerProps) {
     // Each picker's radios form their own group.
     const group = useId();
+    // NEXT pressed: it shows a spinner for a moment, then moves on. The
+    // picker is gone once the next step or page is on screen.
+    const [preparing, setPreparing] = useState(false);
+
+    const next = () => {
+        if (preparing) {
+            return;
+        }
+
+        setPreparing(true);
+        setTimeout(
+            onNext,
+            window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                ? 0
+                : PREPARE_FOR,
+        );
+    };
 
     return (
         <div className="mx-auto flex min-h-[630px] w-full flex-col items-center rounded-[30px] bg-pill px-5 pt-8 pb-9 font-display text-[#171915] shadow-[0_3px_12px_rgba(0,0,0,0.12)] sm:px-10 sm:pt-10">
@@ -94,11 +115,23 @@ export default function LivingSpacePicker({
 
             <button
                 type="button"
-                onClick={onNext}
-                disabled={!selectedId}
-                className="mt-auto min-h-10 w-full max-w-[284px] rounded-full bg-brand px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-brand motion-safe:active:scale-[0.98] motion-reduce:transition-none max-sm:mt-10"
+                onClick={next}
+                disabled={!selectedId || preparing}
+                aria-busy={preparing}
+                className="mt-auto inline-flex min-h-10 w-full max-w-[284px] items-center justify-center gap-2.5 rounded-full bg-brand px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-brand disabled:aria-busy:cursor-wait motion-safe:active:scale-[0.98] motion-reduce:transition-none max-sm:mt-10"
             >
-                NEXT
+                {preparing ? (
+                    <>
+                        <Loader2
+                            aria-hidden="true"
+                            className="size-5 animate-spin"
+                            strokeWidth={2}
+                        />
+                        <span className="text-base">Preparing your edit…</span>
+                    </>
+                ) : (
+                    'NEXT'
+                )}
             </button>
         </div>
     );

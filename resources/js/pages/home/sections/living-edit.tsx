@@ -25,6 +25,8 @@ function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
                     spaceId &&
                     router.visit(
                         `/living-edit?space=${encodeURIComponent(spaceId)}&step=step-1`,
+                        // The button's own spinner reports the wait.
+                        { showProgress: false },
                     )
                 }
                 titleAs="h2"
