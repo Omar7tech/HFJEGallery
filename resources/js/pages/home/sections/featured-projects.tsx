@@ -90,7 +90,7 @@ function FeaturedProjects() {
             <SpacesPattern className="pointer-events-none absolute inset-0 z-0 transform-gpu mask-[radial-gradient(120%_120%_at_top_right,black,transparent_65%)] text-brand/50 opacity-[0.18] [-webkit-mask-image:radial-gradient(120%_120%_at_top_right,black,transparent_65%)]" />
 
             <div className="relative z-10 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
-                <h2 className="max-w-4xl font-display text-[clamp(2.25rem,9cqi,4.75rem)] leading-[1.05] text-ink">
+                <h2 className="max-w-4xl font-display text-[clamp(1.9rem,6.5cqi,3.5rem)] leading-[1.1] text-ink">
                     Spaces That Tell Their Own Story
                 </h2>
 
