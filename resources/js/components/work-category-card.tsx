@@ -1,6 +1,7 @@
 import { Link } from '@inertiajs/react';
 import { ArrowUpRight } from 'lucide-react';
 import { motion, useReducedMotion } from 'motion/react';
+import MarqueeText from '@/components/marquee-text';
 import { SmartImage } from '@/components/smart-image';
 import type { WorkCategory } from '@/types';
 
@@ -64,10 +65,15 @@ export default function WorkCategoryCard({
                     />
 
                     <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 md:p-7">
-                        <span className="min-w-0">
-                            <span className="block font-display text-[clamp(1.25rem,5.5vw,1.75rem)] leading-tight wrap-break-word text-white sm:text-[clamp(1.1rem,2.6vw,2.25rem)]">
+                        <span className="min-w-0 flex-1">
+                            {/* One line always: a long name loops like the
+                                Living Edit labels instead of wrapping. */}
+                            <MarqueeText
+                                speed={40}
+                                className="font-display text-[clamp(1.25rem,5.5vw,1.75rem)] leading-tight text-white sm:text-[clamp(1.1rem,2.6vw,2.25rem)]"
+                            >
                                 {category.name}
-                            </span>
+                            </MarqueeText>
 
                             {/* Rises under the name on hover; the grid-rows
                                 trick animates its height without measuring. */}
