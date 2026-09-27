@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Models\WorkCategory;
 use App\Models\WorkTag;
 use Filament\Facades\Filament;
+use Filament\Forms\Components\CheckboxList;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
@@ -110,7 +111,10 @@ test('a project saves the tags picked for it', function () {
     $seaside = WorkTag::factory()->for($homes, 'category')->create();
     $project = Project::factory()->for($homes, 'category')->create();
 
+    WorkTag::factory()->create(['name' => 'Elsewhere']);
+
     Livewire::test(EditProject::class, ['record' => $project->getRouteKey()])
+        ->assertFormFieldExists('tags', fn (CheckboxList $field): bool => array_keys($field->getOptions()) === [$villas->id, $seaside->id])
         ->fillForm(['tags' => [$villas->id, $seaside->id]])
         ->call('save')
         ->assertHasNoFormErrors();
