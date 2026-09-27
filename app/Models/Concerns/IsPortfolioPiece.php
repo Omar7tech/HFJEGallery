@@ -121,9 +121,9 @@ trait IsPortfolioPiece
      * The piece after this one among its siblings in the dashboard order,
      * wrapping round to the first; a piece without siblings has none.
      *
-     * @param  Builder<static>|Relation<static, *, *>  $siblings
+     * @param  Builder<self>|Relation<self, *, *>  $siblings
      */
-    public function nextAmong(Builder|Relation $siblings): ?static
+    public function nextAmong(Builder|Relation $siblings): ?self
     {
         return (clone $siblings)
             ->with('media')

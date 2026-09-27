@@ -89,14 +89,13 @@ class CurtainController extends Controller
      */
     private function present(iterable $styles): array
     {
-        return collect($styles)
+        return array_values(collect($styles)
             ->map(fn (CurtainStyle $style): array => [
                 'slug' => $style->slug,
                 'name' => $style->name,
                 'description' => $style->description,
                 'image' => $style->imageUrl(),
             ])
-            ->values()
-            ->all();
+            ->all());
     }
 }

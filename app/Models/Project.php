@@ -31,10 +31,16 @@ class Project extends Model implements HasMedia
         return $this->belongsTo(WorkCategory::class, 'work_category_id');
     }
 
-    /** @return BelongsToMany<WorkTag, $this> */
+    /**
+     * The tags the project carries, in their dashboard order.
+     *
+     * @return BelongsToMany<WorkTag, $this>
+     */
     public function tags(): BelongsToMany
     {
-        return $this->belongsToMany(WorkTag::class);
+        return $this->belongsToMany(WorkTag::class)
+            ->orderBy('sort_order')
+            ->orderBy('work_tags.id');
     }
 
     /**

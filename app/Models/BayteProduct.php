@@ -50,9 +50,9 @@ class BayteProduct extends Model implements HasMedia
      */
     public static function forHome(): Collection
     {
-        $picked = static::query()->where('is_on_home', true)->exists();
+        $picked = self::query()->where('is_on_home', true)->exists();
 
-        return static::query()
+        return self::query()
             ->when($picked, fn (Builder $query) => $query->where('is_on_home', true))
             ->with('media')
             ->orderBy('sort_order')
