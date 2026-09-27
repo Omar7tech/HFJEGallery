@@ -1,9 +1,11 @@
 import { router } from '@inertiajs/react';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 interface FilterVisitOptions {
     /** The value the page is showing now, or null for "all". */
     active: string | null;
+    /** The page prop that carries `active`, read back from each response. */
+    activeProp: string;
     /** The page narrowed to a value, or to "all" for null. */
     href: (value: string | null) => string;
     /** The props a switch reloads; everything else stays as it is. */
@@ -24,14 +26,29 @@ const CACHE_FOR: [string, string] = ['30s', '2m'];
  */
 export function useFilterVisit({
     active,
+    activeProp,
     href,
     only,
     reset,
 }: FilterVisitOptions) {
-    // The value picked while its data is still on the way; undefined when
-    // nothing is in flight.
+    // The value picked, held until the page's own `active` catches up with
+    // it. Never cleared on a timer or a callback alone: a cached response can
+    // finish a beat before its props are on screen, and letting go early
+    // flashes the previous value.
     const [pending, setPending] = useState<string | null | undefined>();
-    const loading = pending !== undefined;
+    const [seenActive, setSeenActive] = useState(active);
+    // Only the latest pick may settle the state; an older, cancelled visit
+    // must not undo a newer one.
+    const latestVisit = useRef(0);
+
+    // The page moved on (the picked value landed, or history went back):
+    // nothing is pending any more.
+    if (active !== seenActive) {
+        setSeenActive(active);
+        setPending(undefined);
+    }
+
+    const loading = pending !== undefined && pending !== active;
     const selected = loading ? pending : active;
 
     // The same options for the prefetch and the visit, so the visit finds
@@ -49,11 +66,26 @@ export function useFilterVisit({
             return;
         }
 
+        const visit = ++latestVisit.current;
+        const settle = (next: string | null | undefined) => {
+            if (visit === latestVisit.current) {
+                setPending(next);
+            }
+        };
+
         setPending(value);
         router.get(
             href(value),
             {},
-            { ...options, onFinish: () => setPending(undefined) },
+            {
+                ...options,
+                // The server may answer with a different value than asked
+                // for (an unknown filter falls back); wait for that one.
+                onSuccess: (page) =>
+                    settle((page.props[activeProp] as string | null) ?? null),
+                onError: () => settle(undefined),
+                onCancel: () => settle(undefined),
+            },
         );
     };
 

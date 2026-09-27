@@ -51,6 +51,7 @@ export default function BayteIndex({
 }: BaytePageProps) {
     const filter = useFilterVisit({
         active: activeCategory,
+        activeProp: 'activeCategory',
         href: categoryHref,
         only: ['products', 'activeCategory', 'total'],
         reset: ['products'],

@@ -51,6 +51,7 @@ export default function WorkShow({
     // the scroll.
     const tagFilter = useFilterVisit({
         active: activeTag,
+        activeProp: 'activeTag',
         href: (tagSlug) => tagHref(category.slug, tagSlug),
         only: ['projects', 'activeTag'],
         reset: ['projects'],
@@ -80,7 +81,11 @@ export default function WorkShow({
             {
                 preserveScroll: true,
                 showProgress: false,
-                onFinish: () => setPendingCategory(null),
+                // A category opens as a fresh page, so the pending tab clears
+                // itself; letting go on finish instead can flash the old tab
+                // for a frame before the new page is on screen.
+                onError: () => setPendingCategory(null),
+                onCancel: () => setPendingCategory(null),
             },
         );
     };
