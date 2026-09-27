@@ -89,7 +89,7 @@ class WorkSeeder extends Seeder
                 $project = $category->projects()->create([
                     ...$details,
                     'summary' => "A {$details['location']} project, furnished and dressed by HFJE from the first sketch to the last cushion.",
-                    'description' => "Every piece in this {$category->name} project was chosen around the people who live and work in it.\n\nFrom tailored curtains and upholstery to the final styling, HFJE shaped the light, the textures and the proportions of each room so the space feels complete.",
+                    'description' => "<p>Every piece in this {$category->name} project was chosen around the people who live and work in it.</p><p>From <strong>tailored curtains and upholstery</strong> to the final styling, HFJE shaped the light, the textures and the proportions of each room so the space feels complete.</p>",
                     'sort_order' => $projectIndex,
                 ]);
 

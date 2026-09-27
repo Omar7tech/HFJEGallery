@@ -27,7 +27,8 @@ class ProjectFactory extends Factory
             'location' => fake()->city(),
             'year' => fake()->numberBetween(2008, 2026),
             'summary' => fake()->sentence(10),
-            'description' => fake()->paragraphs(2, true),
+            // Rich-editor HTML, as the dashboard stores it.
+            'description' => '<p>'.fake()->paragraph().'</p><p>'.fake()->paragraph().'</p>',
             'sort_order' => 0,
         ];
     }

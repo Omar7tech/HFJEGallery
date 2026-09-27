@@ -112,7 +112,7 @@ class WorkController extends Controller
                 'location' => $project->location,
                 'year' => $project->year,
                 'summary' => $project->summary,
-                'description' => $project->description,
+                'description' => $project->descriptionHtml(),
                 'cover' => $project->coverUrl('webp'),
                 'gallery' => $project->galleryImages(),
             ],

@@ -36,6 +36,7 @@ export interface ProjectDetail {
     location: string | null;
     year: number | null;
     summary: string | null;
+    /** The story as HTML from the rich editor, sanitized on the server. */
     description: string | null;
     /** Full-size WebP cover, or the placeholder. */
     cover: string;

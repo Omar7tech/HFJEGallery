@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Database\Factories\ProjectFactory;
+use Filament\Forms\Components\RichEditor\RichContentRenderer;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -38,6 +39,18 @@ class Project extends Model implements HasMedia
     {
         return $this->getFirstMediaUrl('cover', $conversion)
             ?: asset(WorkCategory::PLACEHOLDER_IMAGE);
+    }
+
+    /**
+     * The rich-text story as sanitized HTML, safe to render on the site.
+     */
+    public function descriptionHtml(): ?string
+    {
+        if (blank($this->description)) {
+            return null;
+        }
+
+        return RichContentRenderer::make($this->description)->toHtml();
     }
 
     /**

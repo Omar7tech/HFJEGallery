@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Projects\Schemas;
 
+use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
@@ -46,9 +47,14 @@ class ProjectForm
                             ->rows(2)
                             ->helperText('One short line, shown under the project name.')
                             ->columnSpanFull(),
-                        Textarea::make('description')
-                            ->rows(6)
-                            ->helperText('The story of the project. Leave an empty line between paragraphs.')
+                        RichEditor::make('description')
+                            ->toolbarButtons([
+                                ['bold', 'italic', 'underline', 'link'],
+                                ['h2', 'h3'],
+                                ['bulletList', 'orderedList', 'blockquote'],
+                                ['undo', 'redo'],
+                            ])
+                            ->helperText('The story of the project, shown under the summary.')
                             ->columnSpanFull(),
                     ]),
 

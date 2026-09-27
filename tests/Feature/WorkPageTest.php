@@ -122,3 +122,15 @@ test('the gallery is served as webp in its upload order', function () {
             ->where('project.gallery.1.src', fn (string $src) => str_ends_with($src, 'bedroom-webp.webp'))
         );
 });
+
+test('the project story keeps its formatting but strips unsafe html', function () {
+    $homes = WorkCategory::factory()->create(['name' => 'Homes']);
+    $project = Project::factory()->for($homes, 'category')->create([
+        'description' => '<p>Tailored <strong>linen</strong><script>alert(1)</script></p><h2 onclick="steal()">The light</h2>',
+    ]);
+
+    $this->get(route('work.project', [$homes, $project]))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('project.description', '<p>Tailored <strong>linen</strong></p><h2>The light</h2>')
+        );
+});

@@ -23,12 +23,6 @@ export default function WorkProject({
         Boolean(detail.text),
     );
 
-    // Paragraphs are separated by an empty line in the dashboard.
-    const paragraphs = (project.description ?? '')
-        .split(/\n\s*\n/)
-        .map((paragraph) => paragraph.trim())
-        .filter(Boolean);
-
     return (
         <>
             <Head title={`${project.name} · ${category.name}`}>
@@ -88,9 +82,9 @@ export default function WorkProject({
                 />
 
                 {/* The story, kept compact: the summary as a lead line, then
-                    the paragraphs flowing in balanced columns so long text
-                    never leaves gaps. */}
-                {(project.summary || paragraphs.length > 0) && (
+                    the rich-text story flowing in balanced columns so long
+                    text never leaves gaps. */}
+                {(project.summary || project.description) && (
                     <section
                         aria-label="About the project"
                         className="mt-10 @3xl:mt-12"
@@ -101,17 +95,15 @@ export default function WorkProject({
                             </p>
                         )}
 
-                        {paragraphs.length > 0 && (
-                            <div className="mt-5 gap-10 @3xl:columns-2">
-                                {paragraphs.map((paragraph) => (
-                                    <p
-                                        key={paragraph}
-                                        className="mb-4 font-sans text-base leading-relaxed whitespace-pre-line text-ink/70 last:mb-0"
-                                    >
-                                        {paragraph}
-                                    </p>
-                                ))}
-                            </div>
+                        {project.description && (
+                            <div
+                                className="rich-text mt-5 gap-10 @3xl:columns-2"
+                                // Sanitized on the server by Filament's rich
+                                // content renderer before it reaches the page.
+                                dangerouslySetInnerHTML={{
+                                    __html: project.description,
+                                }}
+                            />
                         )}
                     </section>
                 )}
