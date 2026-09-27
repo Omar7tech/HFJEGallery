@@ -62,30 +62,25 @@ const styles = [
     },
 ];
 const portfolio = [
-    ...Array.from({ length: 8 }, (_, index) => ({
+    ...Array.from({ length: 8 }, () => ({
         image: 'curtain-portfolio',
         alt: 'Sculptural vase framed by sheer and textured curtains',
-        type: index % 2 ? 'Layered' : 'Tailored',
     })),
     {
         image: 'layered-curtains',
         alt: 'Layered curtains in a contemporary bedroom',
-        type: 'Layered',
     },
     {
         image: 'blackout-curtains',
         alt: 'Dark blackout curtains beside a sunlit window',
-        type: 'Layered',
     },
     {
         image: 'pleated-curtains',
         alt: 'Tailored pink curtain pleats',
-        type: 'Tailored',
     },
     {
         image: 'eyelet-curtains',
         alt: 'Gray eyelet curtains on a decorative rail',
-        type: 'Tailored',
     },
 ];
 const pill =
@@ -94,14 +89,10 @@ const pill =
 export default function Curtains() {
     const heroVideo = useRef<HTMLVideoElement>(null);
     const [heroReady, setHeroReady] = useState(false);
-    const [filter, setFilter] = useState('Complete');
     const [expanded, setExpanded] = useState(false);
     const [activeStyle, setActiveStyle] = useState(0);
     const [allStyles, setAllStyles] = useState(false);
-    const filtered = portfolio.filter(
-        (item) => filter === 'Complete' || item.type === filter,
-    );
-    const visibleWorks = filtered.slice(0, expanded ? undefined : 8);
+    const visibleWorks = portfolio.slice(0, expanded ? undefined : 8);
     /** Two full rows fit one desktop screen; a single row or the expanded
      * grid keeps its natural tile shape instead. */
     const fitsScreen = !expanded && visibleWorks.length > 4;
@@ -202,30 +193,13 @@ export default function Curtains() {
                                 ({portfolio.length})
                             </sup>
                         </h3>
-                        <div
-                            className="flex gap-3 @lg:gap-8"
-                            aria-label="Filter curtain portfolio"
-                        >
+                        <ul className="flex gap-3 font-sans text-base text-ink @lg:gap-8 @lg:text-lg">
                             {['Complete', 'Tailored', 'Layered'].map((item) => (
-                                <button
-                                    key={item}
-                                    type="button"
-                                    aria-pressed={filter === item}
-                                    onClick={() => {
-                                        setFilter(item);
-                                        setExpanded(false);
-                                    }}
-                                    className={cn(
-                                        'min-h-11 px-1 font-sans text-base underline-offset-4 focus-visible:outline-brand @lg:text-lg',
-                                        filter === item
-                                            ? 'text-brand underline'
-                                            : 'text-ink hover:text-brand',
-                                    )}
-                                >
+                                <li key={item} className="px-1">
                                     {item}
-                                </button>
+                                </li>
                             ))}
-                        </div>
+                        </ul>
                     </div>
                     <div
                         className={cn(
@@ -249,7 +223,7 @@ export default function Curtains() {
                             </div>
                         ))}
                     </div>
-                    {filtered.length > 8 && (
+                    {portfolio.length > 8 && (
                         <div
                             className={cn(
                                 'mt-10 text-center',
