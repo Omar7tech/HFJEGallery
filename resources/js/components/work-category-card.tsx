@@ -16,8 +16,8 @@ interface WorkCategoryCardProps {
 /**
  * A category as a landscape photo card. At rest: the photo and the name on a
  * soft ink gradient. On hover the photo leans in, the gradient deepens and
- * the description rises under the name while the terracotta arrow turns
- * toward it.
+ * the description rises under the name while the terracotta arrow in the
+ * top-right corner turns.
  *
  * Cards fade up one after another as they scroll into view. Touch and
  * reduced-motion visitors get the calm resting card.
@@ -64,8 +64,15 @@ export default function WorkCategoryCard({
                         className="pointer-events-none absolute inset-0 bg-linear-to-t from-ink/60 via-ink/25 to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:transition-none"
                     />
 
-                    <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 md:p-7">
-                        <span className="min-w-0 flex-1">
+                    <span
+                        aria-hidden="true"
+                        className="absolute top-5 right-5 grid size-10 place-items-center rounded-full bg-brand text-brand-foreground transition-[rotate,background-color] duration-500 ease-out group-hover:rotate-45 group-hover:bg-brand-hover motion-reduce:transition-none motion-reduce:group-hover:rotate-0 md:top-7 md:right-7 md:size-12"
+                    >
+                        <ArrowUpRight className="size-5" strokeWidth={1.75} />
+                    </span>
+
+                    <span className="absolute inset-x-0 bottom-0 p-5 md:p-7">
+                        <span className="block min-w-0">
                             {/* One line always: a long name loops like the
                                 Living Edit labels instead of wrapping. */}
                             <MarqueeText
@@ -86,16 +93,6 @@ export default function WorkCategoryCard({
                                     </span>
                                 </span>
                             )}
-                        </span>
-
-                        <span
-                            aria-hidden="true"
-                            className="grid size-10 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-[rotate,background-color] duration-500 ease-out group-hover:rotate-45 group-hover:bg-brand-hover motion-reduce:transition-none motion-reduce:group-hover:rotate-0 md:size-12"
-                        >
-                            <ArrowUpRight
-                                className="size-5"
-                                strokeWidth={1.75}
-                            />
                         </span>
                     </span>
                 </SmartImage>
