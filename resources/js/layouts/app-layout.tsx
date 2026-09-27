@@ -15,7 +15,7 @@ export default function AppLayout({ children }: { children: ReactNode }) {
             {/* Sidebar + content row */}
             <div className="flex flex-1">
                 {/* Sticky sidebar — pinned while scrolling, part of the flow */}
-                <aside className="sticky top-0 hidden h-dvh w-72 shrink-0 lg:block">
+                <aside className="sticky top-0 hidden h-dvh w-60 shrink-0 lg:block">
                     <NavSidebar className="h-full" />
                 </aside>
 

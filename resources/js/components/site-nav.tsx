@@ -96,7 +96,7 @@ function NavLinks({
 }
 
 function BrandFooter() {
-    return <BrandFooterLogo className="max-w-[80%]" />;
+    return <BrandFooterLogo className="max-w-[90%]" />;
 }
 
 /**
@@ -107,7 +107,12 @@ export function NavSidebar({ className }: { className?: string }) {
     const { url } = usePage();
 
     return (
-        <div className={cn('flex h-full flex-col px-8 py-[clamp(1.25rem,4vh,2.5rem)]', className)}>
+        <div
+            className={cn(
+                'flex h-full flex-col px-6 py-[clamp(1.25rem,4vh,2.5rem)]',
+                className,
+            )}
+        >
             <Link href="/" className="w-fit shrink-0">
                 <Logo size={48} />
             </Link>
