@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { ArrowUpRight } from 'lucide-react';
 import { SmartImage } from '@/components/smart-image';
 
@@ -67,8 +68,9 @@ function SpacesPattern({ className }: { className?: string }) {
  */
 function ViewPortfolioButton() {
     return (
-        <button
-            type="button"
+        <Link
+            href="/work"
+            prefetch
             className="group mt-3 flex w-full items-center justify-center rounded-3xl bg-brand py-6 text-lg font-medium tracking-[0.15em] text-brand-foreground uppercase transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-xl"
         >
             View Portfolio
@@ -78,7 +80,7 @@ function ViewPortfolioButton() {
             >
                 <ArrowUpRight className="size-[1.1em]" strokeWidth={2} />
             </span>
-        </button>
+        </Link>
     );
 }
 

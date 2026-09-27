@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
 
         if (app()->isLocal()) {
             $this->call(GalleryImageSeeder::class);
+            $this->call(WorkSeeder::class);
         }
 
         User::updateOrCreate([

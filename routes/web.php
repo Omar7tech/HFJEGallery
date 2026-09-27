@@ -3,6 +3,7 @@
 use App\Http\Controllers\BayteController;
 use App\Http\Controllers\LivingEditController;
 use App\Http\Controllers\MoodBoardController;
+use App\Http\Controllers\WorkController;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
@@ -15,6 +16,11 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 Route::inertia('/', 'home/index')->name('home');
 Route::inertia('/about', 'about/index')->name('about');
 Route::inertia('/curtains', 'curtains/index')->name('curtains');
+Route::controller(WorkController::class)->prefix('work')->name('work.')->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/{category}', 'show')->name('show');
+    Route::get('/{category}/{project}', 'project')->scopeBindings()->name('project');
+});
 Route::get('/bayte', BayteController::class)->name('bayte');
 Route::get('/living-edit', LivingEditController::class)->name('living-edit');
 Route::get('/living-edit/mood-board', MoodBoardController::class)
