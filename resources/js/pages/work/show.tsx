@@ -33,10 +33,6 @@ function tagHref(categorySlug: string, tagSlug?: string | null): string {
         : `/work/${categorySlug}`;
 }
 
-function projectsLabel(count: number): string {
-    return `${count} ${count === 1 ? 'project' : 'projects'}`;
-}
-
 /** Keeps new-tab and modified clicks working as plain links. */
 function isPlainClick(event: MouseEvent): boolean {
     return (
@@ -51,7 +47,6 @@ function isPlainClick(event: MouseEvent): boolean {
 interface TagChipProps {
     href: string;
     active: boolean;
-    count: number;
     onSelect: () => void;
     children: ReactNode;
 }
@@ -60,7 +55,7 @@ interface TagChipProps {
  * A pill filtering the current category. A real link, so it can be opened in
  * a new tab, but a plain click swaps the grid in place.
  */
-function TagChip({ href, active, count, onSelect, children }: TagChipProps) {
+function TagChip({ href, active, onSelect, children }: TagChipProps) {
     return (
         <a
             href={href}
@@ -72,21 +67,13 @@ function TagChip({ href, active, count, onSelect, children }: TagChipProps) {
                 }
             }}
             className={cn(
-                'inline-flex min-h-10 items-center gap-2 rounded-full border px-4 font-sans text-sm whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
+                'inline-flex min-h-10 items-center rounded-full border px-4 font-sans text-sm whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
                 active
                     ? 'border-ink bg-ink text-cream'
                     : 'border-ink/15 bg-white/60 text-ink/75 hover:border-ink/40 hover:text-ink',
             )}
         >
             {children}
-            <span
-                className={cn(
-                    'text-xs tabular-nums',
-                    active ? 'text-cream/60' : 'text-ink/35',
-                )}
-            >
-                {count}
-            </span>
         </a>
     );
 }
@@ -94,21 +81,18 @@ function TagChip({ href, active, count, onSelect, children }: TagChipProps) {
 /** One row of a category tab's dropdown. */
 function TagMenuLink({
     href,
-    count,
     children,
 }: {
     href: string;
-    count: number;
     children: ReactNode;
 }) {
     return (
         <Link
             href={href}
             prefetch="hover"
-            className="flex min-h-10 items-center justify-between gap-6 rounded-xl px-3.5 font-sans text-[15px] whitespace-nowrap text-ink/75 transition-colors duration-150 hover:bg-ink/5 hover:text-ink focus-visible:bg-ink/5 focus-visible:outline-none motion-reduce:transition-none"
+            className="flex min-h-10 items-center rounded-xl px-3.5 font-sans text-[15px] whitespace-nowrap text-ink/75 transition-colors duration-150 hover:bg-ink/5 hover:text-ink focus-visible:bg-ink/5 focus-visible:outline-none motion-reduce:transition-none"
         >
             {children}
-            <span className="text-xs text-ink/35 tabular-nums">{count}</span>
         </Link>
     );
 }
@@ -129,7 +113,6 @@ export default function WorkShow({
     const current = categories.find((item) => item.slug === category.slug);
     const tags = current?.tags ?? [];
     const shownTagDetails = tags.find((tag) => tag.slug === shownTag);
-    const shownCount = shownTagDetails?.count ?? current?.count;
 
     /** Swaps only the grid: the photo and tabs stay put, and so does the scroll. */
     const filterBy = (tagSlug: string | null) => {
@@ -263,7 +246,6 @@ export default function WorkShow({
                                                             href={tagHref(
                                                                 item.slug,
                                                             )}
-                                                            count={item.count}
                                                         >
                                                             All {item.name}
                                                         </TagMenuLink>
@@ -279,9 +261,6 @@ export default function WorkShow({
                                                                     item.slug,
                                                                     tag.slug,
                                                                 )}
-                                                                count={
-                                                                    tag.count
-                                                                }
                                                             >
                                                                 {tag.name}
                                                             </TagMenuLink>
@@ -310,7 +289,6 @@ export default function WorkShow({
                                 <TagChip
                                     href={tagHref(category.slug)}
                                     active={shownTag === null}
-                                    count={current?.count ?? 0}
                                     onSelect={() => filterBy(null)}
                                 >
                                     All
@@ -321,7 +299,6 @@ export default function WorkShow({
                                     <TagChip
                                         href={tagHref(category.slug, tag.slug)}
                                         active={shownTag === tag.slug}
-                                        count={tag.count}
                                         onSelect={() =>
                                             filterBy(
                                                 shownTag === tag.slug
@@ -338,36 +315,16 @@ export default function WorkShow({
                     </nav>
                 )}
 
-                {/* What the grid holds right now, with a way back out of a
-                    filter. Announced to screen readers as it changes. */}
-                {tags.length > 0 && shownCount !== undefined && (
-                    <div
-                        aria-live="polite"
-                        className="mt-5 flex min-h-8 flex-wrap items-center gap-x-3 gap-y-1 font-sans text-sm text-ink/55"
+                {/* A way back out of a filter. */}
+                {shownTagDetails && (
+                    <button
+                        type="button"
+                        onClick={() => filterBy(null)}
+                        className="mt-4 inline-flex min-h-8 items-center gap-1 rounded-full font-sans text-sm text-brand transition-colors hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                     >
-                        <span>
-                            {shownTagDetails ? (
-                                <>
-                                    {projectsLabel(shownCount)} in{' '}
-                                    <span className="text-ink">
-                                        {shownTagDetails.name}
-                                    </span>
-                                </>
-                            ) : (
-                                `All ${projectsLabel(shownCount)}`
-                            )}
-                        </span>
-                        {shownTagDetails && (
-                            <button
-                                type="button"
-                                onClick={() => filterBy(null)}
-                                className="inline-flex min-h-8 items-center gap-1 rounded-full px-2 text-brand transition-colors hover:text-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                            >
-                                <X className="size-3.5" strokeWidth={2} />
-                                Clear filter
-                            </button>
-                        )}
-                    </div>
+                        <X className="size-3.5" strokeWidth={2} />
+                        Clear filter
+                    </button>
                 )}
 
                 <h2 className="sr-only">Projects</h2>
@@ -406,7 +363,7 @@ export default function WorkShow({
                             aria-busy={filtering}
                             className={cn(
                                 'grid gap-x-4 gap-y-10 transition-opacity duration-300 motion-reduce:transition-none @xl:grid-cols-2 @2xl:gap-x-5 @4xl:grid-cols-3',
-                                tags.length > 0 ? 'mt-4' : 'mt-8',
+                                tags.length > 0 ? 'mt-6' : 'mt-8',
                                 filtering && 'pointer-events-none opacity-40',
                             )}
                         >

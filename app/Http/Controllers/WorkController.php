@@ -78,20 +78,17 @@ class WorkController extends Controller
             // categories or straight into one of their tags.
             'categories' => WorkCategory::query()
                 ->has('projects')
-                ->withCount('projects')
-                ->with(['tags' => fn (HasMany $query) => $query->has('projects')->withCount('projects')])
+                ->with(['tags' => fn (HasMany $query) => $query->has('projects')])
                 ->orderBy('sort_order')
                 ->orderBy('id')
                 ->get(['id', 'slug', 'name'])
                 ->map(fn (WorkCategory $item): array => [
                     'slug' => $item->slug,
                     'name' => $item->name,
-                    'count' => $item->projects_count,
                     'tags' => $item->tags
                         ->map(fn (WorkTag $tag): array => [
                             'slug' => $tag->slug,
                             'name' => $tag->name,
-                            'count' => $tag->projects_count,
                         ])
                         ->all(),
                 ])

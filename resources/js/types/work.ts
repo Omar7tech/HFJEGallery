@@ -17,14 +17,10 @@ export interface WorkCategoryLink {
 export interface WorkTagLink {
     slug: string;
     name: string;
-    /** How many projects carry the tag. */
-    count: number;
 }
 
 /** A category in the switcher of a category page, with its tags. */
 export interface WorkCategoryNavItem extends WorkCategoryLink {
-    /** How many projects the category holds. */
-    count: number;
     tags: WorkTagLink[];
 }
 
