@@ -101,6 +101,10 @@ export default function Curtains() {
     const filtered = portfolio.filter(
         (item) => filter === 'Complete' || item.type === filter,
     );
+    const visibleWorks = filtered.slice(0, expanded ? undefined : 8);
+    /** Two full rows fit one desktop screen; a single row or the expanded
+     * grid keeps its natural tile shape instead. */
+    const fitsScreen = !expanded && visibleWorks.length > 4;
 
     return (
         <>
@@ -162,7 +166,11 @@ export default function Curtains() {
 
                 <section
                     id="curtains-portfolio"
-                    className="scroll-mt-24 px-1 pt-24 @lg:px-8 @lg:pt-[18cqi]"
+                    className={cn(
+                        'scroll-mt-24 px-1 pt-24 @lg:px-8 @lg:pt-[18cqi]',
+                        fitsScreen &&
+                            'lg:mt-[8cqi] lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:scroll-mt-0 lg:flex-col lg:py-10!',
+                    )}
                 >
                     <div className="flex flex-col justify-between gap-6 @lg:flex-row @lg:items-start">
                         <h2 className="font-display text-[clamp(1.5rem,3.8cqi,2.6rem)] leading-[1.2] tracking-[-0.045em] text-[#ad6844]">
@@ -182,7 +190,12 @@ export default function Curtains() {
                             atmosphere of a room.
                         </p>
                     </div>
-                    <div className="mt-10 flex flex-wrap items-center justify-between gap-3 @lg:mt-12">
+                    <div
+                        className={cn(
+                            'mt-10 flex flex-wrap items-center justify-between gap-3 @lg:mt-12',
+                            fitsScreen && 'lg:mt-6!',
+                        )}
+                    >
                         <h3 className="font-sans text-sm uppercase @lg:text-lg">
                             Our curtains work{' '}
                             <sup className="text-[10px]">
@@ -214,23 +227,35 @@ export default function Curtains() {
                             ))}
                         </div>
                     </div>
-                    <div className="mt-4 grid grid-cols-2 gap-1 @lg:grid-cols-4">
-                        {filtered
-                            .slice(0, expanded ? undefined : 8)
-                            .map((item, index) => (
-                                <div
-                                    key={`${item.image}-${index}`}
-                                    className="aspect-[1.25] overflow-hidden bg-cream"
-                                >
-                                    <CurtainImage
-                                        name={item.image}
-                                        alt={item.alt}
-                                    />
-                                </div>
-                            ))}
+                    <div
+                        className={cn(
+                            'mt-4 grid grid-cols-2 gap-1 @lg:grid-cols-4',
+                            fitsScreen &&
+                                'lg:min-h-0 lg:flex-[1_1_0] lg:auto-rows-[minmax(0,1fr)] lg:grid-cols-4',
+                        )}
+                    >
+                        {visibleWorks.map((item, index) => (
+                            <div
+                                key={`${item.image}-${index}`}
+                                className={cn(
+                                    'aspect-[1.25] overflow-hidden bg-cream',
+                                    fitsScreen && 'lg:aspect-auto',
+                                )}
+                            >
+                                <CurtainImage
+                                    name={item.image}
+                                    alt={item.alt}
+                                />
+                            </div>
+                        ))}
                     </div>
                     {filtered.length > 8 && (
-                        <div className="mt-10 text-center">
+                        <div
+                            className={cn(
+                                'mt-10 text-center',
+                                fitsScreen && 'lg:mt-6',
+                            )}
+                        >
                             <button
                                 type="button"
                                 onClick={() => setExpanded((value) => !value)}
