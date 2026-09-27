@@ -50,26 +50,9 @@ export default function WorkProject({
                     {category.name}
                 </Link>
 
-                <header className="mt-5 flex flex-col gap-6 @3xl:flex-row @3xl:items-end @3xl:justify-between">
-                    <h1 className="max-w-4xl font-display text-[clamp(2rem,7cqi,4.5rem)] leading-[1.05] text-ink">
-                        {project.name}
-                    </h1>
-
-                    {facts.length > 0 && (
-                        <dl className="flex shrink-0 gap-8 @3xl:text-right">
-                            {facts.map((fact) => (
-                                <div key={fact.label}>
-                                    <dt className="text-xs tracking-[0.2em] text-ink/50 uppercase">
-                                        {fact.label}
-                                    </dt>
-                                    <dd className="mt-1 font-sans text-base text-ink">
-                                        {fact.value}
-                                    </dd>
-                                </div>
-                            ))}
-                        </dl>
-                    )}
-                </header>
+                <h1 className="mt-5 max-w-5xl font-display text-[clamp(2rem,7cqi,4.5rem)] leading-[1.05] text-ink">
+                    {project.name}
+                </h1>
 
                 {/* The cover is the LCP image: fetched eagerly at high priority. */}
                 <SmartImage
@@ -81,25 +64,49 @@ export default function WorkProject({
                     imgClassName="object-cover"
                 />
 
-                {(project.summary || paragraphs.length > 0) && (
-                    <section className="mt-12 grid gap-6 @3xl:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)] @3xl:gap-16">
-                        {project.summary ? (
-                            <p className="font-display text-[clamp(1.1rem,2.4cqi,1.6rem)] leading-[1.4] text-brand">
+                {/* The story, kept compact: the facts as one slim strip,
+                    the summary as a lead line, then the paragraphs flowing
+                    in balanced columns so long text never leaves gaps. */}
+                {(facts.length > 0 ||
+                    project.summary ||
+                    paragraphs.length > 0) && (
+                    <section aria-label="About the project" className="mt-10">
+                        {facts.length > 0 && (
+                            <dl className="flex flex-wrap divide-x divide-ink/10 rounded-2xl bg-[#f2f1ef] py-4">
+                                {facts.map((fact) => (
+                                    <div
+                                        key={fact.label}
+                                        className="px-5 md:px-7"
+                                    >
+                                        <dt className="text-[11px] tracking-[0.2em] text-ink/50 uppercase">
+                                            {fact.label}
+                                        </dt>
+                                        <dd className="mt-1 font-sans text-base text-ink">
+                                            {fact.value}
+                                        </dd>
+                                    </div>
+                                ))}
+                            </dl>
+                        )}
+
+                        {project.summary && (
+                            <p className="mt-8 max-w-4xl font-sans text-[clamp(1.2rem,2.2cqi,1.6rem)] leading-snug font-medium text-ink">
                                 {project.summary}
                             </p>
-                        ) : (
-                            <span aria-hidden="true" />
                         )}
-                        <div className="flex flex-col gap-4">
-                            {paragraphs.map((paragraph) => (
-                                <p
-                                    key={paragraph}
-                                    className="font-sans text-base leading-relaxed whitespace-pre-line text-ink/80"
-                                >
-                                    {paragraph}
-                                </p>
-                            ))}
-                        </div>
+
+                        {paragraphs.length > 0 && (
+                            <div className="mt-5 gap-10 @3xl:columns-2">
+                                {paragraphs.map((paragraph) => (
+                                    <p
+                                        key={paragraph}
+                                        className="mb-4 font-sans text-base leading-relaxed whitespace-pre-line text-ink/70 last:mb-0"
+                                    >
+                                        {paragraph}
+                                    </p>
+                                ))}
+                            </div>
+                        )}
                     </section>
                 )}
 
