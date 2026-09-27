@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Spatie\Image\Enums\Fit;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -30,6 +31,12 @@ class Project extends Model implements HasMedia
     public function category(): BelongsTo
     {
         return $this->belongsTo(WorkCategory::class, 'work_category_id');
+    }
+
+    /** @return BelongsToMany<WorkTag, $this> */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(WorkTag::class);
     }
 
     /**

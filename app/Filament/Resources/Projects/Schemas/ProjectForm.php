@@ -2,12 +2,15 @@
 
 namespace App\Filament\Resources\Projects\Schemas;
 
+use App\Models\WorkTag;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Utilities\Get;
+use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -35,7 +38,32 @@ class ProjectForm
                             )
                             ->required()
                             ->preload()
-                            ->searchable(),
+                            ->searchable()
+                            ->live()
+                            // Tags belong to one category: switching category drops them.
+                            ->afterStateUpdated(fn (Set $set) => $set('tags', [])),
+                        Select::make('tags')
+                            ->relationship(
+                                name: 'tags',
+                                titleAttribute: 'name',
+                                modifyQueryUsing: fn (Builder $query, Get $get): Builder => $query
+                                    ->where('work_category_id', $get('work_category_id'))
+                                    ->orderBy('sort_order'),
+                            )
+                            ->multiple()
+                            ->preload()
+                            ->disabled(fn (Get $get): bool => blank($get('work_category_id')))
+                            ->createOptionForm([
+                                TextInput::make('name')
+                                    ->required()
+                                    ->maxLength(255),
+                            ])
+                            ->createOptionUsing(fn (array $data, Get $get): int => WorkTag::create([
+                                'work_category_id' => $get('work_category_id'),
+                                'name' => $data['name'],
+                            ])->getKey())
+                            ->helperText('Filters on the category page. A project can have several.')
+                            ->columnSpanFull(),
                         TextInput::make('location')
                             ->maxLength(255),
                         TextInput::make('year')

@@ -14,25 +14,25 @@ use Spatie\MediaLibrary\HasMedia;
  */
 class WorkSeeder extends Seeder
 {
-    /** @var array<string, array{description: string, projects: list<array{name: string, location: string, year: int}>}> */
+    /** @var array<string, array{description: string, projects: list<array{name: string, location: string, year: int, tags?: list<string>}>}> */
     private const CATEGORIES = [
         'Homes' => [
             'description' => 'Family houses shaped room by room around the way each household lives.',
             'projects' => [
-                ['name' => 'Broummana Family House', 'location' => 'Broummana', 'year' => 2025],
-                ['name' => 'Faqra Mountain Retreat', 'location' => 'Faqra', 'year' => 2024],
-                ['name' => 'Batroun Seaside Villa', 'location' => 'Batroun', 'year' => 2024],
-                ['name' => 'Baabdat Stone House', 'location' => 'Baabdat', 'year' => 2023],
-                ['name' => 'Jounieh Hillside Home', 'location' => 'Jounieh', 'year' => 2022],
+                ['name' => 'Broummana Family House', 'location' => 'Broummana', 'year' => 2025, 'tags' => ['Villas', 'Mountain']],
+                ['name' => 'Faqra Mountain Retreat', 'location' => 'Faqra', 'year' => 2024, 'tags' => ['Chalets', 'Mountain']],
+                ['name' => 'Batroun Seaside Villa', 'location' => 'Batroun', 'year' => 2024, 'tags' => ['Villas', 'Seaside']],
+                ['name' => 'Baabdat Stone House', 'location' => 'Baabdat', 'year' => 2023, 'tags' => ['Traditional', 'Mountain']],
+                ['name' => 'Jounieh Hillside Home', 'location' => 'Jounieh', 'year' => 2022, 'tags' => ['Villas', 'Seaside']],
             ],
         ],
         'Apartments' => [
             'description' => 'City apartments where every metre is made to work and to feel calm.',
             'projects' => [
-                ['name' => 'Achrafieh Penthouse', 'location' => 'Achrafieh, Beirut', 'year' => 2025],
-                ['name' => 'Gemmayze Loft', 'location' => 'Gemmayze, Beirut', 'year' => 2024],
-                ['name' => 'Ramlet El Bayda Residence', 'location' => 'Beirut', 'year' => 2023],
-                ['name' => 'Hazmieh Garden Flat', 'location' => 'Hazmieh', 'year' => 2023],
+                ['name' => 'Achrafieh Penthouse', 'location' => 'Achrafieh, Beirut', 'year' => 2025, 'tags' => ['Penthouses']],
+                ['name' => 'Gemmayze Loft', 'location' => 'Gemmayze, Beirut', 'year' => 2024, 'tags' => ['Lofts']],
+                ['name' => 'Ramlet El Bayda Residence', 'location' => 'Beirut', 'year' => 2023, 'tags' => ['Penthouses', 'Sea view']],
+                ['name' => 'Hazmieh Garden Flat', 'location' => 'Hazmieh', 'year' => 2023, 'tags' => ['Garden flats']],
             ],
         ],
         'Restaurants' => [
@@ -86,12 +86,20 @@ class WorkSeeder extends Seeder
             $this->attachPhoto($category, 'image', $categoryIndex);
 
             foreach (self::CATEGORIES[$name]['projects'] as $projectIndex => $details) {
+                $tagNames = $details['tags'] ?? [];
+                unset($details['tags']);
+
                 $project = $category->projects()->create([
                     ...$details,
                     'summary' => "A {$details['location']} project, furnished and dressed by HFJE from the first sketch to the last cushion.",
                     'description' => "<p>Every piece in this {$category->name} project was chosen around the people who live and work in it.</p><p>From <strong>tailored curtains and upholstery</strong> to the final styling, HFJE shaped the light, the textures and the proportions of each room so the space feels complete.</p>",
                     'sort_order' => $projectIndex,
                 ]);
+
+                $project->tags()->attach(array_map(
+                    fn (string $tagName): int => $category->tags()->firstOrCreate(['name' => $tagName])->id,
+                    $tagNames,
+                ));
 
                 $this->attachPhoto($project, 'cover', $photo++);
 

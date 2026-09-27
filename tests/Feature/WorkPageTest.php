@@ -2,6 +2,7 @@
 
 use App\Models\Project;
 use App\Models\WorkCategory;
+use App\Models\WorkTag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Collection;
@@ -52,6 +53,69 @@ test('the projects of a category load nine at a time', function () {
 
     $this->get(route('work.show', ['category' => $homes, 'page' => 2]))
         ->assertInertia(fn (Assert $page) => $page->has('projects.data', 2));
+});
+
+test('a tag narrows the category to the projects carrying it', function () {
+    $homes = WorkCategory::factory()->create(['name' => 'Homes']);
+    $villas = WorkTag::factory()->for($homes, 'category')->create(['name' => 'Villas']);
+    $seaside = WorkTag::factory()->for($homes, 'category')->create(['name' => 'Seaside']);
+    $batroun = Project::factory()->for($homes, 'category')->create(['name' => 'Batroun Villa', 'sort_order' => 1]);
+    $broummana = Project::factory()->for($homes, 'category')->create(['name' => 'Broummana House', 'sort_order' => 2]);
+    Project::factory()->for($homes, 'category')->create(['name' => 'Faqra Chalet', 'sort_order' => 3]);
+    $batroun->tags()->attach([$villas->id, $seaside->id]);
+    $broummana->tags()->attach($villas);
+
+    $this->get(route('work.show', ['category' => $homes, 'tag' => 'villas']))
+        ->assertOk()
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('activeTag', 'villas')
+            ->where('projects.data', fn (Collection $projects) => $projects->pluck('name')->all() === ['Batroun Villa', 'Broummana House'])
+        );
+
+    $this->get(route('work.show', ['category' => $homes, 'tag' => 'seaside']))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('projects.data', fn (Collection $projects) => $projects->pluck('name')->all() === ['Batroun Villa'])
+        );
+
+    $this->get(route('work.show', $homes))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('activeTag', null)
+            ->has('projects.data', 3)
+        );
+});
+
+test('the category switcher lists only tags that have projects, in dashboard order', function () {
+    $homes = WorkCategory::factory()->create(['name' => 'Homes']);
+    $seaside = WorkTag::factory()->for($homes, 'category')->create(['name' => 'Seaside', 'sort_order' => 2]);
+    $villas = WorkTag::factory()->for($homes, 'category')->create(['name' => 'Villas', 'sort_order' => 1]);
+    WorkTag::factory()->for($homes, 'category')->create(['name' => 'Chalets']);
+    Project::factory()->for($homes, 'category')->create()->tags()->attach([$seaside->id, $villas->id]);
+
+    $this->get(route('work.show', $homes))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('categories.0.tags', [
+                ['slug' => 'villas', 'name' => 'Villas'],
+                ['slug' => 'seaside', 'name' => 'Seaside'],
+            ])
+        );
+});
+
+test('a tag of another category or an unknown tag is not found', function () {
+    $homes = WorkCategory::factory()->create(['name' => 'Homes']);
+    $apartments = WorkCategory::factory()->create(['name' => 'Apartments']);
+    WorkTag::factory()->for($apartments, 'category')->create(['name' => 'Lofts']);
+    Project::factory()->for($homes, 'category')->create();
+
+    $this->get(route('work.show', ['category' => $homes, 'tag' => 'lofts']))->assertNotFound();
+    $this->get(route('work.show', ['category' => $homes, 'tag' => 'hammocks']))->assertNotFound();
+});
+
+test('two categories may share a tag name', function () {
+    $homes = WorkCategory::factory()->create(['name' => 'Homes']);
+    $apartments = WorkCategory::factory()->create(['name' => 'Apartments']);
+
+    expect(WorkTag::factory()->for($homes, 'category')->create(['name' => 'Modern'])->slug)->toBe('modern')
+        ->and(WorkTag::factory()->for($apartments, 'category')->create(['name' => 'Modern'])->slug)->toBe('modern');
 });
 
 test('an unknown category is not found', function () {

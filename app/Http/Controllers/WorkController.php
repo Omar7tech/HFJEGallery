@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Project;
 use App\Models\WorkCategory;
+use App\Models\WorkTag;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -38,15 +41,23 @@ class WorkController extends Controller
     }
 
     /**
-     * One category: its cover and its projects, loaded page by page as the visitor scrolls.
+     * One category: its cover and its projects, loaded page by page as the visitor
+     * scrolls, optionally narrowed to one of its tags (`?tag=villas`).
      */
-    public function show(WorkCategory $category): Response
+    public function show(Request $request, WorkCategory $category): Response
     {
+        $tag = $request->filled('tag')
+            ? $category->tags()->where('slug', $request->string('tag')->value())->firstOrFail()
+            : null;
+
         $projects = $category->projects()
+            ->when($tag, fn (Builder $query, WorkTag $tag) => $query
+                ->whereHas('tags', fn (Builder $query) => $query->whereKey($tag->id)))
             ->with('media')
             ->orderBy('sort_order')
             ->orderBy('id')
             ->paginate(self::PER_PAGE)
+            ->withQueryString()
             ->through(fn (Project $project): array => [
                 'slug' => $project->slug,
                 'name' => $project->name,
@@ -62,15 +73,24 @@ class WorkController extends Controller
                 'description' => $category->description,
                 'image' => $category->imageUrl('webp'),
             ],
-            // The other shelves, so the visitor can hop between categories.
+            'activeTag' => $tag?->slug,
+            // The other shelves with their tags, so the visitor can hop between
+            // categories or straight into one of their tags.
             'categories' => WorkCategory::query()
                 ->has('projects')
+                ->with(['tags' => fn (HasMany $query) => $query->has('projects')])
                 ->orderBy('sort_order')
                 ->orderBy('id')
-                ->get(['slug', 'name'])
+                ->get(['id', 'slug', 'name'])
                 ->map(fn (WorkCategory $item): array => [
                     'slug' => $item->slug,
                     'name' => $item->name,
+                    'tags' => $item->tags
+                        ->map(fn (WorkTag $tag): array => [
+                            'slug' => $tag->slug,
+                            'name' => $tag->name,
+                        ])
+                        ->all(),
                 ])
                 ->all(),
             'projects' => Inertia::scroll($projects),

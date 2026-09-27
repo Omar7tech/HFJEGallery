@@ -35,6 +35,12 @@ class WorkCategory extends Model implements HasMedia
         return $this->hasMany(Project::class);
     }
 
+    /** @return HasMany<WorkTag, $this> */
+    public function tags(): HasMany
+    {
+        return $this->hasMany(WorkTag::class)->orderBy('sort_order')->orderBy('id');
+    }
+
     /**
      * The category image in the given conversion, falling back to the placeholder.
      */

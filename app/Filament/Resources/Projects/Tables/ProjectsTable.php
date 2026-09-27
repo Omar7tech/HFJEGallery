@@ -31,6 +31,11 @@ class ProjectsTable
                     ->label('Category')
                     ->sortable()
                     ->badge(),
+                TextColumn::make('tags.name')
+                    ->label('Tags')
+                    ->badge()
+                    ->color('gray')
+                    ->toggleable(),
                 TextColumn::make('location')
                     ->searchable()
                     ->toggleable(),

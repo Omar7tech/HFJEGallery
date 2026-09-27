@@ -13,6 +13,17 @@ export interface WorkCategoryLink {
     name: string;
 }
 
+/** A sub-category a category's projects can be filtered by. */
+export interface WorkTagLink {
+    slug: string;
+    name: string;
+}
+
+/** A category in the switcher of a category page, with its tags. */
+export interface WorkCategoryNavItem extends WorkCategoryLink {
+    tags: WorkTagLink[];
+}
+
 /** A project as shown on a category's grid. */
 export interface ProjectCard {
     slug: string;

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\WorkCategories\Schemas;
 
+use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\SpatieMediaLibraryFileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
@@ -26,6 +27,26 @@ class WorkCategoryForm
                             ->maxLength(255)
                             ->rows(2)
                             ->helperText('One or two short lines under the category name.'),
+                    ]),
+
+                Section::make('Tags')
+                    ->description('Sub-categories to filter this category by (Villas, Duplexes…). Pick them on each project; a project can have several. Tags without projects stay hidden on the site.')
+                    ->columnSpanFull()
+                    ->components([
+                        Repeater::make('tags')
+                            ->hiddenLabel()
+                            ->relationship()
+                            ->orderColumn('sort_order')
+                            ->schema([
+                                TextInput::make('name')
+                                    ->hiddenLabel()
+                                    ->required()
+                                    ->maxLength(255)
+                                    ->distinct(),
+                            ])
+                            ->grid(3)
+                            ->addActionLabel('Add tag')
+                            ->defaultItems(0),
                     ]),
 
                 Section::make('Image')
