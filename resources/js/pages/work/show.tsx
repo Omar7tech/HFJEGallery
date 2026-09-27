@@ -120,6 +120,7 @@ export default function WorkShow({
                 reset: ['projects'],
                 preserveState: true,
                 preserveScroll: true,
+                showProgress: false,
                 onFinish: () => setPendingTag(undefined),
             },
         );
@@ -198,7 +199,22 @@ export default function WorkShow({
                                         <Link
                                             href={tagHref(item.slug)}
                                             prefetch
-                                            preserveScroll
+                                            // Visited by hand to hide the
+                                            // progress bar: the page swaps
+                                            // quietly, like the tag pills.
+                                            onClick={(event) => {
+                                                if (isPlainClick(event)) {
+                                                    event.preventDefault();
+                                                    router.get(
+                                                        tagHref(item.slug),
+                                                        {},
+                                                        {
+                                                            preserveScroll: true,
+                                                            showProgress: false,
+                                                        },
+                                                    );
+                                                }
+                                            }}
                                             aria-current={
                                                 active ? 'page' : undefined
                                             }
