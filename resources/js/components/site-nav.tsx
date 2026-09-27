@@ -48,14 +48,14 @@ function NavLinks({
     onNavigate?: () => void;
 }) {
     return (
-        <nav className="flex flex-col gap-3">
+        <nav className="flex flex-col gap-2">
             {navItems.map((item) => (
                 <div key={item.label} className="flex flex-col">
                     <Link
                         href={item.href}
                         onClick={onNavigate}
                         className={cn(
-                            'w-fit border-b border-ink/30 pt-3 pb-1 font-display text-3xl tracking-tight transition-colors',
+                            'w-fit border-b border-ink/30 pt-2 pb-1 font-display text-[1.75rem] tracking-tight transition-colors',
                             item.accent || isActive(currentUrl, item.href)
                                 ? 'text-brand'
                                 : 'text-ink hover:text-brand',
@@ -412,7 +412,7 @@ export function NavBar({
                                 href={item.href}
                                 onClick={closeMenu}
                                 className={cn(
-                                    'block w-fit py-2.5 font-display text-4xl tracking-tight',
+                                    'block w-fit py-2 font-display text-[2.125rem] tracking-tight',
                                     item.accent || isActive(url, item.href)
                                         ? 'text-white'
                                         : 'text-cream/70',
