@@ -112,9 +112,6 @@ export default function Curtains() {
             </Head>
             <div className="@container px-5 pt-6 pb-24 md:px-8 lg:pr-7 lg:pl-0 @lg:pb-[50cqi]">
                 <section aria-label="Curtains and textiles">
-                    {/* The film carries the hero; the heading stays for
-                        screen readers and search. */}
-                    <h1 className="sr-only">Curtains &amp; Textiles</h1>
                     {/* Fills the screen inside the page gutters: one viewport
                         less the fixed brand bar, the top padding and the same
                         gap again underneath, so the film sits inset on all
@@ -152,6 +149,15 @@ export default function Curtains() {
                             }}
                             aria-label="Curtains moving in natural light"
                         />
+                        {/* Title laid over the upper third of the film; the two
+                            lines share a right edge, as in the design. */}
+                        <div className="pointer-events-none absolute inset-x-0 top-[22%] flex justify-center px-6">
+                            <h1 className="text-right font-display text-[clamp(2rem,7.5cqi,6rem)] leading-[1.05] tracking-[-0.02em] text-white uppercase [text-shadow:0_2px_24px_rgba(26,22,20,0.25)]">
+                                Curtains
+                                <br />
+                                &amp;Textiles
+                            </h1>
+                        </div>
                     </div>
                 </section>
 
