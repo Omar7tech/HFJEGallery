@@ -8,7 +8,7 @@ use Inertia\Testing\AssertableInertia as Assert;
 
 uses(RefreshDatabase::class);
 
-test('the page opens on the first category', function () {
+test('the page opens on the whole collection', function () {
     $second = BayteCategory::factory()->create(['name' => 'Daybeds', 'sort_order' => 2]);
     $first = BayteCategory::factory()->create(['name' => 'Lounge Chairs', 'sort_order' => 1]);
     BayteProduct::factory()->for($first, 'category')->create(['name' => 'Sannine']);
@@ -22,9 +22,10 @@ test('the page opens on the first category', function () {
                 ['slug' => 'lounge-chairs', 'name' => 'Lounge Chairs'],
                 ['slug' => 'daybeds', 'name' => 'Daybeds'],
             ])
-            ->where('activeCategory', 'lounge-chairs')
-            ->where('products.data', fn (Collection $pieces) => $pieces->pluck('name')->all() === ['Sannine'])
-            ->where('total', 1)
+            ->where('activeCategory', null)
+            ->where('search', '')
+            ->where('products.data', fn (Collection $pieces) => $pieces->pluck('name')->all() === ['Sannine', 'Raouche'])
+            ->where('total', 2)
         );
 });
 
@@ -41,14 +42,14 @@ test('a category in the url shows only its own pieces', function () {
         );
 });
 
-test('an unknown category falls back to the first one', function () {
+test('an unknown category shows the whole collection', function () {
     $lounge = BayteCategory::factory()->create(['name' => 'Lounge Chairs']);
     BayteProduct::factory()->for($lounge, 'category')->create(['name' => 'Sannine']);
 
     $this->get(route('bayte', ['category' => 'hammocks']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('activeCategory', 'lounge-chairs')
+            ->where('activeCategory', null)
             ->has('products.data', 1)
         );
 });
@@ -115,11 +116,11 @@ test('a category with no pieces is not offered as a filter', function () {
             ->where('categories', [
                 ['slug' => 'lounge-chairs', 'name' => 'Lounge Chairs'],
             ])
-            ->where('activeCategory', 'lounge-chairs')
+            ->where('activeCategory', null)
         );
 });
 
-test('asking for an empty category falls back to one that has pieces', function () {
+test('asking for an empty category shows the whole collection', function () {
     $lounge = BayteCategory::factory()->create(['name' => 'Lounge Chairs', 'sort_order' => 1]);
     BayteCategory::factory()->create(['name' => 'Lighting', 'sort_order' => 2]);
     BayteProduct::factory()->for($lounge, 'category')->create(['name' => 'Sannine']);
@@ -127,7 +128,7 @@ test('asking for an empty category falls back to one that has pieces', function 
     $this->get(route('bayte', ['category' => 'lighting']))
         ->assertOk()
         ->assertInertia(fn (Assert $page) => $page
-            ->where('activeCategory', 'lounge-chairs')
+            ->where('activeCategory', null)
             ->has('products.data', 1)
         );
 });
@@ -140,4 +141,32 @@ test('an empty collection renders the page without a category', function () {
             ->where('activeCategory', null)
             ->has('products.data', 0)
         );
+});
+
+test('a search narrows the pieces by name or description', function () {
+    $lounge = BayteCategory::factory()->create(['name' => 'Lounge Chairs', 'sort_order' => 1]);
+    $tables = BayteCategory::factory()->create(['name' => 'Coffee Tables', 'sort_order' => 2]);
+    BayteProduct::factory()->for($lounge, 'category')->create(['name' => 'Sannine', 'description' => 'Oak frame, linen seat.', 'sort_order' => 1]);
+    BayteProduct::factory()->for($tables, 'category')->create(['name' => 'Oakley', 'description' => 'Low table.', 'sort_order' => 2]);
+    BayteProduct::factory()->for($tables, 'category')->create(['name' => 'Raouche', 'description' => 'Marble top.', 'sort_order' => 3]);
+
+    $this->get(route('bayte', ['search' => '  oak ']))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('search', 'oak')
+            ->where('products.data', fn (Collection $pieces) => $pieces->pluck('name')->all() === ['Sannine', 'Oakley'])
+            ->where('total', 2)
+        );
+
+    $this->get(route('bayte', ['search' => 'oak', 'category' => 'coffee-tables']))
+        ->assertInertia(fn (Assert $page) => $page
+            ->where('products.data', fn (Collection $pieces) => $pieces->pluck('name')->all() === ['Oakley'])
+        );
+});
+
+test('a search treats wildcards as plain text', function () {
+    $lounge = BayteCategory::factory()->create(['name' => 'Lounge Chairs']);
+    BayteProduct::factory()->for($lounge, 'category')->create(['name' => 'Sannine']);
+
+    $this->get(route('bayte', ['search' => '%']))
+        ->assertInertia(fn (Assert $page) => $page->where('total', 0));
 });

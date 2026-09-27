@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BayteCategory;
 use App\Models\BayteProduct;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -14,29 +15,33 @@ class BayteController extends Controller
     private const PER_PAGE = 9;
 
     /**
-     * One category of the BAYTE collection, loaded nine pieces at a time.
+     * The BAYTE catalogue, loaded nine pieces at a time: every piece, or one
+     * category (`?category=sofas`), optionally narrowed by a search
+     * (`?search=oak`) on the name and description.
      */
     public function __invoke(Request $request): Response
     {
-        // An empty shelf has nothing to show, so it never becomes a pill.
-        // Ties in the dashboard order fall back to the order the categories
-        // were added, so the first pill never changes shape on its own.
+        // An empty shelf has nothing to show, so it is never offered. Ties in
+        // the dashboard order fall back to the order the categories were added.
         $categories = BayteCategory::query()
             ->has('products')
             ->orderBy('sort_order')
             ->orderBy('id')
             ->get(['id', 'slug', 'name']);
 
-        // No category in the URL, or one that is unknown or empty, opens the
-        // first shelf.
-        $active = $categories->firstWhere('slug', $request->query('category'))
-            ?? $categories->first();
+        // No category in the URL, or one that is unknown or empty, shows the
+        // whole collection.
+        $active = $categories->firstWhere('slug', $request->query('category'));
+        $search = $request->string('search')->trim()->limit(100, '')->value();
 
-        $products = fn () => BayteProduct::query()
-            ->where('bayte_category_id', $active?->id);
+        $products = fn (): Builder => BayteProduct::query()
+            ->when($active, fn (Builder $query) => $query->where('bayte_category_id', $active->id))
+            ->when($search !== '', fn (Builder $query) => $query->where(fn (Builder $query) => $query
+                ->whereRaw("name like ? escape '!'", [$this->contains($search)])
+                ->orWhereRaw("description like ? escape '!'", [$this->contains($search)])));
 
-        // Closures throughout: a filter tap or "Load more" is a partial reload
-        // asking for the pieces alone, so nothing else is built for it.
+        // Closures throughout: a category tap, a search or "Load more" is a
+        // partial reload asking for the pieces alone, so nothing else is built.
         return Inertia::render('bayte/index', [
             'categories' => fn (): array => $categories
                 ->map(fn (BayteCategory $category): array => [
@@ -45,6 +50,7 @@ class BayteController extends Controller
                 ])
                 ->all(),
             'activeCategory' => $active?->slug,
+            'search' => $search,
             'total' => fn (): int => $products()->count(),
             'products' => Inertia::scroll(fn () => $products()
                 ->with('media')
@@ -59,5 +65,15 @@ class BayteController extends Controller
                     'image' => $product->imageUrl(),
                 ])),
         ]);
+    }
+
+    /**
+     * A LIKE pattern matching the term anywhere, with its own `%` and `_`
+     * taken literally. An explicit escape character reads the same on MySQL
+     * and SQLite.
+     */
+    private function contains(string $term): string
+    {
+        return '%'.str_replace(['!', '%', '_'], ['!!', '!%', '!_'], $term).'%';
     }
 }

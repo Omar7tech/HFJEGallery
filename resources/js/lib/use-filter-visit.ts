@@ -1,4 +1,5 @@
 import { progress, router } from '@inertiajs/react';
+import type { RefObject } from 'react';
 import { useRef, useState } from 'react';
 
 interface FilterVisitOptions {
@@ -12,6 +13,11 @@ interface FilterVisitOptions {
     only: string[];
     /** Infinite-scroll props to start again from their first page. */
     reset: string[];
+    /**
+     * The top of the results. Picked from further down the page, the view
+     * returns to it, so the new results start where the eye is.
+     */
+    results?: RefObject<HTMLElement | null>;
 }
 
 /** How long a prefetched filter stays fresh, then can still be served while it refreshes. */
@@ -30,6 +36,7 @@ export function useFilterVisit({
     href,
     only,
     reset,
+    results,
 }: FilterVisitOptions) {
     // The value picked, held until the page's own `active` catches up with
     // it. Never cleared on a timer or a callback alone: a cached response can
@@ -64,6 +71,20 @@ export function useFilterVisit({
     const select = (value: string | null) => {
         if (value === selected) {
             return;
+        }
+
+        // Only upward: results already in view stay where they are. The
+        // element's scroll margin keeps it clear of the brand bar.
+        const top = results?.current?.getBoundingClientRect().top;
+
+        if (top !== undefined && top < 0) {
+            results?.current?.scrollIntoView({
+                block: 'start',
+                behavior: window.matchMedia('(prefers-reduced-motion: reduce)')
+                    .matches
+                    ? 'auto'
+                    : 'smooth',
+            });
         }
 
         const visit = ++latestVisit.current;

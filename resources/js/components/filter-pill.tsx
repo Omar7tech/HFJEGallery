@@ -9,6 +9,8 @@ interface FilterPillProps {
     onSelect: () => void;
     /** Warm the cache for this filter before it is picked. */
     onPrefetch: () => void;
+    /** A rounded pill in a row, or a full-width row in a vertical list. */
+    variant?: 'pill' | 'list';
     className?: string;
     children: ReactNode;
 }
@@ -16,8 +18,21 @@ interface FilterPillProps {
 /** Hover this long before prefetching, as Inertia's own links do. */
 const HOVER_DELAY = 75;
 
+const VARIANTS = {
+    pill: {
+        base: 'h-10 shrink-0 rounded-full border px-4 text-sm whitespace-nowrap @lg:px-5 @lg:text-[15px]',
+        active: 'border-brand bg-brand text-brand-foreground',
+        idle: 'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
+    },
+    list: {
+        base: 'min-h-11 w-full justify-between gap-3 rounded-xl px-3.5 text-[15px]',
+        active: 'bg-brand/10 font-medium text-brand',
+        idle: 'text-ink/70 hover:bg-ink/5 hover:text-ink',
+    },
+};
+
 /**
- * A pill narrowing a listing to one filter. A real link, so it opens in a new
+ * A filter narrowing a listing, as a pill or a list row. A real link, so it opens in a new
  * tab too, but a plain click swaps the listing in place. It prefetches on
  * hover, on keyboard focus and on press, so the tap lands on a warm cache.
  */
@@ -26,9 +41,11 @@ export default function FilterPill({
     active,
     onSelect,
     onPrefetch,
+    variant = 'pill',
     className,
     children,
 }: FilterPillProps) {
+    const look = VARIANTS[variant];
     const hover = useRef<ReturnType<typeof setTimeout>>(undefined);
 
     return (
@@ -50,10 +67,9 @@ export default function FilterPill({
                 }
             }}
             className={cn(
-                'inline-flex h-10 shrink-0 items-center rounded-full border px-4 font-sans text-sm whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none @lg:px-5 @lg:text-[15px]',
-                active
-                    ? 'border-brand bg-brand text-brand-foreground'
-                    : 'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
+                'inline-flex items-center font-sans transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
+                look.base,
+                active ? look.active : look.idle,
                 className,
             )}
         >
