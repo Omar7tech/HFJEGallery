@@ -84,10 +84,10 @@ function ViewPortfolioButton() {
 
 function FeaturedProjects() {
     return (
-        <section className="@container relative w-full overflow-hidden px-6 py-10 font-display md:px-12 md:py-15 lg:pr-16 lg:pl-0">
+        <section className="@container relative w-full overflow-hidden px-6 py-10 font-display md:px-12 md:py-15 lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:flex-col lg:py-10 lg:pr-16 lg:pl-0">
             <SpacesPattern className="pointer-events-none absolute inset-0 z-0 transform-gpu mask-[radial-gradient(120%_120%_at_top_right,black,transparent_65%)] text-brand/50 opacity-[0.18] [-webkit-mask-image:radial-gradient(120%_120%_at_top_right,black,transparent_65%)]" />
 
-            <div className="relative z-10">
+            <div className="relative z-10 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
                 <h2 className="max-w-4xl font-display text-[clamp(2.25rem,9cqi,4.75rem)] leading-[1.05] text-ink">
                     Spaces That Tell Their Own Story
                 </h2>
@@ -99,7 +99,7 @@ function FeaturedProjects() {
                     client's lifestyle.
                 </p>
 
-                <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 contain-[layout_paint] motion-reduce:transition-none @3xl:aspect-auto @3xl:h-120 @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr]">
+                <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 contain-[layout_paint] motion-reduce:transition-none lg:mt-6 lg:aspect-auto lg:min-h-0 lg:flex-[1_1_0] @3xl:aspect-auto @3xl:h-120 @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr]">
                     {projects.map((project) => (
                         <SmartImage
                             key={project.src}
