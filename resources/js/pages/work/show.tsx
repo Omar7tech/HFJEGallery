@@ -1,11 +1,12 @@
 import { Head, Link, router } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
-import type { MouseEvent, ReactNode } from 'react';
 import { useState } from 'react';
+import FilterPill from '@/components/filter-pill';
 import MarqueeText from '@/components/marquee-text';
 import ProjectGrid from '@/components/project-grid';
 import { SmartImage } from '@/components/smart-image';
-import { cn } from '@/lib/utils';
+import { useFilterVisit } from '@/lib/use-filter-visit';
+import { cn, isPlainClick } from '@/lib/utils';
 import type {
     ProjectCard as Project,
     WorkCategoryLink,
@@ -30,17 +31,6 @@ function tagHref(categorySlug: string, tagSlug?: string | null): string {
         : `/work/${categorySlug}`;
 }
 
-/** Keeps new-tab and modified clicks working as plain links. */
-function isPlainClick(event: MouseEvent): boolean {
-    return (
-        event.button === 0 &&
-        !event.metaKey &&
-        !event.ctrlKey &&
-        !event.shiftKey &&
-        !event.altKey
-    );
-}
-
 /** The underlined look of the category tabs. */
 function tabClassName(active: boolean): string {
     return cn(
@@ -51,82 +41,31 @@ function tabClassName(active: boolean): string {
     );
 }
 
-interface TagPillProps {
-    href: string;
-    active: boolean;
-    onSelect: () => void;
-    children: ReactNode;
-}
-
-/**
- * A pill narrowing the current category to one tag. A real link, so it can be
- * opened in a new tab, but a plain click swaps the grid in place.
- */
-function TagPill({ href, active, onSelect, children }: TagPillProps) {
-    return (
-        <a
-            href={href}
-            aria-current={active ? 'page' : undefined}
-            onClick={(event) => {
-                if (isPlainClick(event)) {
-                    event.preventDefault();
-                    onSelect();
-                }
-            }}
-            className={cn(
-                'inline-flex min-h-10 items-center rounded-full border px-5 font-sans text-sm whitespace-nowrap transition-colors duration-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none @lg:text-[15px]',
-                active
-                    ? 'border-brand bg-brand text-brand-foreground'
-                    : 'border-ink/15 text-ink/70 hover:border-ink/40 hover:text-ink',
-            )}
-        >
-            {children}
-        </a>
-    );
-}
-
 export default function WorkShow({
     category,
     activeTag,
     categories,
     projects,
 }: WorkShowProps) {
-    // The tag picked while its projects are still loading, so the tabs answer
-    // the click at once; undefined when nothing is in flight.
-    const [pendingTag, setPendingTag] = useState<string | null | undefined>();
-    const filtering = pendingTag !== undefined;
-    const shownTag = filtering ? pendingTag : activeTag;
+    // Tag pills swap only the grid: the photo and tabs stay put, and so does
+    // the scroll.
+    const tagFilter = useFilterVisit({
+        active: activeTag,
+        href: (tagSlug) => tagHref(category.slug, tagSlug),
+        only: ['projects', 'activeTag'],
+        reset: ['projects'],
+    });
+    const shownTag = tagFilter.selected;
     // The category being opened, underlined straight away while it loads.
     const [pendingCategory, setPendingCategory] = useState<string | null>(null);
     const shownCategory = pendingCategory ?? category.slug;
-    const loading = filtering || pendingCategory !== null;
+    const loading = tagFilter.loading || pendingCategory !== null;
 
     const current = categories.find((item) => item.slug === category.slug);
     const tags = current?.tags ?? [];
     const shownTagDetails = tags.find((tag) => tag.slug === shownTag);
     // The tag of the projects on screen, which lags the pills while loading.
     const activeTagName = tags.find((tag) => tag.slug === activeTag)?.name;
-
-    /** Swaps only the grid: the photo and tabs stay put, and so does the scroll. */
-    const filterBy = (tagSlug: string | null) => {
-        if (tagSlug === shownTag) {
-            return;
-        }
-
-        setPendingTag(tagSlug);
-        router.get(
-            tagHref(category.slug, tagSlug),
-            {},
-            {
-                only: ['projects', 'activeTag'],
-                reset: ['projects'],
-                preserveState: true,
-                preserveScroll: true,
-                showProgress: false,
-                onFinish: () => setPendingTag(undefined),
-            },
-        );
-    };
 
     /** Opens another category quietly, without the top progress bar. */
     const openCategory = (categorySlug: string) => {
@@ -251,23 +190,29 @@ export default function WorkShow({
                     >
                         <ul className="flex min-w-max gap-2 lg:min-w-0 lg:flex-wrap">
                             <li>
-                                <TagPill
+                                <FilterPill
                                     href={tagHref(category.slug)}
                                     active={shownTag === null}
-                                    onSelect={() => filterBy(null)}
+                                    onSelect={() => tagFilter.select(null)}
+                                    onPrefetch={() => tagFilter.prefetch(null)}
                                 >
                                     All
-                                </TagPill>
+                                </FilterPill>
                             </li>
                             {tags.map((tag) => (
                                 <li key={tag.slug}>
-                                    <TagPill
+                                    <FilterPill
                                         href={tagHref(category.slug, tag.slug)}
                                         active={shownTag === tag.slug}
-                                        onSelect={() => filterBy(tag.slug)}
+                                        onSelect={() =>
+                                            tagFilter.select(tag.slug)
+                                        }
+                                        onPrefetch={() =>
+                                            tagFilter.prefetch(tag.slug)
+                                        }
                                     >
                                         {tag.name}
-                                    </TagPill>
+                                    </FilterPill>
                                 </li>
                             ))}
                         </ul>

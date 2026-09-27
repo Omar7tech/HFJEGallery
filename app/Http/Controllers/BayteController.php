@@ -14,7 +14,7 @@ class BayteController extends Controller
     private const PER_PAGE = 9;
 
     /**
-     * Show one category of the BAYTE collection, paginated.
+     * One category of the BAYTE collection, loaded nine pieces at a time.
      */
     public function __invoke(Request $request): Response
     {
@@ -25,42 +25,39 @@ class BayteController extends Controller
             ->has('products')
             ->orderBy('sort_order')
             ->orderBy('id')
-            ->get();
+            ->get(['id', 'slug', 'name']);
 
-        // No category in the URL — or one that is unknown or empty — opens
-        // the first shelf.
+        // No category in the URL, or one that is unknown or empty, opens the
+        // first shelf.
         $active = $categories->firstWhere('slug', $request->query('category'))
             ?? $categories->first();
 
-        $products = BayteProduct::query()
-            ->where('bayte_category_id', $active?->id)
-            ->with('media')
-            ->orderBy('sort_order')
-            ->orderBy('id')
-            ->paginate(self::PER_PAGE)
-            ->withQueryString();
+        $products = fn () => BayteProduct::query()
+            ->where('bayte_category_id', $active?->id);
 
+        // Closures throughout: a filter tap or "Load more" is a partial reload
+        // asking for the pieces alone, so nothing else is built for it.
         return Inertia::render('bayte/index', [
-            'categories' => $categories
+            'categories' => fn (): array => $categories
                 ->map(fn (BayteCategory $category): array => [
                     'slug' => $category->slug,
                     'name' => $category->name,
                 ])
                 ->all(),
             'activeCategory' => $active?->slug,
-            'products' => [
-                'data' => $products->getCollection()
-                    ->map(fn (BayteProduct $product): array => [
-                        'slug' => $product->slug,
-                        'name' => $product->name,
-                        'description' => $product->description,
-                        'image' => $product->imageUrl(),
-                    ])
-                    ->all(),
-                'currentPage' => $products->currentPage(),
-                'lastPage' => $products->lastPage(),
-                'total' => $products->total(),
-            ],
+            'total' => fn (): int => $products()->count(),
+            'products' => Inertia::scroll(fn () => $products()
+                ->with('media')
+                ->orderBy('sort_order')
+                ->orderBy('id')
+                ->paginate(self::PER_PAGE)
+                ->withQueryString()
+                ->through(fn (BayteProduct $product): array => [
+                    'slug' => $product->slug,
+                    'name' => $product->name,
+                    'description' => $product->description,
+                    'image' => $product->imageUrl(),
+                ])),
         ]);
     }
 }
