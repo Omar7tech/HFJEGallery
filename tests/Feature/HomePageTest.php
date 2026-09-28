@@ -71,6 +71,17 @@ test('a piece already on the home page can still be saved', function () {
     $this->get(ListBayteProducts::getUrl())->assertSuccessful();
 });
 
+test('the products list is headed by the BAYTÉ wordmark and its count', function () {
+    $this->actingAs(User::factory()->create());
+    BayteProduct::factory()->for($this->category, 'category')->count(2)->create();
+
+    $this->get(ListBayteProducts::getUrl())
+        ->assertSuccessful()
+        ->assertSee('BAYTÉ products')
+        ->assertSee('fill="currentColor"', escape: false)
+        ->assertSee('2 pieces in 1 category');
+});
+
 test('the home page offers the active living edit spaces in dashboard order', function () {
     LivingSpace::create(['name' => 'Kitchen', 'sort_order' => 2]);
     LivingSpace::create(['name' => 'Living room', 'sort_order' => 1]);
