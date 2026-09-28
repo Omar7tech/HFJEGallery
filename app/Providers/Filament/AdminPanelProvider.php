@@ -31,12 +31,20 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
+            ->viteTheme('resources/css/filament/admin/theme.css')
             ->login()
             ->spa()
-            ->sidebarWidth('14rem')
+            // No topbar: the ink sidebar carries the logo, search and user
+            // menu, and the page gets the full height (see the admin theme).
+            ->topbar(false)
+            ->sidebarWidth('15rem')
+            ->sidebarCollapsibleOnDesktop()
             ->profile()
+            ->font('Instrument Sans')
+            ->favicon(asset('favicon.svg'))
+            ->brandName('HFJE')
             ->brandLogo(asset('logos/mainlogo-dark.svg'))
-            ->brandLogoHeight('2rem')
+            ->brandLogoHeight('1.6rem')
             ->colors([
                 'primary' => Color::hex('#a65e3c'),
                 'gray' => Color::Stone,
