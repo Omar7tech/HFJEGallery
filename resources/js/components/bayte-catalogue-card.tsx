@@ -15,7 +15,8 @@ interface BayteCatalogueCardProps {
  *
  * The home card is a 3D object that leans toward the pointer; a grid of those
  * fights itself, so this one stays in the plane and answers the pointer with
- * a small, slow lift and the product drawing gently closer.
+ * a small, slow lift and the product drawing gently closer. The badge stays
+ * still, since it becomes the add-to-cart control.
  */
 export default function BayteCatalogueCard({
     name,
@@ -34,7 +35,7 @@ export default function BayteCatalogueCard({
 
                 <span
                     aria-hidden="true"
-                    className="grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:rotate-90 motion-reduce:transition-none motion-reduce:group-hover:rotate-0"
+                    className="grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground"
                 >
                     <Plus className="size-4" strokeWidth={2.5} />
                 </span>
