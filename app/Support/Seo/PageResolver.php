@@ -119,7 +119,7 @@ final class PageResolver
             canonical: route('work.index'),
             schemaType: 'CollectionPage',
             breadcrumbs: $this->trail(['Work' => route('work.index')]),
-            images: $categories->map(fn (WorkCategory $category): string => $category->imageUrl('webp'))->all(),
+            images: array_values($categories->map(fn (WorkCategory $category): string => $category->imageUrl('webp'))->all()),
             nodes: [$this->itemList(route('work.index'), $categories->map(fn (WorkCategory $category): array => [
                 'name' => $category->name,
                 'url' => route('work.show', $category),
@@ -200,7 +200,7 @@ final class PageResolver
             canonical: route('curtains'),
             schemaType: 'CollectionPage',
             breadcrumbs: $this->trail(['Curtains & Textiles' => route('curtains')]),
-            images: $styles->map(fn (CurtainStyle $style): string => $style->imageUrl())->filter()->values()->all(),
+            images: array_values($styles->map(fn (CurtainStyle $style): string => $style->imageUrl())->filter()->all()),
             nodes: [$this->curtainService($styles->all())],
             outline: [
                 $this->section('Shaping light, completing spaces', [
@@ -229,7 +229,7 @@ final class PageResolver
             canonical: route('curtains.styles'),
             schemaType: 'CollectionPage',
             breadcrumbs: $this->trail(['Curtains & Textiles' => route('curtains'), 'Styles' => route('curtains.styles')]),
-            images: $styles->map(fn (CurtainStyle $style): string => $style->imageUrl())->filter()->values()->all(),
+            images: array_values($styles->map(fn (CurtainStyle $style): string => $style->imageUrl())->filter()->all()),
             nodes: [$this->curtainService($styles->all())],
             outline: [$this->section('Curtain styles', $styles->map(fn (CurtainStyle $style): array => [
                 'label' => $style->name,
@@ -249,7 +249,7 @@ final class PageResolver
             canonical: route('curtains.works'),
             schemaType: 'CollectionPage',
             breadcrumbs: $this->trail(['Curtains & Textiles' => route('curtains'), 'Projects' => route('curtains.works')]),
-            images: $works->map(fn (CurtainWork $work): string => $work->coverUrl('webp'))->all(),
+            images: array_values($works->map(fn (CurtainWork $work): string => $work->coverUrl('webp'))->all()),
             nodes: [$this->itemList(route('curtains.works'), $works->map(fn (CurtainWork $work): array => [
                 'name' => $work->name,
                 'url' => route('curtains.work', $work),
@@ -324,7 +324,7 @@ final class PageResolver
                 'BAYTÉ' => route('bayte'),
                 ...($category ? [$category->name => $canonical] : []),
             ])),
-            images: $products->map(fn (BayteProduct $product): string => $product->imageUrl())->all(),
+            images: array_values($products->map(fn (BayteProduct $product): string => $product->imageUrl())->all()),
             nodes: [[
                 '@type' => 'Brand',
                 '@id' => route('bayte').'#brand',
@@ -514,7 +514,7 @@ final class PageResolver
      * The curtain service the studio offers, with each style as an offer in
      * its catalogue — what a search for "blackout curtains Lebanon" matches.
      *
-     * @param  list<CurtainStyle>  $styles
+     * @param  array<int, CurtainStyle>  $styles
      * @return array<string, mixed>
      */
     private function curtainService(array $styles): array
@@ -547,11 +547,13 @@ final class PageResolver
     /**
      * An ordered list of the pages a listing links to.
      *
-     * @param  list<array{name: string, url: string}>  $items
+     * @param  array<int, array{name: string, url: string}>  $items
      * @return array<string, mixed>
      */
     private function itemList(string $pageUrl, array $items): array
     {
+        $items = array_values($items);
+
         return [
             '@type' => 'ItemList',
             '@id' => $pageUrl.'#list',
@@ -589,7 +591,7 @@ final class PageResolver
     }
 
     /**
-     * @param  list<array{label: string, url?: string|null, text?: string|null}>  $items
+     * @param  array<int, array{label: string, url?: string|null, text?: string|null}>  $items
      * @return array{heading: string, items: list<array{label: string, url?: string|null, text?: string|null}>}
      */
     private function section(string $heading, array $items): array
@@ -626,7 +628,7 @@ final class PageResolver
     /**
      * "a, b and c".
      *
-     * @param  list<string>  $items
+     * @param  array<array-key, string>  $items
      */
     private function sentenceList(array $items): string
     {

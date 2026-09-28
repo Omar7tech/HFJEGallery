@@ -176,12 +176,12 @@ final class StructuredData
     {
         $host = parse_url(route('home'), PHP_URL_HOST);
 
-        return collect($this->settings->usableSocialLinks())
-            ->pluck('url')
-            ->filter(fn (string $url): bool => filter_var($url, FILTER_VALIDATE_URL) !== false
-                && parse_url($url, PHP_URL_HOST) !== $host)
-            ->unique()
-            ->values()
-            ->all();
+        $urls = array_filter(
+            array_column($this->settings->usableSocialLinks(), 'url'),
+            fn (string $url): bool => filter_var($url, FILTER_VALIDATE_URL) !== false
+                && parse_url($url, PHP_URL_HOST) !== $host,
+        );
+
+        return array_values(array_unique($urls));
     }
 }
