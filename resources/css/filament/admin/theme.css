@@ -38,12 +38,13 @@
     --hf-display: 'Michroma', ui-sans-serif, system-ui, sans-serif;
 }
 
+/* Dark: near black, with just enough warmth to stay on brand. */
 .dark {
-    --hf-paper: #131110;
-    --hf-paper-lit: #211c18;
-    --hf-sheet: #1a1715;
-    --hf-card: #1f1c19;
-    --hf-inset: #181513;
+    --hf-paper: #050505;
+    --hf-paper-lit: #15120f;
+    --hf-sheet: #0c0b0a;
+    --hf-card: #121110;
+    --hf-inset: #0a0909;
     --hf-text: #ede4d8;
     --hf-text-soft: rgb(237 228 216 / 0.64);
     --hf-text-faint: rgb(237 228 216 / 0.42);
@@ -81,6 +82,12 @@ html {
         0 1px 2px rgb(26 22 20 / 0.04),
         0 12px 32px -20px rgb(74 48 32 / 0.28);
     background-color: var(--hf-paper);
+
+    /* Without the floating sheet, the page and the sheet are one surface,
+       so no band of paper shows above the content. */
+    @media (width < 64rem) {
+        background-color: var(--hf-sheet);
+    }
 }
 
 .dark .fi-body {
