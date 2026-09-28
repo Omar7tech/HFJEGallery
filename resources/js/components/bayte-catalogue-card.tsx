@@ -37,13 +37,13 @@ export default function BayteCatalogueCard({
             <article
                 onClick={() => setDetailsOpen(true)}
                 className={cn(
-                    'group flex cursor-pointer flex-col rounded-2xl bg-surface p-5 ring-1 ring-transparent transition-[background-color,box-shadow,translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:bg-surface-hover hover:shadow-[0_22px_44px_-30px_rgba(74,48,32,0.45)] motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+                    'group flex cursor-pointer flex-col rounded-2xl bg-surface p-5 ring-1 ring-transparent transition-[background-color,box-shadow,translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:bg-surface-hover hover:shadow-[0_22px_44px_-30px_rgba(74,48,32,0.45)] motion-reduce:transition-none motion-reduce:hover:translate-y-0 max-md:p-2',
                     selected && 'ring-brand/35',
                 )}
             >
-                <div className="flex items-start justify-between gap-4">
+                <div className="flex items-start justify-between gap-4 max-md:order-2 max-md:mt-2.5 max-md:gap-2 max-md:px-1 max-md:pb-1">
                     <div className="min-w-0">
-                        <h3 className="text-xl leading-tight text-ink">
+                        <h3 className="text-xl leading-tight text-ink max-md:truncate max-md:text-[15px]">
                             {/* Keyboard route to the details; a tap anywhere on
                             the card opens them too. */}
                             <button
@@ -53,7 +53,7 @@ export default function BayteCatalogueCard({
                                 {name}
                             </button>
                         </h3>
-                        <p className="mt-2 line-clamp-2 text-xs leading-[1.5] text-ink/70">
+                        <p className="mt-2 line-clamp-2 text-xs leading-[1.5] text-ink/70 max-md:mt-1 max-md:text-[11px] max-md:leading-snug">
                             {description}
                         </p>
                     </div>
@@ -79,7 +79,7 @@ export default function BayteCatalogueCard({
                         // The dot stays small; the invisible ring around it
                         // gives a finger a full 44px to land on.
                         className={cn(
-                            'relative grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-colors duration-300 ease-out before:absolute before:-inset-2 before:content-[""] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
+                            'relative grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-colors duration-300 ease-out before:absolute before:-inset-2 before:content-[""] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none max-md:size-6',
                             selected
                                 ? 'bg-ink hover:bg-ink/85'
                                 : 'hover:bg-brand-hover',
@@ -93,7 +93,7 @@ export default function BayteCatalogueCard({
                     </button>
                 </div>
 
-                <div className="relative mt-4 aspect-3/2 w-full">
+                <div className="relative mt-4 aspect-3/2 w-full max-md:order-1 max-md:mt-0 max-md:aspect-square max-md:rounded-xl max-md:bg-white">
                     {/* Ground shadow, fading in with the lift so the cutout reads
                     as standing on the card rather than printed on it. */}
                     <span
@@ -111,7 +111,7 @@ export default function BayteCatalogueCard({
                     />
                 </div>
 
-                <BayteWordmark className="mx-auto mt-4 w-24" />
+                <BayteWordmark className="mx-auto mt-4 w-24 max-md:hidden" />
             </article>
 
             <BayteProductSheet

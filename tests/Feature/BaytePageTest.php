@@ -55,14 +55,14 @@ test('an unknown category shows the whole collection', function () {
         );
 });
 
-test('the pieces of a category load nine at a time', function () {
+test('the pieces of a category load twelve at a time', function () {
     $category = BayteCategory::factory()->create(['name' => 'Lounge Chairs']);
-    BayteProduct::factory()->for($category, 'category')->count(11)->create();
+    BayteProduct::factory()->for($category, 'category')->count(14)->create();
 
     $this->get(route('bayte'))
         ->assertInertia(fn (Assert $page) => $page
-            ->has('products.data', 9)
-            ->where('total', 11)
+            ->has('products.data', 12)
+            ->where('total', 14)
         );
 
     $this->get(route('bayte', ['page' => 2]))

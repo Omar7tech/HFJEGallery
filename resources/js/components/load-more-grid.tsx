@@ -67,12 +67,12 @@ export default function LoadMoreGrid({
             }
             next={({ loading: fetching, fetch, hasMore }) =>
                 hasMore && (
-                    <div className="mt-12 flex justify-center">
+                    <div className="mt-12 flex justify-center max-md:mt-8">
                         <button
                             type="button"
                             onClick={() => fetch()}
                             disabled={fetching}
-                            className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-brand px-10 py-3.5 text-base text-brand-foreground transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60 motion-reduce:transition-none"
+                            className="group inline-flex min-h-11 items-center gap-3 rounded-full bg-brand px-10 py-3.5 text-base text-brand-foreground transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-60 motion-reduce:transition-none max-md:w-full max-md:justify-center max-md:rounded-xl max-md:text-sm max-md:font-medium"
                         >
                             {fetching ? 'Loading…' : 'Load more'}
                             <ArrowDown

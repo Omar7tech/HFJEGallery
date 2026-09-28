@@ -64,11 +64,11 @@ function catalogueHref(category: string | null, search: string): string {
 
 /** The outline of a catalogue card: its name, description and cutout. */
 const skeleton = (
-    <div className="relative overflow-hidden rounded-2xl bg-surface p-5">
+    <div className="relative flex flex-col overflow-hidden rounded-2xl bg-surface p-5 max-md:p-2">
         <span className="absolute inset-0 animate-shimmer bg-linear-to-r from-transparent via-white/50 to-transparent motion-reduce:hidden" />
-        <div className="h-6 w-1/2 rounded-full bg-ink/8" />
-        <div className="mt-3 h-3 w-4/5 rounded-full bg-ink/6" />
-        <div className="mt-4 aspect-3/2 w-full" />
+        <div className="h-6 w-1/2 rounded-full bg-ink/8 max-md:order-2 max-md:mt-2.5 max-md:h-4" />
+        <div className="mt-3 h-3 w-4/5 rounded-full bg-ink/6 max-md:order-3 max-md:mt-2 max-md:mb-1" />
+        <div className="mt-4 aspect-3/2 w-full max-md:order-1 max-md:mt-0 max-md:aspect-square max-md:rounded-xl max-md:bg-white/60" />
     </div>
 );
 
@@ -239,7 +239,7 @@ export default function BayteIndex({
                 />
             </Head>
 
-            <div className="@container px-5 pt-6 pb-20 md:px-8 md:pb-24 lg:pr-7 lg:pl-0">
+            <div className="@container px-5 pt-6 pb-20 max-md:pt-4 max-md:pb-12 md:px-8 md:pb-24 lg:pr-7 lg:pl-0">
                 <h1 className="sr-only">BAYTÉ by HFJE</h1>
 
                 {/* Wordmark, with the "BY HFJE" endorsement tucked under its
@@ -251,7 +251,7 @@ export default function BayteIndex({
                     </p>
                 </div>
 
-                <div className="@container/results mt-10 min-w-0 @4xl:mt-14">
+                <div className="@container/results mt-10 min-w-0 max-md:mt-7 @4xl:mt-14">
                     {/* Search, with the category dropdown beside it. */}
                     <div className="flex gap-2">
                         <div className="relative flex-1">
@@ -382,7 +382,7 @@ export default function BayteIndex({
                         <LoadMoreGrid
                             data="products"
                             count={products.data.length}
-                            className="grid gap-4 @lg/results:grid-cols-2 @lg/results:gap-5 @4xl/results:grid-cols-3"
+                            className="grid gap-4 max-md:grid-cols-2 max-md:gap-x-2.5 max-md:gap-y-3 @lg/results:grid-cols-2 @lg/results:gap-5 @4xl/results:grid-cols-3"
                             skeleton={skeleton}
                             loading={loading}
                         >

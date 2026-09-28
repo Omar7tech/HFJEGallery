@@ -12,8 +12,8 @@ use Inertia\Response;
 
 class BayteController extends Controller
 {
-    /** Fills the three-column grid exactly. */
-    private const PER_PAGE = 9;
+    /** Fills both the two-column phone grid and the three-column grid exactly. */
+    private const PER_PAGE = 12;
 
     /**
      * The BAYTE catalogue, loaded nine pieces at a time: every piece, or one
