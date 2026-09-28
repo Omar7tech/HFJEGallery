@@ -24,7 +24,7 @@ class ContactMessagesTable
                     ->searchable()
                     // Unread messages stand out in bold.
                     ->weight(fn (ContactMessage $record): string => $record->read_at === null ? 'bold' : 'normal')
-                    ->description(fn (ContactMessage $record): ?string => $record->email ?? $record->phone),
+                    ->description(fn (ContactMessage $record): ?string => $record->phone),
                 TextColumn::make('topic')
                     ->badge(),
                 TextColumn::make('message')

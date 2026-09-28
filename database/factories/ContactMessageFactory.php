@@ -20,7 +20,7 @@ class ContactMessageFactory extends Factory
             'topic' => fake()->randomElement(ContactTopic::cases()),
             'name' => fake()->name(),
             'email' => fake()->safeEmail(),
-            'phone' => null,
+            'phone' => '+961 3 '.fake()->numerify('### ###'),
             'message' => fake()->paragraph(),
         ];
     }

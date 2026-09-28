@@ -44,7 +44,7 @@ Route::get('/living-edit/mood-board', MoodBoardController::class)
         AddLinkHeadersForPreloadedAssets::class,
     ])
     ->name('living-edit.mood-board');
-Route::inertia('/contact', 'contact/index')->name('contact');
+Route::get('/contact', [ContactController::class, 'show'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store'])
     ->middleware('throttle:contact')
     ->name('contact.store');
