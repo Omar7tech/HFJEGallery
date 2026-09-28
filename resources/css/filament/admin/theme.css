@@ -7,42 +7,58 @@
 /*
  * HFJE dashboard theme.
  *
- * Quiet on purpose. The sidebar sits on the same warm paper as the page, and
- * the work happens on one white sheet laid on top of it, like a drawing on a
- * cutting table. Terracotta is kept for what is selected or needs attention;
- * Michroma only for page titles and figures. Every colour comes from the
- * tokens below, so light and dark mode swap everything at once.
+ * Quiet on purpose. The sidebar sits on warm paper, lit from the top and
+ * warmed by a little terracotta at its foot; the work happens on one sheet
+ * laid over it, like a drawing on a cutting table. Terracotta marks what is
+ * selected or needs attention; Michroma is kept for page titles and figures.
+ * Tables and forms are dense, because that is where the time is spent.
+ * Every colour comes from the tokens below, so light and dark swap together.
  */
 
 :root {
     --hf-paper: #f3f1ed;
+    --hf-paper-lit: #ece3d6;
     --hf-sheet: #ffffff;
     --hf-card: #ffffff;
+    --hf-inset: #faf8f5;
     --hf-text: #1a1614;
-    --hf-text-soft: rgb(26 22 20 / 0.62);
-    --hf-text-faint: rgb(26 22 20 / 0.42);
+    --hf-text-soft: rgb(26 22 20 / 0.64);
+    --hf-text-faint: rgb(26 22 20 / 0.44);
     --hf-line: rgb(26 22 20 / 0.08);
-    --hf-hover: rgb(26 22 20 / 0.045);
+    --hf-line-strong: rgb(26 22 20 / 0.14);
+    --hf-hover: rgb(26 22 20 / 0.04);
     --hf-chip: #ffffff;
     --hf-accent: #a65e3c;
     --hf-accent-soft: rgb(166 94 60 / 0.11);
+    --hf-glow: rgb(166 94 60 / 0.12);
+    --hf-scrim: rgb(26 22 20 / 0.42);
     --hf-radius: 14px;
     --hf-radius-sm: 9px;
+    --hf-ease: cubic-bezier(0.22, 1, 0.36, 1);
     --hf-display: 'Michroma', ui-sans-serif, system-ui, sans-serif;
 }
 
 .dark {
     --hf-paper: #131110;
+    --hf-paper-lit: #211c18;
     --hf-sheet: #1a1715;
     --hf-card: #1f1c19;
+    --hf-inset: #181513;
     --hf-text: #ede4d8;
-    --hf-text-soft: rgb(237 228 216 / 0.62);
-    --hf-text-faint: rgb(237 228 216 / 0.4);
+    --hf-text-soft: rgb(237 228 216 / 0.64);
+    --hf-text-faint: rgb(237 228 216 / 0.42);
     --hf-line: rgb(255 255 255 / 0.07);
+    --hf-line-strong: rgb(255 255 255 / 0.13);
     --hf-hover: rgb(255 255 255 / 0.045);
     --hf-chip: rgb(255 255 255 / 0.07);
     --hf-accent: #d08a62;
     --hf-accent-soft: rgb(208 138 98 / 0.14);
+    --hf-glow: rgb(166 94 60 / 0.2);
+    --hf-scrim: rgb(0 0 0 / 0.6);
+}
+
+html {
+    scrollbar-color: var(--hf-line-strong) transparent;
 }
 
 ::selection {
@@ -57,33 +73,38 @@
     background-color: var(--hf-paper);
 }
 
+/* The work area fills the window, set off from the sidebar by a single
+   hairline rather than floating as a card beside it. */
 .fi-body .fi-main-ctn {
-    margin: 0.5rem;
-    min-height: calc(100dvh - 1rem);
+    min-height: 100dvh;
     background-color: var(--hf-sheet);
-    border-radius: var(--hf-radius);
-    box-shadow:
-        0 0 0 1px var(--hf-line),
-        0 1px 2px rgb(26 22 20 / 0.03);
 
     @media (width >= 64rem) {
-        margin-inline-start: 0;
+        border-inline-start: 1px solid var(--hf-line);
     }
 }
 
 .fi-main {
-    @apply lg:px-10;
+    @apply lg:px-9;
 }
 
-.fi-page-header-main-ctn,
+.fi-page-header-main-ctn {
+    row-gap: 1.25rem;
+    @apply lg:py-7;
+}
+
 .fi-page-main {
     row-gap: 1.25rem;
+}
+
+.fi-header {
+    column-gap: 1rem;
 }
 
 .fi-header-heading {
     font-family: var(--hf-display);
     font-weight: 400;
-    font-size: clamp(1.15rem, 1rem + 0.6vw, 1.45rem);
+    font-size: clamp(1.1rem, 0.95rem + 0.55vw, 1.4rem);
     line-height: 1.3;
     letter-spacing: -0.01em;
     color: var(--hf-text);
@@ -96,14 +117,18 @@
 
 .fi-breadcrumbs {
     font-size: 0.75rem;
+    margin-bottom: 0.15rem;
 }
 
 /* ------------------------------------------------------------------ */
-/* Sidebar: on the paper, beside the sheet                             */
+/* Sidebar: warm paper, lit from the top                               */
 /* ------------------------------------------------------------------ */
 
 .fi-body .fi-sidebar {
     background-color: var(--hf-paper);
+    background-image:
+        radial-gradient(130% 55% at 0% 100%, var(--hf-glow), transparent 70%),
+        linear-gradient(180deg, var(--hf-paper-lit) 0%, var(--hf-paper) 42%);
 }
 
 .fi-body:not(.fi-body-has-topbar) .fi-sidebar-header {
@@ -168,10 +193,11 @@
     padding: 0.4rem 0.6rem;
     border-radius: var(--hf-radius-sm);
     column-gap: 0.65rem;
-    transition: background-color 120ms ease;
+    transition: background-color 150ms var(--hf-ease);
 
     & > .fi-icon {
         color: var(--hf-text-faint);
+        transition: color 150ms var(--hf-ease);
     }
 }
 
@@ -184,12 +210,13 @@
 .fi-sidebar-item.fi-sidebar-item-has-url > .fi-sidebar-item-btn:is(:hover, :focus-visible) {
     background-color: var(--hf-hover);
 
+    & > .fi-icon,
     & > .fi-sidebar-item-label {
         color: var(--hf-text);
     }
 }
 
-/* The current page: a small white chip lifted off the paper. */
+/* The current page: a small chip lifted off the paper. */
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover {
     background-color: var(--hf-chip);
@@ -225,7 +252,6 @@
     justify-content: center;
     background-color: var(--hf-accent-soft);
     color: var(--hf-accent);
-    --tw-ring-color: transparent;
 }
 
 .fi-sidebar-group-dropdown-trigger-btn:hover {
@@ -244,7 +270,8 @@
 
 .fi-sidebar .fi-user-menu-trigger {
     border-radius: var(--hf-radius-sm);
-    padding: 0.35rem 0.5rem;
+    padding: 0.4rem 0.5rem;
+    transition: background-color 150ms var(--hf-ease);
 
     &:hover {
         background-color: var(--hf-hover);
@@ -252,8 +279,16 @@
 
     & .fi-user-menu-trigger-text {
         font-size: 0.85rem;
+        font-weight: 500;
         color: var(--hf-text);
     }
+}
+
+/* Avatars wear a terracotta ring, set off by a gap of paper. */
+.fi-avatar {
+    box-shadow:
+        0 0 0 2px var(--hf-paper),
+        0 0 0 3.5px var(--hf-accent);
 }
 
 /* ------------------------------------------------------------------ */
@@ -273,11 +308,11 @@
 
 .fi-section:not(.fi-section-not-contained):not(.fi-aside) {
     & > .fi-section-header {
-        padding: 0.9rem 1.25rem;
+        padding: 0.85rem 1.15rem;
     }
 
     &:not(.fi-divided) > .fi-section-content-ctn > .fi-section-content {
-        padding: 1.25rem;
+        padding: 1.15rem;
     }
 
     & > .fi-section-content-ctn {
@@ -285,7 +320,7 @@
     }
 
     & > .fi-section-content-ctn > .fi-section-footer {
-        padding: 0.8rem 1.25rem;
+        padding: 0.75rem 1.15rem;
         border-color: var(--hf-line);
     }
 }
@@ -293,6 +328,7 @@
 .fi-section-header-heading {
     font-size: 0.9rem;
     font-weight: 600;
+    color: var(--hf-text);
 }
 
 .fi-section-header-description {
@@ -302,11 +338,13 @@
 
 /* Stat cards: a quiet label, the figure in Michroma. */
 .fi-wi-stats-overview-stat {
-    padding: 1rem 1.2rem 1.15rem;
-    transition: box-shadow 150ms ease;
+    padding: 1rem 1.15rem 1.1rem;
+    transition: box-shadow 180ms var(--hf-ease);
+    --stat-chart-line-tension: 0.35;
+    --stat-chart-border-width: 1.5;
 
     &:is(a):hover {
-        --tw-ring-color: rgb(166 94 60 / 0.35);
+        --tw-ring-color: rgb(166 94 60 / 0.4);
     }
 
     & .fi-wi-stats-overview-stat-label {
@@ -317,7 +355,7 @@
     & .fi-wi-stats-overview-stat-value {
         font-family: var(--hf-display);
         font-weight: 400;
-        font-size: 1.35rem;
+        font-size: 1.3rem;
         letter-spacing: -0.02em;
         line-height: 1.25;
         color: var(--hf-text);
@@ -330,9 +368,6 @@
     & .fi-wi-stats-overview-stat-label-ctn > .fi-icon {
         color: var(--hf-accent);
     }
-
-    --stat-chart-line-tension: 0.35;
-    --stat-chart-border-width: 1.5;
 }
 
 /* Charts: rounded bars, soft lines, quiet axes, an ink tooltip. */
@@ -360,29 +395,182 @@
 }
 
 /* ------------------------------------------------------------------ */
-/* Tables: compact, with plain headers                                */
+/* Tables: dense rows, plain headers, a light toolbar                  */
 /* ------------------------------------------------------------------ */
 
 .fi-ta-ctn {
     overflow: hidden;
+
+    & .fi-ta-header {
+        padding: 0.85rem 1rem;
+        border-color: var(--hf-line);
+    }
+
+    & .fi-ta-header-heading {
+        font-size: 0.9rem;
+    }
+
+    & .fi-ta-header-toolbar {
+        padding: 0.55rem 1rem;
+        border-color: var(--hf-line);
+
+        & > * {
+            min-height: 2rem;
+        }
+    }
+}
+
+/* The toolbar's search sits in a recessed well. */
+.fi-ta-search-field .fi-input-wrp,
+.fi-ta-header-toolbar .fi-input-wrp {
+    background-color: var(--hf-inset);
 }
 
 .fi-ta-header-cell {
-    font-size: 0.78rem;
+    padding-block: 0.55rem;
+    font-size: 0.75rem;
     font-weight: 500;
     color: var(--hf-text-soft);
+    background-color: var(--hf-inset);
+    @apply sm:first-of-type:ps-4 sm:last-of-type:pe-4;
+}
+
+.fi-ta-table {
+    & > thead > tr {
+        border-bottom: 1px solid var(--hf-line);
+    }
+
+    & > tbody {
+        border-color: var(--hf-line);
+
+        & > tr {
+            border-color: var(--hf-line);
+        }
+    }
+}
+
+/* Row cells: about 40px tall instead of 57. */
+.fi-ta-cell {
+    @apply sm:first:ps-1 sm:last:pe-1;
+
+    &:has(.fi-ta-actions),
+    &:has(.fi-ta-record-checkbox),
+    &.fi-ta-selection-cell {
+        padding-block: 0.45rem;
+        @apply sm:first-of-type:ps-4 sm:last-of-type:pe-4;
+    }
 }
 
 .fi-ta-text:not(.fi-inline) {
-    @apply sm:py-2.5;
+    padding-block: 0.55rem;
+    @apply sm:py-[0.55rem];
+}
+
+.fi-ta-text-item {
+    font-size: 0.84rem;
+}
+
+.fi-ta-text-description {
+    font-size: 0.76rem;
+}
+
+.fi-ta-actions {
+    gap: 0.5rem;
 }
 
 .fi-ta-row.fi-clickable:hover {
     background-color: var(--hf-hover);
 }
 
+.fi-ta-empty-state {
+    padding-block: 2.5rem;
+}
+
 .fi-ta-empty-state-heading {
     font-weight: 600;
+}
+
+.fi-pagination {
+    font-size: 0.8rem;
+}
+
+/* ------------------------------------------------------------------ */
+/* Forms                                                              */
+/* ------------------------------------------------------------------ */
+
+/* Fields sit closer together than Filament's default 1.5rem. */
+.fi-sc.fi-sc-has-gap:not(.fi-sc-dense) {
+    gap: 1.1rem;
+}
+
+.fi-fo-field-label-content {
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.fi-input-wrp {
+    border-radius: var(--hf-radius-sm);
+    --tw-ring-color: var(--hf-line-strong);
+}
+
+.fi-fo-field-wrp-helper-text,
+.fi-fo-field-helper-text {
+    font-size: 0.78rem;
+    color: var(--hf-text-faint);
+}
+
+.fi-checkbox-input {
+    border-radius: 5px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Tabs: a segmented control on paper; underlines inside cards         */
+/* ------------------------------------------------------------------ */
+
+.fi-tabs:not(.fi-contained) {
+    padding: 3px;
+    gap: 2px;
+    border-radius: 11px;
+    background-color: var(--hf-inset);
+    box-shadow: none;
+    --tw-ring-color: var(--hf-line);
+}
+
+.fi-tabs:not(.fi-contained) .fi-tabs-item {
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+
+    &.fi-active {
+        background-color: var(--hf-card);
+        box-shadow:
+            0 0 0 1px var(--hf-line),
+            0 1px 2px rgb(26 22 20 / 0.06);
+    }
+}
+
+.fi-tabs.fi-contained {
+    padding-block: 0;
+    gap: 0.25rem;
+    border-color: var(--hf-line);
+}
+
+.fi-tabs.fi-contained .fi-tabs-item {
+    padding: 0.7rem 0.6rem;
+    border-radius: 0;
+    background: transparent;
+
+    &.fi-active {
+        background: transparent;
+        box-shadow: inset 0 -2px 0 var(--hf-accent);
+    }
+}
+
+.fi-tabs-item.fi-active .fi-tabs-item-label {
+    color: var(--hf-text);
+}
+
+.fi-tabs-item.fi-active > .fi-icon {
+    color: var(--hf-accent);
 }
 
 /* ------------------------------------------------------------------ */
@@ -392,50 +580,62 @@
 .fi-btn {
     border-radius: var(--hf-radius-sm);
     font-weight: 500;
-    @apply sm:px-3.5 sm:py-2;
+    transition:
+        background-color 150ms var(--hf-ease),
+        box-shadow 150ms var(--hf-ease);
+    @apply sm:px-3.5 sm:py-[0.45rem];
 }
 
 .fi-btn.fi-size-sm,
 .fi-btn.fi-size-xs {
-    @apply sm:px-2.5 sm:py-1.5;
+    @apply sm:px-2.5 sm:py-1;
+}
+
+/* The primary button: a hint of depth, nothing more. */
+.fi-btn.fi-color-primary:not(.fi-outlined):not(label) {
+    box-shadow:
+        inset 0 1px 0 rgb(255 255 255 / 0.16),
+        0 1px 2px rgb(166 94 60 / 0.35);
 }
 
 .fi-icon-btn {
     border-radius: var(--hf-radius-sm);
 }
 
-.fi-input-wrp {
-    border-radius: var(--hf-radius-sm);
-}
-
 .fi-badge {
     border-radius: 6px;
     font-weight: 500;
-}
-
-.fi-tabs {
-    border-radius: var(--hf-radius-sm);
-}
-
-.fi-tabs-item {
-    border-radius: 7px;
+    --tw-ring-color: transparent;
 }
 
 .fi-dropdown-panel {
     border-radius: 12px;
     overflow: hidden;
+    --tw-ring-color: var(--hf-line-strong);
+    box-shadow: 0 12px 32px -12px rgb(26 22 20 / 0.25);
 }
 
-.fi-fo-field-label-content {
-    font-weight: 500;
+.fi-dropdown-list {
+    padding: 0.3rem;
+}
+
+.fi-dropdown-list-item {
+    border-radius: 7px;
+    padding-block: 0.4rem;
 }
 
 /* ------------------------------------------------------------------ */
 /* Modals and notifications                                           */
 /* ------------------------------------------------------------------ */
 
+.fi-modal > .fi-modal-close-overlay {
+    background-color: var(--hf-scrim);
+    backdrop-filter: blur(2px);
+}
+
 .fi-modal-window {
     border-radius: 18px;
+    box-shadow: 0 24px 60px -20px rgb(26 22 20 / 0.4);
 }
 
 .fi-modal-heading {
@@ -445,8 +645,17 @@
     letter-spacing: -0.01em;
 }
 
+/* Notifications: a plain card with a coloured edge for its status. */
 .fi-no-notification {
-    border-radius: var(--hf-radius);
+    border-radius: 12px;
+    box-shadow: 0 12px 32px -14px rgb(26 22 20 / 0.3);
+
+    &.fi-color {
+        background-color: var(--hf-card);
+        box-shadow:
+            inset 3px 0 0 var(--color-500),
+            0 12px 32px -14px rgb(26 22 20 / 0.3);
+    }
 }
 
 /* ------------------------------------------------------------------ */
@@ -458,4 +667,12 @@
     font-weight: 400;
     font-size: 1.3rem;
     letter-spacing: -0.01em;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fi-sidebar-item-btn,
+    .fi-btn,
+    .fi-wi-stats-overview-stat {
+        transition: none;
+    }
 }
