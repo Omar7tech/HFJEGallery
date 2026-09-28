@@ -25,4 +25,19 @@ enum ContactTopic: string implements HasLabel
             self::Other => 'Something else',
         };
     }
+
+    /**
+     * The topic's colour in the dashboard charts, built around the studio's
+     * terracotta so a topic reads the same in every chart.
+     */
+    public function chartColor(): string
+    {
+        return match ($this) {
+            self::Interiors => '#a65e3c',
+            self::Curtains => '#d69a6f',
+            self::Bayte => '#5f6f52',
+            self::LivingEdit => '#8a9a7b',
+            self::Other => '#b8aea3',
+        };
+    }
 }
