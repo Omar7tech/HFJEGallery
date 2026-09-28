@@ -153,9 +153,9 @@ function unlockScroll(): void {
 /**
  * The phone and tablet navigation.
  *
- * Closed, it is a slim frosted bar: the logo, a thread of terracotta that
- * fills with the scroll, and a MENU pill. It slips away while reading down
- * the page and comes back the moment you scroll up.
+ * Closed, it is a plain bar edge to edge: the logo and a Menu toggle over
+ * a hairline. It slips away while reading down the page and comes back the
+ * moment you scroll up.
  *
  * Open, the menu is drawn like a pair of curtains: two pleated terracotta
  * panels sweep in from either side and meet in the middle, then the pages
@@ -169,7 +169,6 @@ export function NavBar({ className }: { className?: string }) {
     const { url, props } = usePage();
     const { contact, socials } = props;
     const barRef = useRef<HTMLElement>(null);
-    const progressRef = useRef<HTMLSpanElement>(null);
     const dialogRef = useRef<HTMLDialogElement>(null);
     const toggleRef = useRef<HTMLButtonElement>(null);
     const closeRef = useRef<HTMLButtonElement>(null);
@@ -178,9 +177,8 @@ export function NavBar({ className }: { className?: string }) {
     // The page picked in the menu, while it loads behind the curtains.
     const [leavingFor, setLeavingFor] = useState<string | null>(null);
 
-    // The bar drops in on arrival, then follows the scroll: its thread
-    // fills with the progress down the page, and it hides while scrolling
-    // down and returns on the way back up.
+    // The bar drops in on arrival, then hides while scrolling down and
+    // returns on the way back up.
     useGSAP(
         () => {
             const bar = barRef.current!;
@@ -190,30 +188,25 @@ export function NavBar({ className }: { className?: string }) {
 
             if (!reduced) {
                 gsap.from(bar, {
-                    yPercent: -140,
+                    yPercent: -100,
                     duration: 0.8,
                     delay: 0.15,
                     ease: 'expo.out',
                 });
             }
 
-            const fill = progressRef.current!;
-            gsap.set(fill, { transformOrigin: 'left center' });
-            const setProgress = gsap.quickSetter(fill, 'scaleX');
             let hidden = false;
 
-            const trigger = ScrollTrigger.create({
+            ScrollTrigger.create({
                 start: 0,
                 end: 'max',
                 onUpdate: (self) => {
-                    setProgress(self.progress);
-
                     const hide = self.direction === 1 && self.scroll() > 120;
 
                     if (hide !== hidden) {
                         hidden = hide;
                         gsap.to(bar, {
-                            yPercent: hide ? -140 : 0,
+                            yPercent: hide ? -100 : 0,
                             duration: reduced ? 0 : 0.5,
                             ease: 'expo.out',
                             overwrite: true,
@@ -221,7 +214,6 @@ export function NavBar({ className }: { className?: string }) {
                     }
                 },
             });
-            setProgress(trigger.progress);
         },
         { scope: barRef, dependencies: [url] },
     );
@@ -405,19 +397,19 @@ export function NavBar({ className }: { className?: string }) {
 
     useEffect(() => () => unlockScroll(), []);
 
-    const pill =
-        'inline-flex h-11 items-center gap-3 rounded-full px-5 font-sans text-[11px] font-medium tracking-[0.14em] touch-manipulation transition-[background-color,scale] duration-300 focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:active:scale-95';
+    const toggle =
+        '-mr-2 inline-flex h-11 items-center gap-3 px-2 font-sans text-sm font-medium touch-manipulation transition-colors duration-300 focus-visible:outline-2 focus-visible:outline-offset-2';
 
     return (
         <>
             <header
                 ref={barRef}
                 className={cn(
-                    'px-3 pt-[max(0.75rem,env(safe-area-inset-top))] lg:hidden',
+                    'border-b border-ink/8 bg-white pt-[env(safe-area-inset-top)] lg:hidden',
                     className,
                 )}
             >
-                <div className="relative flex h-14 items-center justify-between overflow-hidden rounded-full bg-white/80 pr-1.5 pl-5 shadow-[0_10px_30px_-14px_rgb(74_48_32/0.35)] ring-1 ring-ink/6 backdrop-blur-xl">
+                <div className="flex h-14 items-center justify-between px-6">
                     <Link href="/" aria-label="HFJE home" className="block">
                         <Logo size={26} />
                     </Link>
@@ -429,29 +421,16 @@ export function NavBar({ className }: { className?: string }) {
                         aria-expanded={open}
                         aria-controls="site-menu"
                         className={cn(
-                            pill,
-                            'bg-brand text-cream hover:bg-brand-hover focus-visible:outline-brand',
+                            toggle,
+                            'text-ink hover:text-brand focus-visible:outline-brand',
                         )}
                     >
-                        MENU
-                        <span aria-hidden="true" className="grid gap-[5px]">
-                            <i className="block h-px w-[18px] bg-current" />
-                            <i className="block h-px w-[12px] justify-self-end bg-current" />
+                        Menu
+                        <span aria-hidden="true" className="grid gap-[6px]">
+                            <i className="block h-px w-5 bg-current" />
+                            <i className="block h-px w-5 bg-current" />
                         </span>
                     </button>
-
-                    {/* A thread of terracotta along the foot of the bar,
-                        filling with the scroll down the page. */}
-                    <span
-                        aria-hidden="true"
-                        className="absolute inset-x-8 bottom-0 h-px bg-brand/15"
-                    >
-                        <span
-                            ref={progressRef}
-                            className="absolute inset-0 bg-brand"
-                            style={{ transform: 'scaleX(0)' }}
-                        />
-                    </span>
                 </div>
             </header>
 
@@ -478,7 +457,7 @@ export function NavBar({ className }: { className?: string }) {
                     className="menu-panel menu-panel-right absolute inset-y-0 right-0 w-[50.2%] bg-brand shadow-[inset_14px_0_24px_-18px_rgb(0_0_0/0.45)]"
                 />
 
-                <div className="menu-inner relative mx-auto grid h-full max-w-xl [scrollbar-width:none] grid-rows-[auto_1fr_auto] overflow-y-auto px-6 pt-[max(1.25rem,env(safe-area-inset-top))] pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+                <div className="menu-inner relative mx-auto grid h-full max-w-xl [scrollbar-width:none] grid-rows-[auto_1fr_auto] overflow-y-auto px-6 pt-[env(safe-area-inset-top)] pb-[max(1.5rem,env(safe-area-inset-bottom))]">
                     <div className="menu-bar flex h-14 items-center justify-between">
                         <Link
                             href="/"
@@ -493,14 +472,14 @@ export function NavBar({ className }: { className?: string }) {
                             type="button"
                             onClick={closeMenu}
                             className={cn(
-                                pill,
-                                'bg-cream/15 text-cream hover:bg-cream/25 focus-visible:outline-cream',
+                                toggle,
+                                'text-cream hover:text-white focus-visible:outline-cream',
                             )}
                         >
-                            CLOSE
+                            Close
                             <span
                                 aria-hidden="true"
-                                className="relative block size-3.5"
+                                className="relative block size-4"
                             >
                                 <i className="absolute top-1/2 left-0 block h-px w-full rotate-45 bg-current" />
                                 <i className="absolute top-1/2 left-0 block h-px w-full -rotate-45 bg-current" />
