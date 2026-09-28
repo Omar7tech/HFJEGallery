@@ -22,11 +22,6 @@ class GeneralSettings extends Settings
     public ?string $email;
 
     /**
-     * The WhatsApp number BAYTÉ enquiries are sent to.
-     */
-    public ?string $whatsapp_number;
-
-    /**
      * The social links shown in the site footer. Each entry is shaped
      * `['label' => string, 'url' => string]`.
      *
@@ -48,17 +43,6 @@ class GeneralSettings extends Settings
         return $this->phone_number_enabled && filled($this->phone_number)
             ? $this->phone_number
             : null;
-    }
-
-    /**
-     * The WhatsApp number reduced to the digits wa.me accepts (no `+`, spaces
-     * or dashes), or null when none is set.
-     */
-    public function whatsappDigits(): ?string
-    {
-        $digits = preg_replace('/\D/', '', (string) $this->whatsapp_number);
-
-        return $digits !== '' ? $digits : null;
     }
 
     /**

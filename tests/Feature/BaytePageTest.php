@@ -2,7 +2,7 @@
 
 use App\Models\BayteCategory;
 use App\Models\BayteProduct;
-use App\Settings\GeneralSettings;
+use App\Settings\BayteSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -173,7 +173,7 @@ test('a search treats wildcards as plain text', function () {
 });
 
 test('the page shares the whatsapp number a selection is sent to', function () {
-    $settings = app(GeneralSettings::class);
+    $settings = app(BayteSettings::class);
     $settings->whatsapp_number = '+961 3 145 782';
     $settings->save();
 

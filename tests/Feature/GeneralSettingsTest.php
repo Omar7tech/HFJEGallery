@@ -33,26 +33,6 @@ test('admins can save contact details and social links', function () {
         ]);
 });
 
-test('admins can set the whatsapp number bayte enquiries go to', function () {
-    $this->actingAs(User::factory()->create());
-
-    Livewire::test(ManageGeneral::class)
-        ->fillForm(['whatsapp_number' => '+961 3 145-782'])
-        ->call('save')
-        ->assertHasNoFormErrors();
-
-    expect(app(GeneralSettings::class)->refresh()->whatsappDigits())->toBe('9613145782');
-});
-
-test('a whatsapp number must look like a phone number', function () {
-    $this->actingAs(User::factory()->create());
-
-    Livewire::test(ManageGeneral::class)
-        ->fillForm(['whatsapp_number' => 'call me'])
-        ->call('save')
-        ->assertHasFormErrors(['whatsapp_number' => 'regex']);
-});
-
 test('an enabled phone number is required', function () {
     $this->actingAs(User::factory()->create());
 

@@ -6,11 +6,11 @@ return new class extends SettingsMigration
 {
     public function up(): void
     {
-        $this->migrator->add('general.whatsapp_number', null);
+        $this->migrator->add('bayte.whatsapp_number', null);
     }
 
     public function down(): void
     {
-        $this->migrator->deleteIfExists('general.whatsapp_number');
+        $this->migrator->deleteIfExists('bayte.whatsapp_number');
     }
 };

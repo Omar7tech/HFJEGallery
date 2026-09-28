@@ -57,14 +57,6 @@ class ManageGeneral extends SettingsPage
                                     ->email()
                                     ->maxLength(255)
                                     ->columnSpanFull(),
-
-                                TextInput::make('whatsapp_number')
-                                    ->label('WhatsApp number')
-                                    ->helperText('BAYTÉ visitors send the pieces they want to know more about to this number. Include the country code, e.g. +961 3 145 782. Leave empty and visitors can still build a selection, but the send button stays disabled.')
-                                    ->tel()
-                                    ->regex('/^\+?[\d\s\-().]{6,}$/')
-                                    ->maxLength(30)
-                                    ->columnSpanFull(),
                             ]),
 
                         Tab::make('Social')

@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BayteCategory;
 use App\Models\BayteProduct;
-use App\Settings\GeneralSettings;
+use App\Settings\BayteSettings;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -22,7 +22,7 @@ class BayteController extends Controller
      * into a selection kept in their browser and send it to the studio's
      * WhatsApp to ask about them.
      */
-    public function __invoke(Request $request, GeneralSettings $settings): Response
+    public function __invoke(Request $request, BayteSettings $settings): Response
     {
         // An empty shelf has nothing to show, so it is never offered. Ties in
         // the dashboard order fall back to the order the categories were added.
