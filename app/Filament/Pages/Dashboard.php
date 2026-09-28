@@ -5,8 +5,8 @@ namespace App\Filament\Pages;
 use Filament\Pages\Dashboard as BaseDashboard;
 
 /**
- * The dashboard: the inbox first, then how messages are trending, then the
- * state of the site's content and anything in it that needs fixing.
+ * The dashboard: what is on the site, how it has grown and how complete it
+ * is, then anything that needs fixing. Messages live in their own inbox.
  */
 class Dashboard extends BaseDashboard
 {

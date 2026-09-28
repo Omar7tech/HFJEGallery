@@ -22,6 +22,9 @@ class ContactMessage extends Model
     /** @use HasFactory<ContactMessageFactory> */
     use HasFactory;
 
+    /** Unread for longer than this, a message is overdue for a reply. */
+    public const int OVERDUE_DAYS = 2;
+
     /** @return array<string, string> */
     protected function casts(): array
     {

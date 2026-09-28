@@ -3,11 +3,13 @@
 namespace App\Filament\Widgets;
 
 use App\Filament\Resources\BayteProducts\BayteProductResource;
+use App\Filament\Resources\ContactMessages\ContactMessageResource;
 use App\Filament\Resources\CurtainWorks\CurtainWorkResource;
 use App\Filament\Resources\LivingSpaces\LivingSpaceResource;
 use App\Filament\Resources\Projects\ProjectResource;
 use App\Models\BayteCategory;
 use App\Models\BayteProduct;
+use App\Models\ContactMessage;
 use App\Models\CurtainStyle;
 use App\Models\CurtainWork;
 use App\Models\GalleryImage;
@@ -19,14 +21,17 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Number;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 /**
  * What the site is showing: each part of it in one number, with what it is
- * made of underneath and how much was added lately.
+ * made of underneath and how much was added lately. The inbox gets a single
+ * card; its own page has the rest.
  */
 class CatalogueStats extends StatsOverviewWidget
 {
-    protected static ?int $sort = 5;
+    protected static ?int $sort = 1;
 
     protected int|string|array $columnSpan = 'full';
 
@@ -61,7 +66,36 @@ class CatalogueStats extends StatsOverviewWidget
                 ->description(LivingEditOption::query()->where('is_active', true)->count().' choices · '.GalleryImage::query()->where('is_active', true)->count().' mood board images')
                 ->icon(Heroicon::OutlinedSparkles)
                 ->url(LivingSpaceResource::getUrl('index')),
+
+            Stat::make('Photo library', Number::format(Media::count()).' files')
+                ->description(Number::fileSize((int) Media::query()->sum('size'), precision: 1).' of photos and images')
+                ->icon(Heroicon::OutlinedPhoto),
+
+            $this->inbox(),
         ];
+    }
+
+    private function inbox(): Stat
+    {
+        $unread = ContactMessage::query()->whereNull('read_at')->count();
+        $overdue = ContactMessage::query()
+            ->whereNull('read_at')
+            ->where('created_at', '<', now()->subDays(ContactMessage::OVERDUE_DAYS))
+            ->count();
+
+        return Stat::make('Unread messages', $unread)
+            ->description(match (true) {
+                $unread === 0 => 'All caught up',
+                $overdue > 0 => "{$overdue} waiting over ".ContactMessage::OVERDUE_DAYS.' days',
+                default => 'All from the last '.ContactMessage::OVERDUE_DAYS.' days',
+            })
+            ->color(match (true) {
+                $unread === 0 => 'success',
+                $overdue > 0 => 'danger',
+                default => 'warning',
+            })
+            ->icon(Heroicon::OutlinedInbox)
+            ->url(ContactMessageResource::getUrl('index', ['filters' => ['read_at' => ['value' => '0']]]));
     }
 
     /**

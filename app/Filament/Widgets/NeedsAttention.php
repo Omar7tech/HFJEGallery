@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class NeedsAttention extends TableWidget
 {
-    protected static ?int $sort = 6;
+    protected static ?int $sort = 9;
 
     protected int|string|array $columnSpan = 'full';
 
@@ -80,14 +80,14 @@ class NeedsAttention extends TableWidget
     {
         $overdue = ContactMessage::query()
             ->whereNull('read_at')
-            ->where('created_at', '<', now()->subDays(InboxStats::OVERDUE_DAYS))
+            ->where('created_at', '<', now()->subDays(ContactMessage::OVERDUE_DAYS))
             ->count();
         $general = app(GeneralSettings::class);
 
         $checks = [
             'overdue-messages' => [
                 $overdue,
-                fn (int $count): string => $this->plural($count, 'message').' unread for over '.InboxStats::OVERDUE_DAYS.' days',
+                fn (int $count): string => $this->plural($count, 'message').' unread for over '.ContactMessage::OVERDUE_DAYS.' days',
                 'People are waiting for a reply.',
                 'Inbox',
                 'danger',
