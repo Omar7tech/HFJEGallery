@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BayteCategory;
 use App\Models\BayteProduct;
+use App\Settings\GeneralSettings;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -17,9 +18,11 @@ class BayteController extends Controller
     /**
      * The BAYTE catalogue, loaded nine pieces at a time: every piece, or one
      * category (`?category=sofas`), optionally narrowed by a search
-     * (`?search=oak`) on the name and description.
+     * (`?search=oak`) on the name and description. Visitors collect pieces
+     * into a selection kept in their browser and send it to the studio's
+     * WhatsApp to ask about them.
      */
-    public function __invoke(Request $request): Response
+    public function __invoke(Request $request, GeneralSettings $settings): Response
     {
         // An empty shelf has nothing to show, so it is never offered. Ties in
         // the dashboard order fall back to the order the categories were added.
@@ -50,6 +53,8 @@ class BayteController extends Controller
                 ])
                 ->all(),
             'activeCategory' => $active?->slug,
+            // Where the visitor's selection is sent; null disables sending it.
+            'whatsappNumber' => fn (): ?string => $settings->whatsappDigits(),
             'search' => $search,
             'total' => fn (): int => $products()->count(),
             'products' => Inertia::scroll(fn () => $products()

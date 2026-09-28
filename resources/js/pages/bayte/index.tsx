@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import BayteCatalogueCard from '@/components/bayte-catalogue-card';
+import BayteSelection from '@/components/bayte-selection';
 import BayteWordmarkDraw from '@/components/bayte-wordmark-draw';
 import BottomSheet from '@/components/bottom-sheet';
 import FilterPill from '@/components/filter-pill';
@@ -32,6 +33,8 @@ interface BaytePageProps {
     categories: Category[];
     /** The category shown, or null for the whole collection. */
     activeCategory: string | null;
+    /** Where a selection of pieces is sent, or null when it can't be sent yet. */
+    whatsappNumber: string | null;
     /** The search the pieces are narrowed by, or an empty string. */
     search: string;
     /** How many pieces match the category and search. */
@@ -72,6 +75,7 @@ const skeleton = (
 export default function BayteIndex({
     categories,
     activeCategory,
+    whatsappNumber,
     search,
     total,
     products,
@@ -385,6 +389,7 @@ export default function BayteIndex({
                             {products.data.map((product) => (
                                 <BayteCatalogueCard
                                     key={product.slug}
+                                    slug={product.slug}
                                     name={product.name}
                                     description={product.description}
                                     src={product.image}
@@ -436,6 +441,8 @@ export default function BayteIndex({
             >
                 {categoryList}
             </BottomSheet>
+
+            <BayteSelection whatsappNumber={whatsappNumber} />
         </>
     );
 }

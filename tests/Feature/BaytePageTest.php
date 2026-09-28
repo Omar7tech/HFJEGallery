@@ -2,6 +2,7 @@
 
 use App\Models\BayteCategory;
 use App\Models\BayteProduct;
+use App\Settings\GeneralSettings;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 use Inertia\Testing\AssertableInertia as Assert;
@@ -169,4 +170,18 @@ test('a search treats wildcards as plain text', function () {
 
     $this->get(route('bayte', ['search' => '%']))
         ->assertInertia(fn (Assert $page) => $page->where('total', 0));
+});
+
+test('the page shares the whatsapp number a selection is sent to', function () {
+    $settings = app(GeneralSettings::class);
+    $settings->whatsapp_number = '+961 3 145 782';
+    $settings->save();
+
+    $this->get(route('bayte'))
+        ->assertInertia(fn (Assert $page) => $page->where('whatsappNumber', '9613145782'));
+});
+
+test('without a whatsapp number the selection has nowhere to be sent', function () {
+    $this->get(route('bayte'))
+        ->assertInertia(fn (Assert $page) => $page->where('whatsappNumber', null));
 });
