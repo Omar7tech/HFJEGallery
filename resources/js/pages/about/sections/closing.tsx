@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 /** The invitation to start, over the home page's living room at night. */
 function Closing() {
     return (
-        <section className="w-full px-5 pt-4 pb-16 font-display md:px-12 md:pb-20 lg:pr-16 lg:pl-0">
+        <section className="w-full px-5 pt-4 pb-16 font-display max-md:pb-10 md:px-12 md:pb-20 lg:pr-16 lg:pl-0">
             <div className="@container relative isolate flex min-h-80 flex-col justify-end overflow-hidden rounded-3xl bg-ink px-6 py-8 md:min-h-96 md:px-10 md:py-10">
                 <img
                     src="/images/potted-plant-table-night-w1535.webp"
@@ -28,7 +28,7 @@ function Closing() {
                 </p>
                 <Link
                     href="/contact"
-                    className="group mt-6 inline-flex w-fit items-center gap-3 rounded-full bg-brand px-8 py-3.5 text-sm text-brand-foreground transition-colors duration-300 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream"
+                    className="group mt-6 inline-flex w-fit items-center gap-3 rounded-full bg-brand px-8 py-3.5 text-sm text-brand-foreground transition-colors duration-300 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream max-md:w-full max-md:justify-center max-md:rounded-xl max-md:font-sans max-md:font-medium"
                 >
                     Get in touch
                     <ArrowRight

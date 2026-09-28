@@ -13,7 +13,7 @@ function Intro() {
     const reducedMotion = useReducedMotion();
 
     return (
-        <section className="@container w-full px-5 pt-8 pb-12 font-display md:px-12 md:pt-12 md:pb-16 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-5 pt-8 pb-12 font-display max-md:pt-5 max-md:pb-9 md:px-12 md:pt-12 md:pb-16 lg:pr-16 lg:pl-0">
             <div className="grid gap-8 @4xl:grid-cols-12 @4xl:items-center @4xl:gap-12">
                 <motion.div
                     initial={reducedMotion ? false : { opacity: 0, y: 16 }}
@@ -34,7 +34,7 @@ function Intro() {
                     <Link
                         href="/work"
                         prefetch
-                        className="group mt-8 inline-flex items-center gap-3 rounded-full bg-brand px-8 py-3.5 text-sm text-brand-foreground transition-colors duration-300 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                        className="group mt-8 inline-flex items-center gap-3 rounded-full bg-brand px-8 py-3.5 text-sm text-brand-foreground transition-colors duration-300 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-6 max-md:w-full max-md:justify-center max-md:rounded-xl max-md:font-sans max-md:font-medium"
                     >
                         See our work
                         <ArrowRight

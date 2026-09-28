@@ -263,7 +263,7 @@ export default function Contact({ formToken }: { formToken: string }) {
                 />
             </Head>
 
-            <section className="@container w-full px-5 pt-8 pb-16 font-display md:px-12 md:pt-12 md:pb-20 lg:pr-16 lg:pl-0">
+            <section className="@container w-full px-5 pt-8 pb-16 font-display max-md:pt-5 max-md:pb-10 md:px-12 md:pt-12 md:pb-20 lg:pr-16 lg:pl-0">
                 {/* Title on the left, the direct lines to the studio on the
                     right; the form takes the full width below. */}
                 <div className="flex flex-col gap-6 @4xl:flex-row @4xl:items-end @4xl:justify-between @4xl:gap-10">
@@ -639,7 +639,7 @@ export default function Contact({ formToken }: { formToken: string }) {
                                 <button
                                     type="submit"
                                     disabled={form.processing}
-                                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-brand px-8 text-sm text-brand-foreground transition-colors duration-300 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-70 @2xl:self-start"
+                                    className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-full bg-brand px-8 text-sm text-brand-foreground transition-colors duration-300 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:opacity-70 max-md:rounded-xl max-md:font-medium @2xl:self-start"
                                 >
                                     {form.processing ? (
                                         <>
