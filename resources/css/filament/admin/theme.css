@@ -18,9 +18,11 @@
 :root {
     --hf-paper: #f3f1ed;
     --hf-paper-lit: #ece3d6;
-    --hf-sheet: #ffffff;
+    /* The sheet is a warm off-white so the white cards on it read as cards. */
+    --hf-sheet: #f7f6f3;
     --hf-card: #ffffff;
-    --hf-inset: #faf8f5;
+    --hf-inset: #faf9f7;
+    --hf-card-shadow: 0 1px 2px rgb(26 22 20 / 0.05), 0 6px 16px -12px rgb(74 48 32 / 0.22);
     --hf-text: #1a1614;
     --hf-text-soft: rgb(26 22 20 / 0.64);
     --hf-text-faint: rgb(26 22 20 / 0.44);
@@ -45,6 +47,7 @@
     --hf-sheet: #0c0b0a;
     --hf-card: #121110;
     --hf-inset: #0a0909;
+    --hf-card-shadow: 0 0 #0000;
     --hf-text: #ede4d8;
     --hf-text-soft: rgb(237 228 216 / 0.64);
     --hf-text-faint: rgb(237 228 216 / 0.42);
@@ -361,7 +364,10 @@ html {
 .fi-in-tabs {
     background-color: var(--hf-card);
     border-radius: var(--hf-radius);
-    box-shadow: none;
+    /* The hairline outline is part of the shadow, so it is drawn here too. */
+    box-shadow:
+        0 0 0 1px var(--hf-line),
+        var(--hf-card-shadow);
     --tw-ring-color: var(--hf-line);
 }
 
@@ -403,7 +409,9 @@ html {
     --stat-chart-border-width: 1.5;
 
     &:is(a):hover {
-        --tw-ring-color: rgb(166 94 60 / 0.4);
+        box-shadow:
+            0 0 0 1px rgb(166 94 60 / 0.4),
+            var(--hf-card-shadow);
     }
 
     & .fi-wi-stats-overview-stat-label {
