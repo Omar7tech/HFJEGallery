@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BayteController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\CurtainController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LivingEditController;
@@ -44,5 +45,8 @@ Route::get('/living-edit/mood-board', MoodBoardController::class)
     ])
     ->name('living-edit.mood-board');
 Route::inertia('/contact', 'contact/index')->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])
+    ->middleware('throttle:contact')
+    ->name('contact.store');
 Route::inertia('/privacy', 'privacy/index')->name('privacy');
 Route::inertia('/terms', 'terms/index')->name('terms');

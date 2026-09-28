@@ -44,6 +44,9 @@ class AppServiceProvider extends ServiceProvider
     protected function configureRateLimiting(): void
     {
         RateLimiter::for('mood-board', fn (Request $request): Limit => Limit::perMinute(120)->by($request->ip()));
+
+        // A person sends a message or two; anything faster is a script.
+        RateLimiter::for('contact', fn (Request $request): Limit => Limit::perHour(10)->by($request->ip()));
     }
 
     /**
