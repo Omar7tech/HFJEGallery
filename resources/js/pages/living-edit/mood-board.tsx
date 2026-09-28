@@ -181,7 +181,7 @@ function SaveImageButton({
             disabled={!isAvailable || saveState === 'saving'}
             title={hint}
             aria-live="polite"
-            className="inline-flex min-h-9 min-w-40 items-center justify-center gap-1.5 rounded-full bg-pill px-5 py-1.5 text-xs text-brand transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-pill-hover disabled:cursor-default disabled:opacity-60"
+            className="inline-flex min-h-9 min-w-40 items-center justify-center gap-1.5 rounded-full bg-pill px-5 py-1.5 text-xs text-brand transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-pill-hover disabled:cursor-default disabled:opacity-60 max-md:min-h-11 max-md:w-full max-md:rounded-xl max-md:text-sm"
         >
             {saveState === 'saving' ? (
                 <>
@@ -289,8 +289,8 @@ export default function LivingMoodBoard({
         .filter((name): name is string => Boolean(name));
 
     return (
-        <section className="@container px-5 pt-9 pb-8 text-[#191b17] md:px-8 lg:pt-[52px] lg:pr-8 lg:pl-0">
-            <header className="grid gap-5 border-b border-brand/75 pb-6 @2xl:grid-cols-[1.04fr_1fr] @2xl:gap-10">
+        <section className="@container px-5 pt-9 pb-8 text-[#191b17] max-md:pt-6 md:px-8 lg:pt-[52px] lg:pr-8 lg:pl-0">
+            <header className="grid gap-5 border-b border-brand/75 pb-6 max-md:gap-3 max-md:pb-5 @2xl:grid-cols-[1.04fr_1fr] @2xl:gap-10">
                 <div className="font-display">
                     <p className="text-[clamp(0.7rem,2.5cqi,1rem)] leading-relaxed whitespace-nowrap">
                         HFJE LIVING COLLECTIONS
@@ -299,14 +299,14 @@ export default function LivingMoodBoard({
                         The Living Edit
                     </h1>
                 </div>
-                <p className="max-w-[380px] font-sans text-base leading-relaxed text-[#b56c49] @2xl:pt-0.5">
-                    Choose The Feelings, Moments, And Materials That Feel Like
-                    Home. Your Selections Are Matched With Visual Directions
-                    Curated By HFJE.
+                <p className="max-w-[380px] font-sans text-base leading-relaxed text-[#b56c49] max-md:max-w-none max-md:text-[15px] @2xl:pt-0.5">
+                    Choose the feelings, moments, and materials that feel like
+                    home. Your selections are matched with visual directions
+                    curated by HFJE.
                 </p>
             </header>
 
-            <div className="mt-10 grid items-start gap-10 @2xl:grid-cols-[minmax(0,1.04fr)_minmax(0,1fr)]">
+            <div className="mt-10 grid items-start gap-10 max-md:mt-6 max-md:gap-9 @2xl:grid-cols-[minmax(0,1.04fr)_minmax(0,1fr)]">
                 <div className="min-w-0 pt-2 font-sans">
                     <h2 className="text-xl leading-6">
                         STEP {stepNumber} OF {LIVING_EDIT_TOTAL_STEPS}
@@ -330,7 +330,7 @@ export default function LivingMoodBoard({
                             />
                         ))}
                     </div>
-                    <fieldset className="mt-7">
+                    <fieldset className="mt-7 max-md:mt-5">
                         <legend className="sr-only">
                             {STEP_COPY[step].legend}
                         </legend>
@@ -339,7 +339,7 @@ export default function LivingMoodBoard({
                                 Options for this step are coming soon.
                             </p>
                         )}
-                        <div className="grid grid-cols-4 gap-2">
+                        <div className="grid grid-cols-4 gap-2 max-md:grid-cols-3">
                             {options.map(({ id, name, icon }) => (
                                 <button
                                     key={id}
@@ -351,7 +351,7 @@ export default function LivingMoodBoard({
                                     }
                                     onClick={() => onToggle(id)}
                                     className={cn(
-                                        'flex aspect-square min-w-0 flex-col items-center justify-center gap-[8%] rounded-xl p-2 text-center text-[clamp(0.625rem,1.5cqi,0.8125rem)] leading-none transition-[background-color,color,opacity,scale] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-60 motion-safe:enabled:active:scale-[0.97] motion-reduce:transition-none',
+                                        'flex aspect-square min-w-0 flex-col items-center justify-center gap-[8%] rounded-xl p-2 text-center text-[clamp(0.625rem,1.5cqi,0.8125rem)] leading-none transition-[background-color,color,opacity,scale] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-60 motion-safe:enabled:active:scale-[0.97] motion-reduce:transition-none max-md:text-xs',
                                         selected.includes(id)
                                             ? 'bg-brand text-white'
                                             : 'bg-pill text-brand enabled:hover:bg-pill-hover',
@@ -370,14 +370,14 @@ export default function LivingMoodBoard({
                             ))}
                         </div>
                     </fieldset>
-                    <p className="mt-8 border-b border-brand/75 pb-2 text-[clamp(0.75rem,1.4cqi,0.875rem)]">
-                        Select Up To {MAX_STEP_SELECTIONS}
+                    <p className="mt-8 border-b border-brand/75 pb-2 text-[clamp(0.75rem,1.4cqi,0.875rem)] max-md:mt-5 max-md:text-ink/60">
+                        Select up to {MAX_STEP_SELECTIONS}
                     </p>
-                    <div className="mt-5 flex items-center justify-between px-2">
+                    <div className="mt-5 flex items-center justify-between px-2 max-md:mt-4 max-md:gap-4 max-md:px-0">
                         <button
                             type="button"
                             onClick={onBack}
-                            className="min-h-9 px-1 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-[#777] transition-colors hover:text-brand focus-visible:outline-brand"
+                            className="min-h-9 px-1 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-[#777] transition-colors hover:text-brand focus-visible:outline-brand max-md:min-h-12 max-md:px-2 max-md:text-sm"
                         >
                             Back
                         </button>
@@ -390,7 +390,7 @@ export default function LivingMoodBoard({
                                         : showBoard
                                 }
                                 disabled={selected.length === 0 || isBoardBusy}
-                                className="inline-flex min-h-9 min-w-44 items-center justify-center gap-2 rounded-lg bg-brand px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default disabled:opacity-80"
+                                className="inline-flex min-h-9 min-w-44 items-center justify-center gap-2 rounded-lg bg-brand px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default disabled:opacity-80 max-md:min-h-12 max-md:flex-1 max-md:rounded-xl max-md:text-sm max-md:font-medium"
                             >
                                 {isBoardBusy ? (
                                     <LoaderCircle
@@ -410,7 +410,7 @@ export default function LivingMoodBoard({
                                 type="button"
                                 onClick={onContinue}
                                 disabled={!onContinue || selected.length === 0}
-                                className="min-h-9 rounded-lg bg-brand px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default"
+                                className="min-h-9 rounded-lg bg-brand px-6 py-1.5 text-[clamp(0.8125rem,1.5cqi,0.9375rem)] text-white transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand enabled:hover:bg-brand-hover disabled:cursor-default max-md:min-h-12 max-md:flex-1 max-md:rounded-xl max-md:text-sm max-md:font-medium"
                             >
                                 Continue
                             </button>
@@ -461,7 +461,7 @@ export default function LivingMoodBoard({
                                 : `Your images appear after step ${LIVING_EDIT_TOTAL_STEPS}.`}
                         </p>
                     )}
-                    <div className="mt-9 flex justify-center">
+                    <div className="mt-9 flex justify-center max-md:mt-5">
                         <SaveImageButton
                             status={board.status}
                             onSave={saveImage}
@@ -470,10 +470,10 @@ export default function LivingMoodBoard({
                 </div>
             </div>
 
-            <div className="mt-[50px] flex justify-center">
+            <div className="mt-[50px] flex justify-center max-md:mt-8">
                 <Link
                     href="/contact"
-                    className="rounded-full bg-brand px-6 py-3 font-display text-[11px] text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                    className="rounded-full bg-brand px-6 py-3 font-display text-[11px] text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:w-full max-md:rounded-xl max-md:py-3.5 max-md:text-center max-md:font-sans max-md:text-sm max-md:font-medium"
                 >
                     Book a Consulting Call
                 </Link>

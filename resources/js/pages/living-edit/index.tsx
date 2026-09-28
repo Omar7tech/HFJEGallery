@@ -55,7 +55,7 @@ export default function LivingEdit({
         <>
             <Head title="Living Edit" />
 
-            <section className="w-full px-4 pt-9 pb-4 md:px-8 lg:pt-[52px] lg:pr-7 lg:pl-0">
+            <section className="w-full px-4 pt-9 pb-4 max-md:px-5 max-md:pt-6 md:px-8 lg:pt-[52px] lg:pr-7 lg:pl-0">
                 <LivingSpacePicker
                     spaces={spaces}
                     selectedId={space?.id ?? null}
