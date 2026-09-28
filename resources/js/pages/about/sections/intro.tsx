@@ -13,7 +13,7 @@ function Intro() {
     const reducedMotion = useReducedMotion();
 
     return (
-        <section className="@container w-full px-6 pt-8 pb-12 font-display md:px-12 md:pt-12 md:pb-16 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-5 pt-8 pb-12 font-display md:px-12 md:pt-12 md:pb-16 lg:pr-16 lg:pl-0">
             <div className="grid gap-8 @4xl:grid-cols-12 @4xl:items-center @4xl:gap-12">
                 <motion.div
                     initial={reducedMotion ? false : { opacity: 0, y: 16 }}

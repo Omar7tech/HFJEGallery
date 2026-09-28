@@ -13,8 +13,8 @@ const TEXT_START = 0.15;
 
 /**
  * Shared "Crafted / Around Living." headline with the hand-drawn ellipse that
- * animates around "Around". The desktop hero passes a motion `style` so it can
- * recolor on scroll; the mobile hero styles it statically via `className`.
+ * animates around "Around". Desktop only; it takes a motion `style` so it can
+ * recolor on scroll.
  */
 function Headline({
     style,
@@ -119,16 +119,16 @@ function Hero() {
 
     return (
         <>
-            {/* Mobile / tablet: clean editorial stack — headline, image, copy, CTA.
-          Nothing overlaps the photo; it reads top-to-bottom. */}
-            <section className="px-6 pt-10 pb-14 font-display lg:hidden">
-                <Headline className="text-4xl leading-[1.1] text-ink sm:text-5xl" />
+            {/* Mobile / tablet: clean editorial stack — image, copy, CTA. The
+          headline is desktop-only; here it stays for screen readers. */}
+            <section className="px-5 pt-6 pb-14 font-display lg:hidden">
+                <h1 className="sr-only">Crafted Around Living.</h1>
 
                 {/* Landscape photo with the same day → night crossfade, driven by the
             image's own scroll position. */}
                 <div
                     ref={mobileImageRef}
-                    className="relative mt-8 aspect-3/2 w-full overflow-hidden rounded-3xl"
+                    className="relative aspect-3/2 w-full overflow-hidden rounded-3xl"
                 >
                     <img
                         className="absolute inset-0 h-full w-full object-cover"

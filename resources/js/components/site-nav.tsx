@@ -409,7 +409,7 @@ export function NavBar({ className }: { className?: string }) {
                     className,
                 )}
             >
-                <div className="flex h-14 items-center justify-between px-6">
+                <div className="flex h-14 items-center justify-between px-5">
                     <Link href="/" aria-label="HFJE home" className="block">
                         <Logo size={26} />
                     </Link>
@@ -457,7 +457,7 @@ export function NavBar({ className }: { className?: string }) {
                     className="menu-panel menu-panel-right absolute inset-y-0 right-0 w-[50.2%] bg-brand shadow-[inset_14px_0_24px_-18px_rgb(0_0_0/0.45)]"
                 />
 
-                <div className="menu-inner relative mx-auto grid h-full max-w-xl [scrollbar-width:none] grid-rows-[auto_1fr_auto] overflow-y-auto px-6 pt-[env(safe-area-inset-top)] pb-[max(1.5rem,env(safe-area-inset-bottom))]">
+                <div className="menu-inner relative mx-auto grid h-full max-w-xl [scrollbar-width:none] grid-rows-[auto_1fr_auto] overflow-y-auto px-5 pt-[env(safe-area-inset-top)] pb-[max(1.5rem,env(safe-area-inset-bottom))]">
                     <div className="menu-bar flex h-14 items-center justify-between">
                         <Link
                             href="/"

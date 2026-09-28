@@ -28,7 +28,7 @@ function Process() {
     const reducedMotion = useReducedMotion();
 
     return (
-        <section className="@container w-full px-6 py-12 font-display md:px-12 md:py-16 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-5 py-12 font-display md:px-12 md:py-16 lg:pr-16 lg:pl-0">
             <h2 className="max-w-xl text-[clamp(1.5rem,4cqi,2.25rem)] leading-[1.15] text-ink">
                 From first visit to final fitting.
             </h2>

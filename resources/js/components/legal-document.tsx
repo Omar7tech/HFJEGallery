@@ -52,7 +52,7 @@ export default function LegalDocument({
         <>
             <Head title={title} />
 
-            <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
+            <section className="@container w-full px-5 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
                 <p className="font-sans text-xs font-semibold tracking-[0.25em] text-brand uppercase">
                     Legal
                 </p>

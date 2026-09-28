@@ -263,7 +263,7 @@ export default function Contact({ formToken }: { formToken: string }) {
                 />
             </Head>
 
-            <section className="@container w-full px-6 pt-8 pb-16 font-display md:px-12 md:pt-12 md:pb-20 lg:pr-16 lg:pl-0">
+            <section className="@container w-full px-5 pt-8 pb-16 font-display md:px-12 md:pt-12 md:pb-20 lg:pr-16 lg:pl-0">
                 {/* Title on the left, the direct lines to the studio on the
                     right; the form takes the full width below. */}
                 <div className="flex flex-col gap-6 @4xl:flex-row @4xl:items-end @4xl:justify-between @4xl:gap-10">

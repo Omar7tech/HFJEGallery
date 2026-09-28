@@ -38,7 +38,7 @@ const actions: Action[] = [
 
 function Curtains() {
     return (
-        <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:flex-col lg:py-10 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-5 py-16 font-display md:px-12 md:py-24 lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:flex-col lg:py-10 lg:pr-16 lg:pl-0">
             <h2 className="max-w-4xl font-display text-[clamp(2rem,8cqi,3.5rem)] leading-[1.05] text-ink">
                 Curtains &amp; Textiles
             </h2>

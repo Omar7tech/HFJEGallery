@@ -15,7 +15,7 @@ export interface BayteHomeProduct {
 /** The BAYTÉ teaser, showing the pieces picked for it in the dashboard. */
 function Bayte({ products }: { products: BayteHomeProduct[] }) {
     return (
-        <section className="@container w-full px-6 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-5 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
             {/* Wordmark, with the "BY HFJE" endorsement tucked under its right edge. */}
             <div className="w-full max-w-3xl @3xl:w-[78%]">
                 <BayteWordmarkDraw className="block w-full" />

@@ -55,7 +55,7 @@ function Manifesto() {
     ];
 
     return (
-        <section className="@container w-full px-6 py-12 font-display md:px-12 md:py-16 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-5 py-12 font-display md:px-12 md:py-16 lg:pr-16 lg:pl-0">
             <div className="grid gap-10 border-t border-ink/15 pt-10 @4xl:grid-cols-12 @4xl:gap-12 @4xl:pt-14">
                 <p
                     ref={text}

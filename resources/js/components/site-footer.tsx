@@ -116,7 +116,7 @@ export default function SiteFooter({ className }: { className?: string }) {
                 className="relative z-10 h-0.5 w-full bg-gradient-to-r from-cream/0 via-cream/60 to-cream/0"
             />
 
-            <div className="relative z-10 flex min-h-0 grow flex-col px-6 pt-14 pb-6 sm:px-10 lg:px-16 lg:pt-[clamp(2.5rem,7vh,4.5rem)]">
+            <div className="relative z-10 flex min-h-0 grow flex-col px-5 pt-14 pb-6 sm:px-10 lg:px-16 lg:pt-[clamp(2.5rem,7vh,4.5rem)]">
                 <div className="grid gap-12 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)] lg:gap-16">
                     {/* CTA */}
                     <div className="max-w-xl">

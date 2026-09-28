@@ -86,7 +86,7 @@ function ViewPortfolioButton() {
 
 function FeaturedProjects() {
     return (
-        <section className="@container relative w-full overflow-hidden px-6 py-10 font-display md:px-12 md:py-15 lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:flex-col lg:py-10 lg:pr-16 lg:pl-0">
+        <section className="@container relative w-full overflow-hidden px-5 py-10 font-display md:px-12 md:py-15 lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:flex-col lg:py-10 lg:pr-16 lg:pl-0">
             <SpacesPattern className="pointer-events-none absolute inset-0 z-0 transform-gpu mask-[radial-gradient(120%_120%_at_top_right,black,transparent_65%)] text-brand/50 opacity-[0.18] [-webkit-mask-image:radial-gradient(120%_120%_at_top_right,black,transparent_65%)]" />
 
             <div className="relative z-10 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
