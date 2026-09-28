@@ -25,7 +25,7 @@ interface BayteProductCardProps {
 }
 
 /** How far the card leans, in degrees, at the far edge of the pointer travel. */
-const TILT = 11;
+const TILT = 7;
 /** Loose enough to feel like weight, tight enough to never lag the cursor. */
 const SPRING = {
     type: 'spring',
@@ -65,12 +65,12 @@ export default function BayteProductCard({
     const rotateX = useTransform(smoothY, [0, 1], [TILT, -TILT]);
 
     // The cutout drifts with the lean — the parallax that sells the depth.
-    const productX = useTransform(smoothX, [0, 1], [-22, 22]);
-    const productY = useTransform(smoothY, [0, 1], [-16, 16]);
+    const productX = useTransform(smoothX, [0, 1], [-14, 14]);
+    const productY = useTransform(smoothY, [0, 1], [-10, 10]);
 
     // The shadow it casts slides the other way, and squashes as the card tips.
-    const contactX = useTransform(smoothX, [0, 1], [18, -18]);
-    const contactScale = useTransform(smoothY, [0, 1], [0.88, 1.12]);
+    const contactX = useTransform(smoothX, [0, 1], [12, -12]);
+    const contactScale = useTransform(smoothY, [0, 1], [0.92, 1.08]);
 
     const sheenX = useTransform(smoothX, (value) => `${value * 100}%`);
     const sheenY = useTransform(smoothY, (value) => `${value * 100}%`);
@@ -80,9 +80,9 @@ export default function BayteProductCard({
     // rather than sitting under the card at rest.
     const lift = useMotionValue(0);
     const smoothLift = useSpring(lift, SPRING);
-    const shadowX = useTransform(smoothX, [0, 1], [24, -24]);
-    const shadowY = useTransform(smoothY, [0, 1], [28, 6]);
-    const shadowAlpha = useTransform(smoothLift, [0, 1], [0, 0.6]);
+    const shadowX = useTransform(smoothX, [0, 1], [16, -16]);
+    const shadowY = useTransform(smoothY, [0, 1], [18, 4]);
+    const shadowAlpha = useTransform(smoothLift, [0, 1], [0, 0.45]);
     const shadow = useMotionTemplate`${shadowX}px ${shadowY}px 54px -30px rgba(74, 48, 32, ${shadowAlpha})`;
 
     const trackPointer = (event: PointerEvent<HTMLElement>) => {
@@ -120,7 +120,7 @@ export default function BayteProductCard({
                           transformPerspective: 1100,
                       }
             }
-            whileHover={reducedMotion ? undefined : { scale: 1.025 }}
+            whileHover={reducedMotion ? undefined : { scale: 1.015 }}
             transition={SPRING}
             className={cn(
                 'group relative z-0 flex flex-col rounded-2xl bg-surface p-5 will-change-transform [perspective:1100px] transform-3d hover:z-10',
@@ -141,7 +141,7 @@ export default function BayteProductCard({
                 className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-90 motion-reduce:hidden"
             />
 
-            <div className="flex items-start justify-between gap-4 transition-transform duration-500 ease-out group-hover:translate-z-[26px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0">
+            <div className="flex items-start justify-between gap-4 transition-transform duration-500 ease-out group-hover:translate-z-[16px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0">
                 <div className="min-w-0">
                     <h3 className="text-xl leading-none text-ink">{name}</h3>
                     <p className="mt-2 text-xs leading-none text-ink/70">
@@ -156,7 +156,7 @@ export default function BayteProductCard({
                         aria-label={`View ${name}`}
                         className={cn(
                             badgeClassName,
-                            'transition-[background-color,transform,translate,rotate] duration-500 ease-out group-hover:translate-z-[48px] group-hover:rotate-90 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none motion-reduce:group-hover:rotate-0',
+                            'transition-[background-color,transform,translate,rotate] duration-500 ease-out group-hover:translate-z-[30px] group-hover:rotate-90 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none motion-reduce:group-hover:rotate-0',
                         )}
                     >
                         <Plus className="size-4" strokeWidth={2.5} />
@@ -166,7 +166,7 @@ export default function BayteProductCard({
                         aria-hidden="true"
                         className={cn(
                             badgeClassName,
-                            'transition-transform duration-500 ease-out group-hover:translate-z-[48px] group-hover:rotate-90 motion-reduce:transition-none motion-reduce:group-hover:rotate-0',
+                            'transition-transform duration-500 ease-out group-hover:translate-z-[30px] group-hover:rotate-90 motion-reduce:transition-none motion-reduce:group-hover:rotate-0',
                         )}
                     >
                         <Plus className="size-4" strokeWidth={2.5} />
@@ -183,14 +183,14 @@ export default function BayteProductCard({
                             ? undefined
                             : { x: contactX, scaleX: contactScale }
                     }
-                    className="pointer-events-none absolute inset-x-8 bottom-1 h-5 rounded-[50%] bg-ink/30 opacity-0 blur-lg transition-[opacity,transform,translate] duration-500 ease-out group-hover:translate-z-[22px] group-hover:opacity-100 motion-reduce:hidden"
+                    className="pointer-events-none absolute inset-x-8 bottom-1 h-5 rounded-[50%] bg-ink/30 opacity-0 blur-lg transition-[opacity,transform,translate] duration-500 ease-out group-hover:translate-z-[14px] group-hover:opacity-100 motion-reduce:hidden"
                 />
 
                 <motion.div
                     style={
                         reducedMotion ? undefined : { x: productX, y: productY }
                     }
-                    className="absolute inset-0 scale-[0.9] transition-transform duration-500 ease-out group-hover:translate-z-[96px] group-hover:scale-[1.04] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.9]"
+                    className="absolute inset-0 scale-[0.9] transition-transform duration-500 ease-out group-hover:translate-z-[60px] group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.9]"
                 >
                     <SmartImage
                         src={src}
@@ -202,7 +202,7 @@ export default function BayteProductCard({
                 </motion.div>
             </div>
 
-            <BayteWordmark className="mx-auto mt-4 w-24 transition-transform duration-500 ease-out group-hover:translate-z-[34px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0" />
+            <BayteWordmark className="mx-auto mt-4 w-24 transition-transform duration-500 ease-out group-hover:translate-z-[21px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0" />
         </motion.article>
     );
 }
