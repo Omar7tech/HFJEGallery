@@ -16,7 +16,7 @@ function LivingEdit({ spaces }: { spaces: LivingSpace[] }) {
     }
 
     return (
-        <section className="w-full px-5 py-16 md:px-12 md:py-24 lg:pr-16 lg:pl-0">
+        <section className="w-full px-5 py-16 max-md:py-10 md:px-12 md:py-24 lg:pr-16 lg:pl-0">
             <LivingSpacePicker
                 spaces={spaces}
                 selectedId={spaceId}

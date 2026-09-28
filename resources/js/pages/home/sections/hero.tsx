@@ -73,7 +73,7 @@ function ExploreButton({ className }: { className?: string }) {
     return (
         <button
             type="button"
-            className={`group flex w-full items-center justify-center rounded-full bg-brand px-8 py-4 text-sm font-semibold tracking-[0.2em] text-brand-foreground uppercase transition-[background-color,letter-spacing] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand active:bg-brand-hover motion-reduce:transition-none sm:text-base lg:inline-flex lg:w-auto lg:justify-start lg:rounded-none lg:py-4 lg:pr-12 lg:pl-8 lg:hover:bg-brand-hover lg:hover:tracking-[0.26em] ${className ?? ''}`}
+            className={`group flex w-full items-center justify-center rounded-full bg-brand px-8 py-4 text-sm font-semibold tracking-[0.2em] max-lg:tracking-[0.12em] max-lg:whitespace-nowrap text-brand-foreground uppercase transition-[background-color,letter-spacing] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand active:bg-brand-hover motion-reduce:transition-none sm:text-base lg:inline-flex lg:w-auto lg:justify-start lg:rounded-none lg:py-4 lg:pr-12 lg:pl-8 lg:hover:bg-brand-hover lg:hover:tracking-[0.26em] ${className ?? ''}`}
         >
             EXPLORE OUR WORK
             <span
@@ -121,14 +121,14 @@ function Hero() {
         <>
             {/* Mobile / tablet: clean editorial stack — image, copy, CTA. The
           headline is desktop-only; here it stays for screen readers. */}
-            <section className="px-5 pt-6 pb-14 font-display lg:hidden">
+            <section className="px-5 pt-3 pb-10 font-display lg:hidden">
                 <h1 className="sr-only">Crafted Around Living.</h1>
 
                 {/* Landscape photo with the same day → night crossfade, driven by the
             image's own scroll position. */}
                 <div
                     ref={mobileImageRef}
-                    className="relative aspect-3/2 w-full overflow-hidden rounded-3xl"
+                    className="relative aspect-square w-full overflow-hidden rounded-3xl sm:aspect-3/2"
                 >
                     <img
                         className="absolute inset-0 h-full w-full object-cover"
@@ -151,12 +151,12 @@ function Hero() {
                     />
                 </div>
 
-                <p className="mt-8 max-w-md text-lg leading-relaxed font-medium text-brand sm:text-xl">
-                    {yearsOfExperience()} of craftsmanship, creating homes
-                    designed around the people who live in them.
+                <p className="mt-5 max-w-md text-xl leading-snug text-ink sm:text-2xl">
+                    {yearsOfExperience()} years of craftsmanship, creating
+                    homes designed around the people who live in them.
                 </p>
 
-                <ExploreButton className="mt-8" />
+                <ExploreButton className="mt-6" />
             </section>
 
             {/* Desktop: full-height photo with the day→night scroll crossfade and
@@ -203,7 +203,7 @@ function Hero() {
                         style={{ color: subtextColor }}
                         className="-translate-y-14 text-2xl font-medium"
                     >
-                        {yearsOfExperience()} of craftsmanship,
+                        {yearsOfExperience()} years of craftsmanship,
                         <br />
                         creating homes designed around
                         <br />

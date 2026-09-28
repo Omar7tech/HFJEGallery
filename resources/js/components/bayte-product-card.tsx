@@ -8,6 +8,7 @@ import {
     useTransform,
 } from 'motion/react';
 import type { PointerEvent } from 'react';
+import { useSyncExternalStore } from 'react';
 import BayteWordmark from '@/components/bayte-wordmark';
 import { SmartImage } from '@/components/smart-image';
 import { bayteSelection, useIsSelected } from '@/lib/bayte-selection';
@@ -34,6 +35,24 @@ const SPRING = {
     mass: 0.6,
 } as const;
 
+const FINE_POINTER = '(hover: hover) and (pointer: fine)';
+
+function subscribeToPointer(onChange: () => void): () => void {
+    const query = window.matchMedia(FINE_POINTER);
+    query.addEventListener('change', onChange);
+
+    return () => query.removeEventListener('change', onChange);
+}
+
+/** Whether the visitor has a mouse (or trackpad) to lean the card with. */
+function useFinePointer(): boolean {
+    return useSyncExternalStore(
+        subscribeToPointer,
+        () => window.matchMedia(FINE_POINTER).matches,
+        () => false,
+    );
+}
+
 /**
  * A BAYTÉ catalogue card: name and description top-left, a terracotta "+"
  * top-right, the product cutout in the middle and the wordmark at the foot.
@@ -44,7 +63,8 @@ const SPRING = {
  * flat on the card: it adds the piece to the visitor's selection. A specular
  * sheen tracks the cursor, and the contact shadow under the product swings
  * opposite the lean so the cutout reads as floating off the card. Touch and
- * reduced-motion visitors get the flat card.
+ * reduced-motion visitors get the flat card; on phones it is a compact
+ * tile with the product first and the name beneath it.
  */
 export default function BayteProductCard({
     slug,
@@ -54,7 +74,10 @@ export default function BayteProductCard({
     alt,
     className,
 }: BayteProductCardProps) {
-    const reducedMotion = useReducedMotion();
+    const finePointer = useFinePointer();
+    // Touch screens and reduced motion get the flat card: no tilt, parallax,
+    // sheen or lift.
+    const reducedMotion = useReducedMotion() || !finePointer;
 
     // Pointer position over the card, 0→1 on each axis; both rest at centre.
     const pointerX = useMotionValue(0.5);
@@ -123,7 +146,9 @@ export default function BayteProductCard({
             whileHover={reducedMotion ? undefined : { scale: 1.015 }}
             transition={SPRING}
             className={cn(
-                'group relative z-0 flex flex-col rounded-2xl bg-surface p-5 will-change-transform [perspective:1100px] transform-3d hover:z-10',
+                'group relative z-0 flex flex-col rounded-2xl bg-surface p-5 max-md:p-3',
+                !reducedMotion &&
+                    'will-change-transform [perspective:1100px] transform-3d hover:z-10',
                 'transition-colors duration-500 ease-out hover:bg-surface-hover motion-reduce:transition-none',
                 className,
             )}
@@ -141,10 +166,12 @@ export default function BayteProductCard({
                 className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-90 motion-reduce:hidden"
             />
 
-            <div className="flex items-start justify-between gap-4">
+            <div className="flex items-start justify-between gap-4 max-md:order-2 max-md:mt-3 max-md:gap-3 max-md:px-1">
                 <div className="min-w-0 transition-transform duration-500 ease-out group-hover:translate-z-[16px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0">
-                    <h3 className="text-xl leading-none text-ink">{name}</h3>
-                    <p className="mt-2 text-xs leading-none text-ink/70">
+                    <h3 className="text-xl leading-none text-ink max-md:truncate max-md:text-base max-md:leading-tight">
+                        {name}
+                    </h3>
+                    <p className="mt-2 text-xs leading-none text-ink/70 max-md:mt-1 max-md:line-clamp-2 max-md:leading-snug">
                         {description}
                     </p>
                 </div>
@@ -182,7 +209,12 @@ export default function BayteProductCard({
                 </button>
             </div>
 
-            <div className="relative mt-4 aspect-4/3 w-full transform-3d">
+            <div
+                className={cn(
+                    'relative mt-4 aspect-4/3 w-full max-md:order-1 max-md:mt-0 max-md:aspect-square max-md:rounded-xl max-md:bg-white',
+                    !reducedMotion && 'transform-3d',
+                )}
+            >
                 {/* Ground shadow, kept on a lower plane than the cutout. */}
                 <motion.span
                     aria-hidden="true"
@@ -198,7 +230,7 @@ export default function BayteProductCard({
                     style={
                         reducedMotion ? undefined : { x: productX, y: productY }
                     }
-                    className="absolute inset-0 scale-[0.9] transition-transform duration-500 ease-out group-hover:translate-z-[60px] group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.9]"
+                    className="absolute inset-0 scale-[0.9] transition-transform duration-500 ease-out group-hover:translate-z-[60px] group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.9] max-md:scale-[0.82]"
                 >
                     <SmartImage
                         src={src}
@@ -210,7 +242,7 @@ export default function BayteProductCard({
                 </motion.div>
             </div>
 
-            <BayteWordmark className="mx-auto mt-4 w-24 transition-transform duration-500 ease-out group-hover:translate-z-[21px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0" />
+            <BayteWordmark className="mx-auto mt-4 w-24 transition-transform duration-500 ease-out group-hover:translate-z-[21px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 max-md:hidden" />
         </motion.article>
     );
 }

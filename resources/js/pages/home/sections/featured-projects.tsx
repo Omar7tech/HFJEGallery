@@ -71,12 +71,12 @@ function ViewPortfolioButton() {
         <Link
             href="/work"
             prefetch
-            className="group mt-3 flex w-full items-center justify-center rounded-3xl bg-brand py-6 text-lg font-medium tracking-[0.15em] text-brand-foreground uppercase transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-xl"
+            className="group mt-3 flex w-full items-center justify-center rounded-3xl bg-brand py-6 text-lg font-medium tracking-[0.15em] text-brand-foreground uppercase transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none max-md:mt-4 max-md:rounded-full max-md:py-4 max-md:text-sm max-md:tracking-[0.12em] @lg:text-xl"
         >
             View Portfolio
             <span
                 aria-hidden="true"
-                className="inline-flex max-w-0 -translate-x-2 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:ml-3 group-hover:max-w-[1.4em] group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none"
+                className="inline-flex max-w-0 -translate-x-2 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:ml-3 group-hover:max-w-[1.4em] group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none max-lg:ml-3 max-lg:max-w-[1.4em] max-lg:translate-x-0 max-lg:opacity-100"
             >
                 <ArrowUpRight className="size-[1.1em]" strokeWidth={2} />
             </span>
@@ -86,7 +86,7 @@ function ViewPortfolioButton() {
 
 function FeaturedProjects() {
     return (
-        <section className="@container relative w-full overflow-hidden px-5 py-10 font-display md:px-12 md:py-15 lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:flex-col lg:py-10 lg:pr-16 lg:pl-0">
+        <section className="@container relative w-full overflow-hidden px-5 py-10 font-display max-md:py-8 md:px-12 md:py-15 lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:flex-col lg:py-10 lg:pr-16 lg:pl-0">
             <SpacesPattern className="pointer-events-none absolute inset-0 z-0 transform-gpu mask-[radial-gradient(120%_120%_at_top_right,black,transparent_65%)] text-brand/50 opacity-[0.18] [-webkit-mask-image:radial-gradient(120%_120%_at_top_right,black,transparent_65%)]" />
 
             <div className="relative z-10 lg:flex lg:min-h-0 lg:flex-1 lg:flex-col">
@@ -94,14 +94,14 @@ function FeaturedProjects() {
                     Spaces That Tell Their Own Story
                 </h2>
 
-                <p className="mt-4 max-w-2xl font-sans text-base leading-relaxed font-medium text-brand">
+                <p className="mt-4 max-w-2xl font-sans text-base leading-relaxed font-medium text-brand max-md:mt-3 max-md:text-[15px]">
                     Every project is unique because every family lives
                     differently. Explore a portfolio of homes, apartments,
                     restaurants, and commercial spaces crafted around each
                     client's lifestyle.
                 </p>
 
-                <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 contain-[layout_paint] motion-reduce:transition-none lg:mt-6 lg:aspect-auto lg:min-h-0 lg:flex-[1_1_0] @3xl:aspect-auto @3xl:h-120 @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr]">
+                <div className="mt-10 grid aspect-5/4 grid-cols-[2fr_1fr_1fr_1fr] grid-rows-[1fr_1fr_1fr_1fr] gap-3 contain-[layout_paint] motion-reduce:transition-none max-md:mt-6 max-md:aspect-square max-md:gap-2 lg:mt-6 lg:aspect-auto lg:min-h-0 lg:flex-[1_1_0] @3xl:aspect-auto @3xl:h-120 @3xl:grid-cols-[1fr_1fr_1fr_1fr] @3xl:gap-5 @3xl:transition-[grid-template-columns,grid-template-rows] @3xl:duration-500 @3xl:ease-out @3xl:has-[.project-banner:hover]:grid-rows-[9fr_1fr_1fr_1fr] @3xl:has-[.project-tall:hover]:grid-cols-[2.4fr_1fr_1fr_1fr]">
                     {projects.map((project) => (
                         <SmartImage
                             key={project.src}

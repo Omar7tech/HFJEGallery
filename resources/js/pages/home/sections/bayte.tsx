@@ -15,9 +15,9 @@ export interface BayteHomeProduct {
 /** The BAYTÉ teaser, showing the pieces picked for it in the dashboard. */
 function Bayte({ products }: { products: BayteHomeProduct[] }) {
     return (
-        <section className="@container w-full px-5 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-5 py-16 font-display max-md:py-10 md:px-12 md:py-24 lg:pr-16 lg:pl-0">
             {/* Wordmark, with the "BY HFJE" endorsement tucked under its right edge. */}
-            <div className="w-full max-w-3xl @3xl:w-[78%]">
+            <div className="w-full max-w-3xl max-md:w-[82%] @3xl:w-[78%]">
                 <BayteWordmarkDraw className="block w-full" />
                 <p className="mt-3 text-right text-xs tracking-[0.08em] text-ink uppercase @lg:text-sm">
                     By HFJE
@@ -25,23 +25,24 @@ function Bayte({ products }: { products: BayteHomeProduct[] }) {
             </div>
 
             {/* Tagline on the left, the collection blurb right-aligned opposite it. */}
-            <div className="mt-10 grid gap-6 @2xl:grid-cols-2 @2xl:items-start @2xl:gap-10">
+            <div className="mt-10 grid gap-6 max-md:mt-6 max-md:gap-3 @2xl:grid-cols-2 @2xl:items-start @2xl:gap-10">
                 <h2 className="text-2xl leading-[1.3] text-brand @lg:text-3xl">
                     Fewer Pieces.
                     <br />
                     Better Living.
                 </h2>
 
-                <p className="font-sans text-base leading-relaxed text-ink @2xl:text-right">
-                    A Curated Collection Of Ready-To-Purchase Furniture Designed
-                    For Modern Lebanese Homes. Every Piece Solves A Real Living
-                    Need Through Thoughtful Function, Lasting Materials, And The
-                    Craftsmanship Of HFJE.
+                <p className="font-sans text-base leading-relaxed text-ink max-md:text-[15px] @2xl:text-right">
+                    A curated collection of ready-to-purchase furniture designed
+                    for modern Lebanese homes. Every piece solves a real living
+                    need through thoughtful function, lasting materials, and the
+                    craftsmanship of HFJE.
                 </p>
             </div>
 
             {products.length > 0 && (
-                <div className="mt-8 grid gap-4 @xl:grid-cols-3 @2xl:gap-5">
+                // Phones swipe through the pieces; wider screens keep the grid.
+                <div className="mt-8 grid gap-4 max-md:-mx-5 max-md:flex max-md:snap-x max-md:snap-mandatory max-md:scroll-px-5 max-md:[scrollbar-width:none] max-md:overflow-x-auto max-md:px-5 max-md:pb-2 @xl:grid-cols-3 @2xl:gap-5">
                     {products.map((product) => (
                         <BayteProductCard
                             key={product.slug}
@@ -50,12 +51,13 @@ function Bayte({ products }: { products: BayteHomeProduct[] }) {
                             description={product.description}
                             src={product.image}
                             alt={product.name}
+                            className="max-md:w-[72%] max-md:shrink-0 max-md:snap-start"
                         />
                     ))}
                 </div>
             )}
 
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8 flex justify-center max-md:mt-6">
                 <Link
                     href="/bayte"
                     prefetch

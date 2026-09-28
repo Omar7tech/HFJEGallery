@@ -50,7 +50,7 @@ export default function LivingSpacePicker({
     };
 
     return (
-        <div className="mx-auto flex min-h-[630px] w-full flex-col items-center rounded-[30px] bg-pill px-5 pt-8 pb-9 font-display text-[#171915] shadow-[0_3px_12px_rgba(0,0,0,0.12)] sm:px-10 sm:pt-10">
+        <div className="mx-auto flex min-h-[630px] w-full flex-col items-center rounded-[30px] bg-pill px-5 pt-8 pb-9 font-display text-[#171915] shadow-[0_3px_12px_rgba(0,0,0,0.12)] max-md:min-h-0 max-md:pt-7 max-md:pb-7 sm:px-10 sm:pt-10">
             <Title className="text-center text-[clamp(1.5rem,3.4vw,2.25rem)] leading-[1.4] tracking-[-0.045em]">
                 The Living Edit
             </Title>
@@ -66,7 +66,7 @@ export default function LivingSpacePicker({
                     </p>
                 )}
 
-                <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-4 sm:mt-14 sm:gap-x-10">
+                <div className="mt-10 grid grid-cols-2 gap-x-5 gap-y-4 max-md:mt-6 max-md:gap-3 sm:mt-14 sm:gap-x-10">
                     {spaces.map(({ id, name, icon }) => (
                         <label
                             key={id}
@@ -103,7 +103,7 @@ export default function LivingSpacePicker({
                                 aria-hidden={!icon}
                                 className={cn(
                                     'mt-3 text-center text-[clamp(0.55rem,1.1vw,0.75rem)] leading-relaxed uppercase',
-                                    !icon && 'invisible',
+                                    !icon && 'invisible max-md:hidden',
                                 )}
                             >
                                 {name}
@@ -118,7 +118,7 @@ export default function LivingSpacePicker({
                 onClick={next}
                 disabled={!selectedId || preparing}
                 aria-busy={preparing}
-                className="mt-auto inline-flex min-h-10 w-full max-w-[284px] items-center justify-center gap-2.5 rounded-full bg-brand px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-brand disabled:aria-busy:cursor-wait motion-safe:active:scale-[0.98] motion-reduce:transition-none max-sm:mt-10"
+                className="mt-auto inline-flex min-h-10 w-full max-w-[284px] items-center justify-center gap-2.5 rounded-full bg-brand px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-brand disabled:aria-busy:cursor-wait motion-safe:active:scale-[0.98] motion-reduce:transition-none max-md:mt-7"
             >
                 {preparing ? (
                     <>

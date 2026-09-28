@@ -21,9 +21,9 @@ function Experience() {
     ];
 
     return (
-        <section className="@container w-full px-5 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
+        <section className="@container w-full px-5 py-16 font-display max-md:py-10 md:px-12 md:py-24 lg:pr-16 lg:pl-0">
             {/* Image + intro */}
-            <div className="grid gap-10 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
+            <div className="grid gap-10 max-md:gap-6 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
                 <SmartImage
                     className="aspect-3/2 w-full min-w-0 rounded-3xl @3xl:col-span-3 @3xl:aspect-4/3"
                     imgClassName="object-cover"
@@ -37,7 +37,7 @@ function Experience() {
                         {years} Years of Craftsmanship
                     </h2>
 
-                    <p className="mt-4 max-w-xl font-sans text-base leading-relaxed font-semibold text-ink">
+                    <p className="mt-4 max-w-xl font-sans text-base leading-relaxed font-semibold text-ink max-md:mt-3 max-md:text-[15px]">
                         More than two decades of transforming houses into homes
                         through exceptional craftsmanship, premium materials,
                         and personalized design.
@@ -45,7 +45,7 @@ function Experience() {
 
                     <Link
                         href="/contact"
-                        className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand lg:pr-20"
+                        className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-5 max-md:py-2.5 lg:pr-20"
                     >
                         Get in touch
                     </Link>
@@ -53,7 +53,7 @@ function Experience() {
             </div>
 
             {/* Stats */}
-            <div className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 md:mt-20 @2xl:grid-cols-4">
+            <div className="mt-16 grid grid-cols-2 gap-x-8 gap-y-10 max-md:mt-8 max-md:gap-y-6 max-md:border-t max-md:border-ink/10 max-md:pt-6 md:mt-20 @2xl:grid-cols-4">
                 {stats.map((stat) => (
                     <div key={stat.lines[0]} className="@container min-w-0">
                         <p className="font-display text-[clamp(1.5rem,15cqi,2.75rem)] leading-none text-ink">
