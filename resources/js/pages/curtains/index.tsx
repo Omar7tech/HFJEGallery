@@ -19,6 +19,10 @@ const STYLE_COLUMNS: Record<number, string> = {
 const pill =
     'inline-flex min-h-11 items-center justify-center rounded-full bg-brand px-10 py-3.5 font-display text-[clamp(0.8rem,2.05cqi,1.25rem)] leading-tight text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand';
 
+/** Phones get the site's phone button: full width, soft corners, calm label. */
+const phoneButton =
+    'max-md:flex max-md:w-full max-md:rounded-xl max-md:py-3.5 max-md:font-sans max-md:text-sm max-md:font-medium max-md:normal-case';
+
 interface CurtainsProps {
     styles: CurtainStyle[];
     /** The first few curtain works, in dashboard order. */
@@ -48,14 +52,14 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                     href="/videos/curtains/curtain-film.mp4"
                 />
             </Head>
-            <div className="@container px-5 pt-6 pb-24 md:px-8 lg:pr-7 lg:pl-0 @lg:pb-[50cqi]">
+            <div className="@container px-5 pt-6 pb-24 max-md:pt-3 max-md:pb-12 md:px-8 lg:pr-7 lg:pl-0 @lg:pb-[50cqi]">
                 <section aria-label="Curtains and textiles">
                     {/* Fills the screen inside the page gutters: one viewport
                         less the fixed brand bar, the top padding and the same
                         gap again underneath, so the film sits inset on all
                         four sides. Capped so it stops growing on a large
                         display. */}
-                    <div className="relative h-[calc(100svh-7rem-max(0.75rem,env(safe-area-inset-top)))] max-h-230 overflow-hidden rounded-3xl bg-cream md:rounded-[36px] lg:h-[calc(100svh-3rem)]">
+                    <div className="relative h-[calc(100svh-7rem-max(0.75rem,env(safe-area-inset-top)))] max-h-230 overflow-hidden rounded-3xl bg-cream max-md:h-[62svh] max-md:min-h-96 md:rounded-[36px] lg:h-[calc(100svh-3rem)]">
                         {/* No poster: the photo is framed differently from
                             the film, so showing it first jumped on the swap.
                             The film fades up from the empty box once it has a
@@ -89,8 +93,8 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                         />
                         {/* Title laid over the upper third of the film; the two
                             lines share a right edge, as in the design. */}
-                        <div className="pointer-events-none absolute inset-x-0 top-[22%] flex justify-center px-6">
-                            <h1 className="text-right font-display text-[clamp(2rem,7.5cqi,6rem)] leading-[1.05] tracking-[-0.02em] text-white uppercase [text-shadow:0_2px_24px_rgba(26,22,20,0.25)]">
+                        <div className="pointer-events-none absolute inset-x-0 top-[22%] flex justify-center px-6 max-md:top-auto max-md:bottom-7 max-md:justify-start max-md:px-5">
+                            <h1 className="text-right font-display text-[clamp(2rem,7.5cqi,6rem)] leading-[1.05] tracking-[-0.02em] text-white uppercase [text-shadow:0_2px_24px_rgba(26,22,20,0.25)] max-md:text-left max-md:text-[calc((100vw-5rem)/8.5)]">
                                 Curtains
                                 <br />
                                 &amp;Textiles
@@ -102,12 +106,12 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                 <section
                     id="curtains-portfolio"
                     className={cn(
-                        'scroll-mt-24 px-1 pt-24 @lg:px-8 @lg:pt-[18cqi]',
+                        'scroll-mt-24 px-1 pt-24 max-md:px-0 max-md:pt-12 @lg:px-8 @lg:pt-[18cqi]',
                         fitsScreen &&
                             'lg:mt-[8cqi] lg:flex lg:h-dvh lg:max-h-[1000px] lg:min-h-[640px] lg:scroll-mt-0 lg:flex-col lg:py-10!',
                     )}
                 >
-                    <div className="flex flex-col justify-between gap-6 @lg:flex-row @lg:items-start">
+                    <div className="flex flex-col justify-between gap-6 max-md:gap-3 @lg:flex-row @lg:items-start">
                         <h2 className="font-display text-[clamp(1.5rem,3.8cqi,2.6rem)] leading-[1.2] tracking-[-0.045em] text-brand">
                             Shaping Light.
                             <br />
@@ -117,7 +121,7 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                         </h2>
                         {/* Desktop keeps a fixed three-line shape against the
                             heading, so the breaks are set rather than wrapped. */}
-                        <p className="max-w-[290px] font-sans text-base leading-relaxed @lg:w-auto @lg:max-w-[52ch] @lg:text-right">
+                        <p className="max-w-[290px] font-sans text-base leading-relaxed max-md:max-w-none max-md:text-[15px] @lg:w-auto @lg:max-w-[52ch] @lg:text-right">
                             Curtains define more than privacy. They shape the{' '}
                             <br className="hidden @lg:inline" />
                             light, soften the architecture, and complete the{' '}
@@ -129,7 +133,7 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                         <>
                             <div
                                 className={cn(
-                                    'mt-10 flex flex-wrap items-center justify-between gap-3 @lg:mt-12',
+                                    'mt-10 flex flex-wrap items-center justify-between gap-3 max-md:mt-8 @lg:mt-12',
                                     fitsScreen && 'lg:mt-6!',
                                 )}
                             >
@@ -139,7 +143,7 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                                         ({worksCount})
                                     </sup>
                                 </h3>
-                                <ul className="flex gap-3 font-sans text-base text-ink @lg:gap-8 @lg:text-lg">
+                                <ul className="flex gap-3 font-sans text-base text-ink max-md:hidden @lg:gap-8 @lg:text-lg">
                                     {['Complete', 'Tailored', 'Layered'].map(
                                         (item) => (
                                             <li key={item} className="px-1">
@@ -151,7 +155,7 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                             </div>
                             <div
                                 className={cn(
-                                    'mt-4 grid grid-cols-2 gap-1 @lg:grid-cols-4',
+                                    'mt-4 grid grid-cols-2 gap-1 max-md:mt-3 max-md:gap-0.5 @lg:grid-cols-4',
                                     fitsScreen &&
                                         'lg:min-h-0 lg:flex-[1_1_0] lg:auto-rows-[minmax(0,1fr)] lg:grid-cols-4',
                                 )}
@@ -177,14 +181,18 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                             </div>
                             <div
                                 className={cn(
-                                    'mt-10 text-center',
+                                    'mt-10 text-center max-md:mt-5',
                                     fitsScreen && 'lg:mt-6',
                                 )}
                             >
                                 <Link
                                     href="/curtains/work"
                                     prefetch
-                                    className={cn(pill, 'min-w-[34%]')}
+                                    className={cn(
+                                        pill,
+                                        'min-w-[34%]',
+                                        phoneButton,
+                                    )}
                                 >
                                     View More
                                 </Link>
@@ -196,13 +204,13 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                 {styles.length > 0 && (
                     <section
                         id="curtain-styles"
-                        className="scroll-mt-24 px-1 pt-24 @lg:pt-[18cqi]"
+                        className="scroll-mt-24 px-1 pt-24 max-md:px-0 max-md:pt-12 @lg:pt-[18cqi]"
                     >
                         <h2 className="font-display text-[clamp(1.25rem,3.5cqi,2.5rem)] leading-tight tracking-[-0.04em] uppercase">
                             Designed for Every Window
                         </h2>
-                        <p className="mt-2 font-display text-[clamp(0.75rem,2.15cqi,1.4rem)]">
-                            From Soft Sheers To Complete Light Control.
+                        <p className="mt-2 font-display text-[clamp(0.75rem,2.15cqi,1.4rem)] max-md:text-sm max-md:text-ink/70">
+                            From soft sheers to complete light control.
                         </p>
 
                         {/* A few styles sit side by side as cards; five or
@@ -222,44 +230,80 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                                 ))}
                             </div>
                         ) : (
-                            <div className="curtain-style-gallery mt-5 flex h-[360px] gap-2 @lg:h-[min(46cqi,620px)] @lg:gap-2.5">
-                                {styles.map((style, index) => (
-                                    <button
-                                        key={style.slug}
-                                        type="button"
-                                        aria-label={style.name}
-                                        aria-pressed={activeStyle === index}
-                                        onClick={() => setActiveStyle(index)}
-                                        onPointerEnter={(event) => {
-                                            if (event.pointerType === 'mouse') {
-                                                setActiveStyle(index);
-                                            }
-                                        }}
-                                        onFocus={() => setActiveStyle(index)}
-                                        className={cn(
-                                            'curtain-style-card relative min-w-0 overflow-hidden bg-cream text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
-                                            activeStyle === index
-                                                ? 'flex-[6.5]'
-                                                : 'flex-1',
-                                        )}
-                                    >
-                                        <SmartImage
-                                            src={style.image}
-                                            alt={style.description}
-                                            className="size-full"
-                                            imgClassName="object-cover"
-                                        />
-                                        <span
-                                            aria-hidden="true"
-                                            className="curtain-style-label absolute bottom-5 px-4 py-3 font-display text-[clamp(0.55rem,1.45cqi,1rem)] leading-tight whitespace-nowrap text-white uppercase"
+                            <>
+                                {/* Phones: a swipeable row of style cards, each
+                                leading to the full list of styles. */}
+                                <div className="nav-scroll -mx-5 mt-5 flex snap-x snap-mandatory scroll-px-5 gap-3 overflow-x-auto px-5 pb-2 md:hidden">
+                                    {styles.map((style) => (
+                                        <Link
+                                            key={style.slug}
+                                            href="/curtains/styles"
+                                            prefetch
+                                            className="relative block w-[62%] shrink-0 snap-start overflow-hidden rounded-2xl bg-cream focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                                         >
-                                            <span className="curtain-style-label-text relative">
-                                                {style.name}
+                                            <SmartImage
+                                                src={style.image}
+                                                alt={style.description}
+                                                className="aspect-3/4"
+                                                imgClassName="object-cover"
+                                            >
+                                                <span
+                                                    aria-hidden="true"
+                                                    className="pointer-events-none absolute inset-0 bg-linear-to-t from-ink/65 via-ink/5 to-transparent"
+                                                />
+                                                <span className="absolute inset-x-0 bottom-0 p-4 font-display text-base leading-tight text-white">
+                                                    {style.name}
+                                                </span>
+                                            </SmartImage>
+                                        </Link>
+                                    ))}
+                                </div>
+                                <div className="curtain-style-gallery mt-5 flex h-[360px] gap-2 max-md:hidden @lg:h-[min(46cqi,620px)] @lg:gap-2.5">
+                                    {styles.map((style, index) => (
+                                        <button
+                                            key={style.slug}
+                                            type="button"
+                                            aria-label={style.name}
+                                            aria-pressed={activeStyle === index}
+                                            onClick={() =>
+                                                setActiveStyle(index)
+                                            }
+                                            onPointerEnter={(event) => {
+                                                if (
+                                                    event.pointerType ===
+                                                    'mouse'
+                                                ) {
+                                                    setActiveStyle(index);
+                                                }
+                                            }}
+                                            onFocus={() =>
+                                                setActiveStyle(index)
+                                            }
+                                            className={cn(
+                                                'curtain-style-card relative min-w-0 overflow-hidden bg-cream text-left focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand',
+                                                activeStyle === index
+                                                    ? 'flex-[6.5]'
+                                                    : 'flex-1',
+                                            )}
+                                        >
+                                            <SmartImage
+                                                src={style.image}
+                                                alt={style.description}
+                                                className="size-full"
+                                                imgClassName="object-cover"
+                                            />
+                                            <span
+                                                aria-hidden="true"
+                                                className="curtain-style-label absolute bottom-5 px-4 py-3 font-display text-[clamp(0.55rem,1.45cqi,1rem)] leading-tight whitespace-nowrap text-white uppercase"
+                                            >
+                                                <span className="curtain-style-label-text relative">
+                                                    {style.name}
+                                                </span>
                                             </span>
-                                        </span>
-                                    </button>
-                                ))}
-                            </div>
+                                        </button>
+                                    ))}
+                                </div>
+                            </>
                         )}
 
                         <div className="mt-5 text-center">
@@ -269,9 +313,10 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
                                 className={cn(
                                     pill,
                                     'min-w-[56%] text-[clamp(0.7rem,1.7cqi,1.15rem)] uppercase',
+                                    phoneButton,
                                 )}
                             >
-                                Explore All Curtain Styles
+                                Explore all curtain styles
                             </Link>
                         </div>
                     </section>

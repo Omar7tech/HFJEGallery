@@ -25,10 +25,10 @@ export default function CurtainStyleCard({
                 className="aspect-3/4 rounded-2xl @3xl:rounded-3xl"
                 imgClassName="object-cover"
             />
-            <h3 className="mt-4 font-display text-[clamp(0.95rem,2cqi,1.2rem)] leading-snug text-brand">
+            <h3 className="mt-4 font-display text-[clamp(0.95rem,2cqi,1.2rem)] leading-snug text-brand max-md:mt-2.5">
                 {style.name}
             </h3>
-            <p className="mt-1.5 font-sans text-base leading-relaxed text-ink/70">
+            <p className="mt-1.5 font-sans text-base leading-relaxed text-ink/70 max-md:mt-1 max-md:text-sm max-md:leading-snug">
                 {style.description}
             </p>
         </article>

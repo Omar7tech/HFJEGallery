@@ -17,7 +17,7 @@ export default function CurtainStyles({ styles }: { styles: CurtainStyle[] }) {
                 />
             </Head>
 
-            <div className="@container px-5 pt-6 pb-20 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
+            <div className="@container px-5 pt-6 pb-20 max-md:pt-4 max-md:pb-12 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
                 <PageHeader
                     back={{ label: 'Curtains', href: '/curtains' }}
                     title="Designed for Every Window"
@@ -25,7 +25,7 @@ export default function CurtainStyles({ styles }: { styles: CurtainStyle[] }) {
                 />
 
                 {styles.length > 0 ? (
-                    <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 @3xl:grid-cols-3 @3xl:gap-x-5 @5xl:grid-cols-4">
+                    <div className="mt-10 grid grid-cols-2 gap-x-4 gap-y-10 max-md:mt-6 max-md:gap-x-3 max-md:gap-y-6 @3xl:grid-cols-3 @3xl:gap-x-5 @5xl:grid-cols-4">
                         {styles.map((style, index) => (
                             <CurtainStyleCard
                                 key={style.slug}

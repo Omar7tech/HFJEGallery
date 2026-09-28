@@ -20,11 +20,11 @@ export default function PageHeader({ back, title, lead }: PageHeaderProps) {
                 {back.label}
             </Link>
 
-            <h1 className="mt-4 font-display text-[clamp(1.75rem,5cqi,3.5rem)] leading-[1.1] tracking-[-0.04em] text-ink uppercase">
+            <h1 className="mt-4 font-display text-[clamp(1.75rem,5cqi,3.5rem)] leading-[1.1] tracking-[-0.04em] text-ink uppercase max-md:mt-2">
                 {title}
             </h1>
             {lead && (
-                <p className="mt-3 max-w-xl font-sans text-base leading-relaxed text-ink/70">
+                <p className="mt-3 max-w-xl font-sans text-base leading-relaxed text-ink/70 max-md:mt-2 max-md:text-[15px]">
                     {lead}
                 </p>
             )}
