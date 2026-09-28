@@ -66,17 +66,18 @@ export default function WorkCategoryCard({
 
                     <span
                         aria-hidden="true"
-                        className="absolute top-5 right-5 grid size-10 place-items-center rounded-full bg-brand text-brand-foreground transition-[rotate,background-color] duration-500 ease-out group-hover:rotate-45 group-hover:bg-brand-hover motion-reduce:transition-none motion-reduce:group-hover:rotate-0 md:top-7 md:right-7 md:size-12"
+                        className="absolute top-5 right-5 grid size-10 place-items-center rounded-full bg-brand text-brand-foreground transition-[rotate,background-color] duration-500 ease-out group-hover:rotate-45 group-hover:bg-brand-hover motion-reduce:transition-none motion-reduce:group-hover:rotate-0 max-md:top-4 max-md:right-4 max-md:size-9 md:top-7 md:right-7 md:size-12"
                     >
                         <ArrowUpRight className="size-5" strokeWidth={1.75} />
                     </span>
 
-                    <span className="absolute inset-x-0 bottom-0 p-5 md:p-7">
+                    <span className="absolute inset-x-0 bottom-0 p-5 max-md:p-4 md:p-7">
                         <span className="block min-w-0">
                             {/* One line always: a long name loops like the
                                 Living Edit labels instead of wrapping. */}
                             <MarqueeText
                                 speed={40}
+                                wrapOnPhones
                                 className="font-display text-[clamp(1.25rem,5.5vw,1.75rem)] leading-tight text-white sm:text-[clamp(1.1rem,2.6vw,2.25rem)]"
                             >
                                 {category.name}

@@ -6,16 +6,21 @@ interface MarqueeTextProps {
     className?: string;
     /** Scroll speed in pixels per second. */
     speed?: number;
+    /** On phones, wrap onto more lines instead of looping. */
+    wrapOnPhones?: boolean;
 }
 
 /**
  * Single-line text that loops horizontally only when it does not fit.
  * Falls back to a truncated label when the user prefers reduced motion.
+ * With `wrapOnPhones`, a phone wraps it instead: the measuring copy wraps
+ * too, so it never counts as overflowing there.
  */
 export default function MarqueeText({
     children,
     className,
     speed = 24,
+    wrapOnPhones = false,
 }: MarqueeTextProps) {
     const containerRef = useRef<HTMLSpanElement>(null);
     const textRef = useRef<HTMLSpanElement>(null);
@@ -54,6 +59,7 @@ export default function MarqueeText({
                 // "y" and "g", so the box gets breathing room above and below,
                 // cancelled by an equal negative margin to keep the layout.
                 'relative -my-[0.2em] block overflow-hidden py-[0.2em] whitespace-nowrap',
+                wrapOnPhones && 'max-md:text-balance max-md:whitespace-normal',
                 isLooping &&
                     'motion-safe:[mask-image:linear-gradient(to_right,transparent,black_12%,black_88%,transparent)]',
                 className,

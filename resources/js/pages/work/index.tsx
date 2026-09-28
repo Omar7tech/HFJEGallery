@@ -19,12 +19,12 @@ export default function WorkIndex({
                 />
             </Head>
 
-            <div className="@container px-5 pt-6 pb-20 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
-                <header className="flex flex-col gap-5 @3xl:flex-row @3xl:items-end @3xl:justify-between">
+            <div className="@container px-5 pt-6 pb-20 max-md:pb-12 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
+                <header className="flex flex-col gap-5 max-md:gap-3 @3xl:flex-row @3xl:items-end @3xl:justify-between">
                     <h1 className="font-display text-[clamp(2.25rem,8cqi,4.75rem)] leading-[1.05] text-ink">
                         Our Work
                     </h1>
-                    <p className="max-w-md font-sans text-base leading-relaxed text-brand @3xl:text-right">
+                    <p className="max-w-md font-sans text-base leading-relaxed text-brand max-md:text-[15px] @3xl:text-right">
                         Every project is unique because every family lives
                         differently. Choose a kind of space to explore the homes
                         and places we have crafted.
@@ -32,7 +32,7 @@ export default function WorkIndex({
                 </header>
 
                 {categories.length > 0 ? (
-                    <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:gap-5">
+                    <div className="mt-8 grid gap-4 max-md:mt-6 max-md:gap-3 sm:grid-cols-2 xl:gap-5">
                         {categories.map((category, index) => (
                             <WorkCategoryCard
                                 key={category.slug}

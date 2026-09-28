@@ -42,7 +42,7 @@ export default function ProjectDetail({
                 <meta property="og:image" content={project.cover} />
             </Head>
 
-            <div className="@container px-5 pt-6 pb-20 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
+            <div className="@container px-5 pt-6 pb-20 max-md:pt-4 max-md:pb-12 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
                 <Link
                     href={parent.href}
                     className="inline-flex items-center gap-2 text-sm tracking-[0.15em] text-ink/60 uppercase transition-colors hover:text-brand"
@@ -51,14 +51,16 @@ export default function ProjectDetail({
                     {parent.name}
                 </Link>
 
-                {/* One line always: a long name loops like the category
-                    titles instead of wrapping. */}
-                <h1 className="mt-5 font-display text-[clamp(1.5rem,4.2cqi,2.75rem)] leading-[1.15] text-ink">
-                    <MarqueeText speed={40}>{project.name}</MarqueeText>
+                {/* One line on wider screens, where a long name loops like
+                    the category titles; phones wrap it instead. */}
+                <h1 className="mt-5 font-display text-[clamp(1.5rem,4.2cqi,2.75rem)] leading-[1.15] text-ink max-md:mt-3 max-md:text-[1.75rem]">
+                    <MarqueeText speed={40} wrapOnPhones>
+                        {project.name}
+                    </MarqueeText>
                 </h1>
 
                 {/* Parent pill, then where and when, on one quiet line. */}
-                <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-base text-ink/60">
+                <div className="mt-5 flex flex-wrap items-center gap-x-4 gap-y-2 font-sans text-base text-ink/60 max-md:mt-3 max-md:gap-x-3 max-md:text-sm">
                     <Link
                         href={parent.href}
                         className="inline-flex h-8 items-center rounded-full bg-brand/10 px-3.5 text-sm text-brand transition-colors hover:bg-brand hover:text-brand-foreground"
@@ -86,7 +88,7 @@ export default function ProjectDetail({
                     alt={project.name}
                     loading="eager"
                     fetchPriority="high"
-                    className="mt-8 h-[56svh] max-h-190 min-h-72 rounded-3xl md:rounded-[36px] lg:h-[72svh]"
+                    className="mt-8 h-[56svh] max-h-190 min-h-72 rounded-3xl max-md:mt-5 max-md:aspect-4/3 max-md:h-auto max-md:min-h-0 md:rounded-[36px] lg:h-[72svh]"
                     imgClassName="object-cover"
                 />
 
@@ -96,10 +98,10 @@ export default function ProjectDetail({
                 {(project.summary || project.description) && (
                     <section
                         aria-label="About the project"
-                        className="mt-10 @3xl:mt-12"
+                        className="mt-10 max-md:mt-7 @3xl:mt-12"
                     >
                         {project.summary && (
-                            <p className="max-w-4xl font-sans text-[clamp(1.2rem,2.2cqi,1.6rem)] leading-snug font-medium text-ink">
+                            <p className="max-w-4xl font-sans text-[clamp(1.2rem,2.2cqi,1.6rem)] leading-snug font-medium text-ink max-md:text-lg">
                                 {project.summary}
                             </p>
                         )}
@@ -118,8 +120,11 @@ export default function ProjectDetail({
                 )}
 
                 {project.gallery.length > 0 && (
-                    <section className="mt-16" aria-label="Gallery">
-                        <h2 className="mb-6 border-b border-ink/10 pb-4 font-sans text-sm tracking-[0.15em] text-ink uppercase @lg:text-base">
+                    <section
+                        className="mt-16 max-md:mt-10"
+                        aria-label="Gallery"
+                    >
+                        <h2 className="mb-6 border-b border-ink/10 pb-4 font-sans text-sm tracking-[0.15em] text-ink uppercase max-md:mb-4 max-md:pb-3 @lg:text-base">
                             Gallery
                         </h2>
                         <ProjectGallery
@@ -133,7 +138,7 @@ export default function ProjectDetail({
                     <Link
                         href={next.href}
                         prefetch
-                        className="group mt-20 flex items-center gap-5 border-t border-ink/10 pt-8 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand @xl:gap-8"
+                        className="group mt-20 flex items-center gap-5 border-t border-ink/10 pt-8 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-10 max-md:gap-4 max-md:pt-6 @xl:gap-8"
                     >
                         <SmartImage
                             src={next.image}

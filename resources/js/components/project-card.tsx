@@ -45,7 +45,7 @@ export default function ProjectCard({
                 alt={project.name}
                 loading={eager ? 'eager' : 'lazy'}
                 fetchPriority={eager ? 'high' : undefined}
-                className="aspect-4/3 rounded-2xl @3xl:rounded-3xl"
+                className="aspect-4/3 rounded-2xl max-md:aspect-3/2 @3xl:rounded-3xl"
                 imgClassName="object-cover transition-transform duration-700 ease-out group-hover:scale-105 motion-reduce:transition-none motion-reduce:group-hover:scale-100"
             >
                 {tags.length > 0 && (
@@ -67,11 +67,13 @@ export default function ProjectCard({
                 )}
             </SmartImage>
 
-            <h3 className="mt-4 font-display text-[clamp(1rem,2.2cqi,1.3rem)] leading-snug text-ink transition-colors duration-300 group-hover:text-brand">
+            <h3 className="mt-4 font-display text-[clamp(1rem,2.2cqi,1.3rem)] leading-snug text-ink transition-colors duration-300 group-hover:text-brand max-md:mt-3 max-md:text-lg">
                 {project.name}
             </h3>
             {meta && (
-                <p className="mt-1.5 font-sans text-base text-ink/60">{meta}</p>
+                <p className="mt-1.5 font-sans text-base text-ink/60 max-md:mt-1 max-md:text-sm">
+                    {meta}
+                </p>
             )}
         </Link>
     );

@@ -56,7 +56,7 @@ export default function ProjectGrid({
         <LoadMoreGrid
             data={data}
             count={projects.length}
-            className="grid gap-x-4 gap-y-10 @xl:grid-cols-2 @2xl:gap-x-5 @4xl:grid-cols-3"
+            className="grid gap-x-4 gap-y-10 max-md:gap-y-7 @xl:grid-cols-2 @2xl:gap-x-5 @4xl:grid-cols-3"
             skeleton={skeleton}
             loading={loading}
         >
