@@ -411,11 +411,16 @@ html {
     }
 
     & .fi-ta-header-toolbar {
-        padding: 0.55rem 1rem;
+        padding: 0.4rem 0.75rem 0.4rem 1rem;
         border-color: var(--hf-line);
 
         & > * {
-            min-height: 2rem;
+            min-height: 1.9rem;
+        }
+
+        & .fi-input {
+            padding-block: 0.3rem;
+            font-size: 0.82rem;
         }
     }
 }
@@ -427,12 +432,18 @@ html {
 }
 
 .fi-ta-header-cell {
-    padding-block: 0.55rem;
-    font-size: 0.75rem;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.72rem;
     font-weight: 500;
+    line-height: 1.1rem;
     color: var(--hf-text-soft);
     background-color: var(--hf-inset);
     @apply sm:first-of-type:ps-4 sm:last-of-type:pe-4;
+
+    & .fi-icon {
+        width: 0.9rem;
+        height: 0.9rem;
+    }
 }
 
 .fi-ta-table {
@@ -449,33 +460,68 @@ html {
     }
 }
 
-/* Row cells: about 40px tall instead of 57. */
+/* Row cells: about 36px tall instead of Filament's 57. */
 .fi-ta-cell {
     @apply sm:first:ps-1 sm:last:pe-1;
 
     &:has(.fi-ta-actions),
     &:has(.fi-ta-record-checkbox),
     &.fi-ta-selection-cell {
-        padding-block: 0.45rem;
+        padding-block: 0.3rem;
         @apply sm:first-of-type:ps-4 sm:last-of-type:pe-4;
+    }
+
+    & .fi-badge {
+        font-size: 0.7rem;
+        line-height: 1rem;
+        padding-block: 0.1rem;
+        min-height: 0;
+    }
+
+    & .fi-ta-image img {
+        max-height: 2rem;
     }
 }
 
-.fi-ta-text:not(.fi-inline) {
-    padding-block: 0.55rem;
-    @apply sm:py-[0.55rem];
+.fi-ta-text:not(.fi-inline),
+.fi-ta-icon:not(.fi-inline),
+.fi-ta-image:not(.fi-inline) {
+    padding: 0.4rem 0.75rem;
+    @apply sm:px-3 sm:py-[0.4rem];
+}
+
+.fi-ta-text {
+    row-gap: 0.1rem !important;
 }
 
 .fi-ta-text-item {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
+    line-height: 1.25rem;
 }
 
 .fi-ta-text-description {
-    font-size: 0.76rem;
+    font-size: 0.74rem;
+    line-height: 1.1rem;
 }
 
 .fi-ta-actions {
-    gap: 0.5rem;
+    gap: 0.35rem;
+
+    & .fi-link,
+    & .fi-btn {
+        font-size: 0.78rem;
+    }
+
+    & .fi-icon {
+        width: 1rem;
+        height: 1rem;
+    }
+}
+
+.fi-ta-record-checkbox,
+.fi-ta-page-checkbox {
+    width: 0.95rem;
+    height: 0.95rem;
 }
 
 .fi-ta-row.fi-clickable:hover {
@@ -490,8 +536,19 @@ html {
     font-weight: 600;
 }
 
-.fi-pagination {
-    font-size: 0.8rem;
+.fi-ta-ctn .fi-pagination {
+    padding: 0.45rem 1rem;
+    font-size: 0.78rem;
+    border-color: var(--hf-line);
+
+    & .fi-input-wrp {
+        min-height: 0;
+    }
+
+    & .fi-btn,
+    & .fi-pagination-item-btn {
+        padding-block: 0.25rem;
+    }
 }
 
 /* ------------------------------------------------------------------ */

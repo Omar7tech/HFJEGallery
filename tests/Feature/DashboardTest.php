@@ -13,18 +13,41 @@ use App\Filament\Widgets\PhotoCoverageChart;
 use App\Filament\Widgets\ProjectsByCategoryChart;
 use App\Filament\Widgets\ProjectsByYearChart;
 use App\Filament\Widgets\TopTagsChart;
+use App\Filament\Widgets\Welcome;
 use App\Models\BayteCategory;
 use App\Models\BayteProduct;
 use App\Models\ContactMessage;
 use App\Models\User;
 use App\Settings\BayteSettings;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Livewire\Livewire;
 
 uses(RefreshDatabase::class);
 
 beforeEach(function () {
-    $this->actingAs(User::factory()->create());
+    $this->actingAs(User::factory()->create(['name' => 'Omar Abi Farraj']));
+});
+
+test('the welcome card greets by name for the hour in Beirut', function () {
+    // 18:30 in Beirut is 15:30 UTC: evening, and the living room at night.
+    $this->travelTo(CarbonImmutable::parse('2026-09-28 18:30', Welcome::STUDIO_TIMEZONE));
+
+    Livewire::test(Welcome::class)
+        ->assertSee('Good evening, Omar.')
+        ->assertSee('potted-plant-table-night', escape: false);
+
+    $this->travelTo(CarbonImmutable::parse('2026-09-28 09:00', Welcome::STUDIO_TIMEZONE));
+
+    Livewire::test(Welcome::class)
+        ->assertSee('Good morning, Omar.')
+        ->assertDontSee('potted-plant-table-night', escape: false);
+});
+
+test('the welcome card sums up what is waiting', function () {
+    ContactMessage::factory()->count(2)->create();
+
+    Livewire::test(Welcome::class)->assertSee('You have 2 unread messages');
 });
 
 test('the dashboard opens', function () {

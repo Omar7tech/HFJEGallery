@@ -43,7 +43,7 @@ class NeedsAttention extends TableWidget
     public function table(Table $table): Table
     {
         return $table
-            ->records(fn (): array => $this->issues())
+            ->records(fn (): array => self::issues())
             ->paginated(false)
             ->columns([
                 TextColumn::make('issue')
@@ -76,7 +76,7 @@ class NeedsAttention extends TableWidget
      *
      * @return array<string, array{issue: string, why: string, area: string, severity: string, url: string}>
      */
-    private function issues(): array
+    public static function issues(): array
     {
         $overdue = ContactMessage::query()
             ->whereNull('read_at')
@@ -87,7 +87,7 @@ class NeedsAttention extends TableWidget
         $checks = [
             'overdue-messages' => [
                 $overdue,
-                fn (int $count): string => $this->plural($count, 'message').' unread for over '.ContactMessage::OVERDUE_DAYS.' days',
+                fn (int $count): string => self::plural($count, 'message').' unread for over '.ContactMessage::OVERDUE_DAYS.' days',
                 'People are waiting for a reply.',
                 'Inbox',
                 'danger',
@@ -102,8 +102,8 @@ class NeedsAttention extends TableWidget
                 ManageBayte::getUrl(),
             ],
             'bayte-photos' => [
-                $this->withoutMedia(BayteProduct::query(), 'image'),
-                fn (int $count): string => $this->plural($count, 'BAYTÉ piece').' without a photo',
+                self::withoutMedia(BayteProduct::query(), 'image'),
+                fn (int $count): string => self::plural($count, 'BAYTÉ piece').' without a photo',
                 'They show a placeholder in the catalogue.',
                 'BAYTÉ',
                 'danger',
@@ -111,15 +111,15 @@ class NeedsAttention extends TableWidget
             ],
             'bayte-empty-categories' => [
                 BayteCategory::query()->doesntHave('products')->count(),
-                fn (int $count): string => $this->plural($count, 'BAYTÉ category', 'BAYTÉ categories').' with no pieces',
+                fn (int $count): string => self::plural($count, 'BAYTÉ category', 'BAYTÉ categories').' with no pieces',
                 'Empty categories are hidden from the site.',
                 'BAYTÉ',
                 'warning',
                 BayteCategoryResource::getUrl('index'),
             ],
             'project-covers' => [
-                $this->withoutMedia(Project::query(), 'cover'),
-                fn (int $count): string => $this->plural($count, 'project').' without a cover image',
+                self::withoutMedia(Project::query(), 'cover'),
+                fn (int $count): string => self::plural($count, 'project').' without a cover image',
                 'The cover is what the project card shows.',
                 'Work',
                 'danger',
@@ -127,23 +127,23 @@ class NeedsAttention extends TableWidget
             ],
             'work-empty-categories' => [
                 WorkCategory::query()->doesntHave('projects')->count(),
-                fn (int $count): string => $this->plural($count, 'work category', 'work categories').' with no projects',
+                fn (int $count): string => self::plural($count, 'work category', 'work categories').' with no projects',
                 'Visitors who open them find nothing.',
                 'Work',
                 'warning',
                 WorkCategoryResource::getUrl('index'),
             ],
             'curtain-covers' => [
-                $this->withoutMedia(CurtainWork::query(), 'cover'),
-                fn (int $count): string => $this->plural($count, 'curtain project').' without a cover image',
+                self::withoutMedia(CurtainWork::query(), 'cover'),
+                fn (int $count): string => self::plural($count, 'curtain project').' without a cover image',
                 'The cover is what the project card shows.',
                 'Curtains',
                 'danger',
                 CurtainWorkResource::getUrl('index'),
             ],
             'curtain-style-images' => [
-                $this->withoutMedia(CurtainStyle::query()->where('is_active', true), 'image'),
-                fn (int $count): string => $this->plural($count, 'live curtain style').' without an image',
+                self::withoutMedia(CurtainStyle::query()->where('is_active', true), 'image'),
+                fn (int $count): string => self::plural($count, 'live curtain style').' without an image',
                 'Styles are chosen by their picture.',
                 'Curtains',
                 'warning',
@@ -189,12 +189,12 @@ class NeedsAttention extends TableWidget
     /**
      * @param  Builder<*>  $query
      */
-    private function withoutMedia(Builder $query, string $collection): int
+    private static function withoutMedia(Builder $query, string $collection): int
     {
         return $query->whereDoesntHave('media', fn (Builder $media) => $media->where('collection_name', $collection))->count();
     }
 
-    private function plural(int $count, string $singular, ?string $plural = null): string
+    private static function plural(int $count, string $singular, ?string $plural = null): string
     {
         return $count.' '.($count === 1 ? $singular : ($plural ?? $singular.'s'));
     }
