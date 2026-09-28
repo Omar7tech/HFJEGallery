@@ -1,4 +1,4 @@
-import { Plus } from 'lucide-react';
+import { Check, Plus } from 'lucide-react';
 import {
     motion,
     useMotionTemplate,
@@ -10,16 +10,16 @@ import {
 import type { PointerEvent } from 'react';
 import BayteWordmark from '@/components/bayte-wordmark';
 import { SmartImage } from '@/components/smart-image';
+import { bayteSelection, useIsSelected } from '@/lib/bayte-selection';
 import { cn } from '@/lib/utils';
 
 interface BayteProductCardProps {
+    slug: string;
     name: string;
     description: string;
     /** Product cutout — transparent background works best on the card. */
     src: string;
     alt: string;
-    /** Fired by the "+" button; omit it to render the badge as decoration. */
-    onSelect?: () => void;
     /** Extra classes for the card itself (grid placement, width…). */
     className?: string;
 }
@@ -41,17 +41,17 @@ const SPRING = {
  * On a mouse it becomes a shallow 3D object — the card leans toward the
  * pointer while the product and text sit on their own planes above it, so they
  * part in real parallax rather than sliding as one picture. The badge stays
- * flat on the card, since it becomes the add-to-cart control. A specular
+ * flat on the card: it adds the piece to the visitor's selection. A specular
  * sheen tracks the cursor, and the contact shadow under the product swings
  * opposite the lean so the cutout reads as floating off the card. Touch and
  * reduced-motion visitors get the flat card.
  */
 export default function BayteProductCard({
+    slug,
     name,
     description,
     src,
     alt,
-    onSelect,
     className,
 }: BayteProductCardProps) {
     const reducedMotion = useReducedMotion();
@@ -104,8 +104,7 @@ export default function BayteProductCard({
         lift.set(0);
     };
 
-    const badgeClassName =
-        'grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground';
+    const selected = useIsSelected(slug);
 
     return (
         <motion.article
@@ -150,23 +149,37 @@ export default function BayteProductCard({
                     </p>
                 </div>
 
-                {onSelect ? (
-                    <button
-                        type="button"
-                        onClick={onSelect}
-                        aria-label={`View ${name}`}
-                        className={cn(
-                            badgeClassName,
-                            'transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
-                        )}
-                    >
+                <button
+                    type="button"
+                    onClick={() =>
+                        bayteSelection.toggle({
+                            slug,
+                            name,
+                            description,
+                            image: src,
+                        })
+                    }
+                    aria-pressed={selected}
+                    aria-label={
+                        selected
+                            ? `Remove ${name} from your selection`
+                            : `Add ${name} to your selection`
+                    }
+                    // The dot stays small; the invisible ring around it gives
+                    // a finger a full 44px to land on.
+                    className={cn(
+                        'relative grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-colors duration-300 ease-out before:absolute before:-inset-2 before:content-[""] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
+                        selected
+                            ? 'bg-ink hover:bg-ink/85'
+                            : 'hover:bg-brand-hover',
+                    )}
+                >
+                    {selected ? (
+                        <Check className="size-4" strokeWidth={2.5} />
+                    ) : (
                         <Plus className="size-4" strokeWidth={2.5} />
-                    </button>
-                ) : (
-                    <span aria-hidden="true" className={badgeClassName}>
-                        <Plus className="size-4" strokeWidth={2.5} />
-                    </span>
-                )}
+                    )}
+                </button>
             </div>
 
             <div className="relative mt-4 aspect-4/3 w-full transform-3d">

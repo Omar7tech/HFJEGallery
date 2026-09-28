@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
 import { ArrowRight } from 'lucide-react';
+import BayteAddedToast from '@/components/bayte-added-toast';
 import BayteProductCard from '@/components/bayte-product-card';
 import BayteWordmarkDraw from '@/components/bayte-wordmark-draw';
 
@@ -44,6 +45,7 @@ function Bayte({ products }: { products: BayteHomeProduct[] }) {
                     {products.map((product) => (
                         <BayteProductCard
                             key={product.slug}
+                            slug={product.slug}
                             name={product.name}
                             description={product.description}
                             src={product.image}
@@ -66,6 +68,8 @@ function Bayte({ products }: { products: BayteHomeProduct[] }) {
                     />
                 </Link>
             </div>
+
+            <BayteAddedToast />
         </section>
     );
 }
