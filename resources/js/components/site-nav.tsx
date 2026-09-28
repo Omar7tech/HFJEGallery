@@ -563,7 +563,7 @@ export function NavBar({ className }: { className?: string }) {
                         })}
                     </nav>
 
-                    <div className="menu-footer grid gap-4 border-t border-cream/20 pt-6">
+                    <div className="menu-footer grid gap-4 pt-6">
                         <p className="font-display text-lg leading-snug text-white">
                             Crafted Around Living.
                         </p>
