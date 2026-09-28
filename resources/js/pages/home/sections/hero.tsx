@@ -64,7 +64,7 @@ function Headline({
 }
 
 /**
- * The "EXPLORE OUR WORK" CTA. On mobile it's a full-width rounded pill with the
+ * The "Explore our work" CTA. On mobile it's a full-width button with the
  * arrow always showing — there's no hover on touch. From `lg` it becomes the
  * squared-off bar that bleeds off the right edge of the desktop hero, and the
  * arrow slides out on hover instead.
@@ -73,9 +73,9 @@ function ExploreButton({ className }: { className?: string }) {
     return (
         <button
             type="button"
-            className={`group flex w-full items-center justify-center rounded-full bg-brand px-8 py-4 text-sm font-semibold tracking-[0.2em] max-lg:tracking-[0.12em] max-lg:whitespace-nowrap text-brand-foreground uppercase transition-[background-color,letter-spacing] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand active:bg-brand-hover motion-reduce:transition-none sm:text-base lg:inline-flex lg:w-auto lg:justify-start lg:rounded-none lg:py-4 lg:pr-12 lg:pl-8 lg:hover:bg-brand-hover lg:hover:tracking-[0.26em] ${className ?? ''}`}
+            className={`group flex w-full items-center justify-center rounded-full bg-brand px-8 py-4 text-sm font-semibold tracking-[0.2em] max-lg:rounded-xl max-lg:py-3.5 max-lg:font-medium max-lg:tracking-[0.02em] max-lg:normal-case max-lg:whitespace-nowrap text-brand-foreground uppercase transition-[background-color,letter-spacing] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand active:bg-brand-hover motion-reduce:transition-none sm:text-base lg:inline-flex lg:w-auto lg:justify-start lg:rounded-none lg:py-4 lg:pr-12 lg:pl-8 lg:hover:bg-brand-hover lg:hover:tracking-[0.26em] ${className ?? ''}`}
         >
-            EXPLORE OUR WORK
+            Explore our work
             <span
                 aria-hidden="true"
                 className="ml-3 inline-flex max-w-[1.5rem] overflow-hidden transition-all duration-300 ease-out motion-reduce:transition-none lg:ml-0 lg:max-w-0 lg:-translate-x-2 lg:opacity-0 lg:group-hover:ml-3 lg:group-hover:max-w-[1.5rem] lg:group-hover:translate-x-0 lg:group-hover:opacity-100"

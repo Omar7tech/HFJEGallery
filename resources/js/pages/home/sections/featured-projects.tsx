@@ -71,9 +71,9 @@ function ViewPortfolioButton() {
         <Link
             href="/work"
             prefetch
-            className="group mt-3 flex w-full items-center justify-center rounded-3xl bg-brand py-6 text-lg font-medium tracking-[0.15em] text-brand-foreground uppercase transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none max-md:mt-4 max-md:rounded-full max-md:py-4 max-md:text-sm max-md:tracking-[0.12em] @lg:text-xl"
+            className="group mt-3 flex w-full items-center justify-center rounded-3xl bg-brand py-6 text-lg font-medium tracking-[0.15em] text-brand-foreground uppercase transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none max-md:mt-4 max-md:rounded-xl max-md:py-3.5 max-md:text-sm max-md:tracking-[0.02em] max-md:normal-case @lg:text-xl"
         >
-            View Portfolio
+            View portfolio
             <span
                 aria-hidden="true"
                 className="inline-flex max-w-0 -translate-x-2 overflow-hidden opacity-0 transition-all duration-300 ease-out group-hover:ml-3 group-hover:max-w-[1.4em] group-hover:translate-x-0 group-hover:opacity-100 motion-reduce:transition-none max-lg:ml-3 max-lg:max-w-[1.4em] max-lg:translate-x-0 max-lg:opacity-100"

@@ -131,7 +131,7 @@ export default function SiteFooter({ className }: { className?: string }) {
                         </p>
                         <Link
                             href="/contact"
-                            className="group mt-8 inline-flex items-center gap-3 rounded-full border border-cream/50 px-7 py-3.5 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors duration-300 ease-out hover:border-cream hover:bg-cream hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream motion-reduce:transition-none"
+                            className="group mt-8 inline-flex items-center gap-3 rounded-full border border-cream/50 px-7 py-3.5 text-sm font-semibold tracking-[0.2em] text-white uppercase transition-colors duration-300 ease-out hover:border-cream hover:bg-cream hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-cream motion-reduce:transition-none max-md:flex max-md:w-full max-md:justify-center max-md:rounded-xl max-md:font-medium max-md:tracking-[0.02em] max-md:normal-case"
                         >
                             Get in touch
                             <ArrowRight

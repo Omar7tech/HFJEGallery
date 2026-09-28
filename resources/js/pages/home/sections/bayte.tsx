@@ -61,7 +61,7 @@ function Bayte({ products }: { products: BayteHomeProduct[] }) {
                 <Link
                     href="/bayte"
                     prefetch
-                    className="group flex items-center gap-3 rounded-full bg-brand px-12 py-3.5 text-base text-brand-foreground transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none @lg:text-lg"
+                    className="group flex items-center gap-3 rounded-full bg-brand px-12 py-3.5 text-base text-brand-foreground transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none max-md:w-full max-md:justify-center max-md:rounded-xl max-md:py-3.5 max-md:text-sm @lg:text-lg"
                 >
                     Discover BAYTÉ
                     <ArrowRight

@@ -45,7 +45,7 @@ function Experience() {
 
                     <Link
                         href="/contact"
-                        className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-5 max-md:py-2.5 lg:pr-20"
+                        className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-5 max-md:w-full max-md:justify-center max-md:rounded-xl max-md:py-3 max-md:text-sm lg:pr-20"
                     >
                         Get in touch
                     </Link>

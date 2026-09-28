@@ -118,7 +118,7 @@ export default function LivingSpacePicker({
                 onClick={next}
                 disabled={!selectedId || preparing}
                 aria-busy={preparing}
-                className="mt-auto inline-flex min-h-10 w-full max-w-[284px] items-center justify-center gap-2.5 rounded-full bg-brand px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-brand disabled:aria-busy:cursor-wait motion-safe:active:scale-[0.98] motion-reduce:transition-none max-md:mt-7"
+                className="mt-auto inline-flex min-h-10 w-full max-w-[284px] items-center justify-center gap-2.5 rounded-full bg-brand px-6 py-1.5 text-center text-xl leading-tight text-white transition-[background-color,scale] duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand disabled:cursor-default disabled:hover:bg-brand disabled:aria-busy:cursor-wait motion-safe:active:scale-[0.98] motion-reduce:transition-none max-md:mt-7 max-md:min-h-12 max-md:max-w-none max-md:rounded-xl max-md:text-sm max-md:font-medium"
             >
                 {preparing ? (
                     <>
@@ -130,7 +130,7 @@ export default function LivingSpacePicker({
                         <span className="text-base">Preparing your edit…</span>
                     </>
                 ) : (
-                    'NEXT'
+                    <span className="uppercase max-md:normal-case">Next</span>
                 )}
             </button>
         </div>

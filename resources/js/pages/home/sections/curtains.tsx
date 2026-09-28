@@ -74,7 +74,7 @@ function Curtains() {
             <div className="mt-3 flex flex-col gap-3 max-md:mt-2 max-md:grid max-md:grid-flow-dense max-md:grid-cols-2 max-md:gap-2 @lg:flex-row @lg:items-stretch @lg:gap-4">
                 {actions.map((action) => {
                     const className = cn(
-                        'rounded-2xl text-center tracking-[0.02em] transition-colors duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none max-md:rounded-full max-md:py-3.5 max-md:text-[15px] @lg:rounded-3xl @lg:text-lg',
+                        'rounded-2xl text-center tracking-[0.02em] transition-colors duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand motion-reduce:transition-none max-md:rounded-xl max-md:py-3.5 max-md:text-sm @lg:rounded-3xl @lg:text-lg',
                         action.filled
                             ? 'bg-brand py-6 text-brand-foreground hover:bg-brand-hover max-md:col-span-2 @lg:-my-1 @lg:shrink-0 @lg:px-14'
                             : 'bg-cream/40 py-5 text-brand hover:bg-cream/70 @lg:flex-1',
