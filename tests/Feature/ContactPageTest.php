@@ -1,10 +1,12 @@
 <?php
 
 use App\Enums\ContactTopic;
+use App\Filament\Resources\ContactMessages\Pages\ListContactMessages;
 use App\Filament\Resources\ContactMessages\Pages\ViewContactMessage;
 use App\Http\Requests\StoreContactMessageRequest;
 use App\Models\ContactMessage;
 use App\Models\User;
+use Filament\Actions\Testing\TestAction;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia as Assert;
 use Livewire\Livewire;
@@ -146,4 +148,30 @@ test('opening a message in the dashboard marks it read', function () {
         ->assertSee($message->name);
 
     expect($message->refresh()->read_at)->not->toBeNull();
+});
+
+test('messages can be marked read and unread from the inbox', function () {
+    $this->actingAs(User::factory()->create());
+    $unread = ContactMessage::factory()->create();
+    $read = ContactMessage::factory()->read()->create();
+
+    Livewire::test(ListContactMessages::class)
+        ->assertActionVisible(TestAction::make('markAsRead')->table($unread))
+        ->assertActionHidden(TestAction::make('markAsRead')->table($read))
+        ->callAction(TestAction::make('markAsRead')->table($unread))
+        ->callAction(TestAction::make('markAsUnread')->table($read));
+
+    expect($unread->refresh()->isUnread())->toBeFalse()
+        ->and($read->refresh()->isUnread())->toBeTrue();
+});
+
+test('several messages can be marked read at once', function () {
+    $this->actingAs(User::factory()->create());
+    $messages = ContactMessage::factory()->count(3)->create();
+
+    Livewire::test(ListContactMessages::class)
+        ->selectTableRecords($messages->modelKeys())
+        ->callAction(TestAction::make('markAsRead')->table()->bulk());
+
+    expect(ContactMessage::query()->whereNull('read_at')->count())->toBe(0);
 });

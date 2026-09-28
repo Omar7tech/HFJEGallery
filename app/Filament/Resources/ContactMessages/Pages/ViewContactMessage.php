@@ -4,8 +4,10 @@ namespace App\Filament\Resources\ContactMessages\Pages;
 
 use App\Filament\Resources\ContactMessages\ContactMessageResource;
 use App\Models\ContactMessage;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\ViewRecord;
+use Filament\Support\Icons\Heroicon;
 
 class ViewContactMessage extends ViewRecord
 {
@@ -28,6 +30,15 @@ class ViewContactMessage extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            // Leaves the message flagged for later and goes back to the inbox.
+            Action::make('markAsUnread')
+                ->label('Mark as unread')
+                ->icon(Heroicon::OutlinedEnvelope)
+                ->color('gray')
+                ->action(function (ContactMessage $record): void {
+                    $record->markAsUnread();
+                    $this->redirect(ContactMessageResource::getUrl('index'));
+                }),
             DeleteAction::make(),
         ];
     }

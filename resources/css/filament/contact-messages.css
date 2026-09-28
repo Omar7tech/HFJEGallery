@@ -1,0 +1,24 @@
+/*
+ * Unread contact messages in the dashboard table: a soft green wash and a
+ * green edge on the first cell, so new mail stands out at a glance.
+ */
+
+.fi-ta-row.contact-message-unread {
+    background-color: color-mix(in oklab, var(--success-500) 9%, transparent);
+}
+
+.fi-ta-row.contact-message-unread.fi-clickable:hover {
+    background-color: color-mix(in oklab, var(--success-500) 15%, transparent);
+}
+
+.fi-ta-row.contact-message-unread > td:first-child {
+    box-shadow: inset 3px 0 0 var(--success-500);
+}
+
+.dark .fi-ta-row.contact-message-unread {
+    background-color: color-mix(in oklab, var(--success-400) 12%, transparent);
+}
+
+.dark .fi-ta-row.contact-message-unread.fi-clickable:hover {
+    background-color: color-mix(in oklab, var(--success-400) 18%, transparent);
+}

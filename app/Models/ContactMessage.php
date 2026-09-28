@@ -26,10 +26,20 @@ class ContactMessage extends Model
         ];
     }
 
+    public function isUnread(): bool
+    {
+        return $this->read_at === null;
+    }
+
     public function markAsRead(): void
     {
-        if ($this->read_at === null) {
+        if ($this->isUnread()) {
             $this->forceFill(['read_at' => now()])->save();
         }
+    }
+
+    public function markAsUnread(): void
+    {
+        $this->forceFill(['read_at' => null])->save();
     }
 }

@@ -32,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
 
         FilamentAsset::register([
             Css::make('mood-board-slot-picker', resource_path('css/filament/mood-board-slot-picker.css'))->loadedOnRequest(),
+            Css::make('contact-messages', resource_path('css/filament/contact-messages.css')),
         ]);
 
         $this->configureRateLimiting();
