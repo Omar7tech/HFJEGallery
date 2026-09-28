@@ -8,7 +8,8 @@ import {
     useTransform,
 } from 'motion/react';
 import type { PointerEvent } from 'react';
-import { useSyncExternalStore } from 'react';
+import { useState, useSyncExternalStore } from 'react';
+import BayteProductSheet from '@/components/bayte-product-sheet';
 import BayteWordmark from '@/components/bayte-wordmark';
 import { SmartImage } from '@/components/smart-image';
 import { bayteSelection, useIsSelected } from '@/lib/bayte-selection';
@@ -128,121 +129,147 @@ export default function BayteProductCard({
     };
 
     const selected = useIsSelected(slug);
+    const [detailsOpen, setDetailsOpen] = useState(false);
 
     return (
-        <motion.article
-            onPointerMove={trackPointer}
-            onPointerLeave={releasePointer}
-            style={
-                reducedMotion
-                    ? undefined
-                    : {
-                          rotateX,
-                          rotateY,
-                          boxShadow: shadow,
-                          transformPerspective: 1100,
-                      }
-            }
-            whileHover={reducedMotion ? undefined : { scale: 1.015 }}
-            transition={SPRING}
-            className={cn(
-                'group relative z-0 flex flex-col rounded-2xl bg-surface p-5 max-md:p-3',
-                !reducedMotion &&
-                    'will-change-transform [perspective:1100px] transform-3d hover:z-10',
-                'transition-colors duration-500 ease-out hover:bg-surface-hover motion-reduce:transition-none',
-                className,
-            )}
-        >
-            {/* Specular sheen — only lit while the pointer is on the card. */}
-            <motion.span
-                aria-hidden="true"
-                style={reducedMotion ? undefined : { backgroundImage: sheen }}
-                className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 mix-blend-soft-light transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:hidden"
-            />
-
-            {/* A hairline of light along the top edge as the card lifts. */}
-            <span
-                aria-hidden="true"
-                className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-90 motion-reduce:hidden"
-            />
-
-            <div className="flex items-start justify-between gap-4 max-md:order-2 max-md:mt-3 max-md:gap-3 max-md:px-1">
-                <div className="min-w-0 transition-transform duration-500 ease-out group-hover:translate-z-[16px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0">
-                    <h3 className="text-xl leading-none text-ink max-md:truncate max-md:text-base max-md:leading-tight">
-                        {name}
-                    </h3>
-                    <p className="mt-2 text-xs leading-none text-ink/70 max-md:mt-1 max-md:line-clamp-2 max-md:leading-snug">
-                        {description}
-                    </p>
-                </div>
-
-                <button
-                    type="button"
-                    onClick={() =>
-                        bayteSelection.toggle({
-                            slug,
-                            name,
-                            description,
-                            image: src,
-                        })
-                    }
-                    aria-pressed={selected}
-                    aria-label={
-                        selected
-                            ? `Remove ${name} from your selection`
-                            : `Add ${name} to your selection`
-                    }
-                    // The dot stays small; the invisible ring around it gives
-                    // a finger a full 44px to land on.
-                    className={cn(
-                        'relative grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-colors duration-300 ease-out before:absolute before:-inset-2 before:content-[""] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
-                        selected
-                            ? 'bg-ink hover:bg-ink/85'
-                            : 'hover:bg-brand-hover',
-                    )}
-                >
-                    {selected ? (
-                        <Check className="size-4" strokeWidth={2.5} />
-                    ) : (
-                        <Plus className="size-4" strokeWidth={2.5} />
-                    )}
-                </button>
-            </div>
-
-            <div
+        <>
+            <motion.article
+                onClick={() => setDetailsOpen(true)}
+                onPointerMove={trackPointer}
+                onPointerLeave={releasePointer}
+                style={
+                    reducedMotion
+                        ? undefined
+                        : {
+                              rotateX,
+                              rotateY,
+                              boxShadow: shadow,
+                              transformPerspective: 1100,
+                          }
+                }
+                whileHover={reducedMotion ? undefined : { scale: 1.015 }}
+                transition={SPRING}
                 className={cn(
-                    'relative mt-4 aspect-4/3 w-full max-md:order-1 max-md:mt-0 max-md:aspect-square max-md:rounded-xl max-md:bg-white',
-                    !reducedMotion && 'transform-3d',
+                    'group relative z-0 flex cursor-pointer flex-col rounded-2xl bg-surface p-5 max-md:p-3',
+                    !reducedMotion &&
+                        'will-change-transform [perspective:1100px] transform-3d hover:z-10',
+                    'transition-colors duration-500 ease-out hover:bg-surface-hover motion-reduce:transition-none',
+                    className,
                 )}
             >
-                {/* Ground shadow, kept on a lower plane than the cutout. */}
+                {/* Specular sheen — only lit while the pointer is on the card. */}
                 <motion.span
                     aria-hidden="true"
                     style={
-                        reducedMotion
-                            ? undefined
-                            : { x: contactX, scaleX: contactScale }
+                        reducedMotion ? undefined : { backgroundImage: sheen }
                     }
-                    className="pointer-events-none absolute inset-x-8 bottom-1 h-5 rounded-[50%] bg-ink/30 opacity-0 blur-lg transition-[opacity,transform,translate] duration-500 ease-out group-hover:translate-z-[14px] group-hover:opacity-100 motion-reduce:hidden"
+                    className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 mix-blend-soft-light transition-opacity duration-500 ease-out group-hover:opacity-100 motion-reduce:hidden"
                 />
 
-                <motion.div
-                    style={
-                        reducedMotion ? undefined : { x: productX, y: productY }
-                    }
-                    className="absolute inset-0 scale-[0.9] transition-transform duration-500 ease-out group-hover:translate-z-[60px] group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.9] max-md:scale-[0.82]"
-                >
-                    <SmartImage
-                        src={src}
-                        alt={alt}
-                        className="size-full"
-                        imgClassName="object-contain"
-                        placeholderClassName="bg-transparent"
-                    />
-                </motion.div>
-            </div>
+                {/* A hairline of light along the top edge as the card lifts. */}
+                <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-90 motion-reduce:hidden"
+                />
 
-            <BayteWordmark className="mx-auto mt-4 w-24 transition-transform duration-500 ease-out group-hover:translate-z-[21px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 max-md:hidden" />
-        </motion.article>
+                <div className="flex items-start justify-between gap-4 max-md:order-2 max-md:mt-3 max-md:gap-3 max-md:px-1">
+                    <div className="min-w-0 transition-transform duration-500 ease-out group-hover:translate-z-[16px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0">
+                        <h3 className="text-xl leading-none text-ink max-md:truncate max-md:text-base max-md:leading-tight">
+                            {/* Keyboard route to the details; a tap anywhere on
+                            the card opens them too. */}
+                            <button
+                                type="button"
+                                className="text-left focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                            >
+                                {name}
+                            </button>
+                        </h3>
+                        <p className="mt-2 line-clamp-2 text-xs leading-snug text-ink/70 max-md:mt-1">
+                            {description}
+                        </p>
+                    </div>
+
+                    <button
+                        type="button"
+                        onClick={(event) => {
+                            // The badge adds the piece; it doesn't open it.
+                            event.stopPropagation();
+                            bayteSelection.toggle({
+                                slug,
+                                name,
+                                description,
+                                image: src,
+                            });
+                        }}
+                        aria-pressed={selected}
+                        aria-label={
+                            selected
+                                ? `Remove ${name} from your selection`
+                                : `Add ${name} to your selection`
+                        }
+                        // The dot stays small; the invisible ring around it gives
+                        // a finger a full 44px to land on.
+                        className={cn(
+                            'relative grid size-7 shrink-0 place-items-center rounded-full bg-brand text-brand-foreground transition-colors duration-300 ease-out before:absolute before:-inset-2 before:content-[""] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
+                            selected
+                                ? 'bg-ink hover:bg-ink/85'
+                                : 'hover:bg-brand-hover',
+                        )}
+                    >
+                        {selected ? (
+                            <Check className="size-4" strokeWidth={2.5} />
+                        ) : (
+                            <Plus className="size-4" strokeWidth={2.5} />
+                        )}
+                    </button>
+                </div>
+
+                <div
+                    className={cn(
+                        'relative mt-4 aspect-4/3 w-full max-md:order-1 max-md:mt-0 max-md:aspect-square max-md:rounded-xl max-md:bg-white',
+                        !reducedMotion && 'transform-3d',
+                    )}
+                >
+                    {/* Ground shadow, kept on a lower plane than the cutout. */}
+                    <motion.span
+                        aria-hidden="true"
+                        style={
+                            reducedMotion
+                                ? undefined
+                                : { x: contactX, scaleX: contactScale }
+                        }
+                        className="pointer-events-none absolute inset-x-8 bottom-1 h-5 rounded-[50%] bg-ink/30 opacity-0 blur-lg transition-[opacity,transform,translate] duration-500 ease-out group-hover:translate-z-[14px] group-hover:opacity-100 motion-reduce:hidden"
+                    />
+
+                    <motion.div
+                        style={
+                            reducedMotion
+                                ? undefined
+                                : { x: productX, y: productY }
+                        }
+                        className="absolute inset-0 scale-[0.9] transition-transform duration-500 ease-out group-hover:translate-z-[60px] group-hover:scale-[1.02] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 motion-reduce:group-hover:scale-[0.9] max-md:scale-[0.82]"
+                    >
+                        <SmartImage
+                            src={src}
+                            alt={alt}
+                            className="size-full"
+                            imgClassName="object-contain"
+                            placeholderClassName="bg-transparent"
+                        />
+                    </motion.div>
+                </div>
+
+                <BayteWordmark className="mx-auto mt-4 w-24 transition-transform duration-500 ease-out group-hover:translate-z-[21px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0 max-md:hidden" />
+            </motion.article>
+
+            <BayteProductSheet
+                open={detailsOpen}
+                onClose={() => setDetailsOpen(false)}
+                slug={slug}
+                name={name}
+                description={description}
+                src={src}
+            />
+        </>
     );
 }
