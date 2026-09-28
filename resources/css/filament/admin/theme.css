@@ -151,9 +151,10 @@ html {
 .fi-body .fi-sidebar {
     border-radius: var(--hf-panel-radius);
     background-color: var(--hf-card);
+    /* A faint warmth at the top and foot, half the strength it was. */
     background-image:
-        radial-gradient(140% 50% at 0% 100%, var(--hf-glow), transparent 70%),
-        linear-gradient(180deg, var(--hf-paper-lit) 0%, var(--hf-card) 34%);
+        radial-gradient(120% 38% at 0% 100%, color-mix(in oklab, var(--hf-glow) 50%, transparent), transparent 70%),
+        linear-gradient(180deg, color-mix(in oklab, var(--hf-paper-lit) 50%, var(--hf-card)) 0%, var(--hf-card) 24%);
     box-shadow: var(--hf-panel-shadow);
 
     /* Desktop: sticky beside the sheet, inset by the same gap. */
