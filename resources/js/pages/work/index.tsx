@@ -37,7 +37,6 @@ export default function WorkIndex({
                             <WorkCategoryCard
                                 key={category.slug}
                                 category={category}
-                                index={index}
                                 eager={index < EAGER_CARDS}
                             />
                         ))}
