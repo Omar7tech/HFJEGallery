@@ -34,7 +34,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class NeedsAttention extends TableWidget
 {
-    protected static ?int $sort = 9;
+    protected static ?int $sort = 13;
 
     protected int|string|array $columnSpan = 'full';
 

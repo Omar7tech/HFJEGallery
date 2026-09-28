@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class PhotoCoverageChart extends ChartWidget
 {
-    protected static ?int $sort = 3;
+    protected static ?int $sort = 7;
 
     protected int|string|array $columnSpan = ['md' => 2, 'xl' => 1];
 

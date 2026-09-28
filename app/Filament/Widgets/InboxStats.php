@@ -16,9 +16,6 @@ use Filament\Widgets\StatsOverviewWidget\Stat;
  */
 class InboxStats extends StatsOverviewWidget
 {
-    /** A message unread for longer than this is overdue for a reply. */
-    public const int OVERDUE_DAYS = 2;
-
     protected static ?int $sort = 1;
 
     protected int|string|array $columnSpan = 'full';
@@ -47,7 +44,7 @@ class InboxStats extends StatsOverviewWidget
         $unread = ContactMessage::query()->whereNull('read_at')->count();
         $overdue = ContactMessage::query()
             ->whereNull('read_at')
-            ->where('created_at', '<', now()->subDays(self::OVERDUE_DAYS))
+            ->where('created_at', '<', now()->subDays(ContactMessage::OVERDUE_DAYS))
             ->count();
 
         $stat = Stat::make('Unread messages', $unread)
@@ -60,11 +57,11 @@ class InboxStats extends StatsOverviewWidget
                 ->descriptionIcon(Heroicon::CheckCircle)
                 ->color('success'),
             $overdue > 0 => $stat
-                ->description("{$overdue} waiting over ".self::OVERDUE_DAYS.' days')
+                ->description("{$overdue} waiting over ".ContactMessage::OVERDUE_DAYS.' days')
                 ->descriptionIcon(Heroicon::ExclamationTriangle)
                 ->color('danger'),
             default => $stat
-                ->description('All from the last '.self::OVERDUE_DAYS.' days')
+                ->description('All from the last '.ContactMessage::OVERDUE_DAYS.' days')
                 ->descriptionIcon(Heroicon::Clock)
                 ->color('warning'),
         };

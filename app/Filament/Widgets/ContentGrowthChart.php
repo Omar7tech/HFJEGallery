@@ -16,7 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ContentGrowthChart extends ChartWidget
 {
-    protected static ?int $sort = 2;
+    protected static ?int $sort = 6;
 
     protected int|string|array $columnSpan = ['md' => 2, 'xl' => 2];
 

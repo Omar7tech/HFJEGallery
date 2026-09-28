@@ -13,7 +13,7 @@ use Filament\Widgets\ChartWidget;
  */
 class LivingEditChoicesChart extends ChartWidget
 {
-    protected static ?int $sort = 8;
+    protected static ?int $sort = 12;
 
     protected ?string $heading = 'Living Edit choices';
 

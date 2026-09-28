@@ -11,7 +11,7 @@ use Filament\Widgets\ChartWidget;
  */
 class ProjectsByCategoryChart extends ChartWidget
 {
-    protected static ?int $sort = 4;
+    protected static ?int $sort = 8;
 
     protected ?string $heading = 'Projects by category';
 

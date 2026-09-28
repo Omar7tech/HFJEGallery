@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class BayteByCategoryChart extends ChartWidget
 {
-    protected static ?int $sort = 7;
+    protected static ?int $sort = 11;
 
     protected int|string|array $columnSpan = ['md' => 2, 'xl' => 2];
 

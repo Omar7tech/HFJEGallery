@@ -11,7 +11,7 @@ use Filament\Widgets\ChartWidget;
  */
 class TopTagsChart extends ChartWidget
 {
-    protected static ?int $sort = 6;
+    protected static ?int $sort = 10;
 
     protected ?string $heading = 'Most used tags';
 

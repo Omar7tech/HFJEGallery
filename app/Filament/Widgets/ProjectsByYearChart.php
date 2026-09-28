@@ -13,7 +13,7 @@ use Filament\Widgets\ChartWidget;
  */
 class ProjectsByYearChart extends ChartWidget
 {
-    protected static ?int $sort = 5;
+    protected static ?int $sort = 9;
 
     protected ?string $heading = 'Projects by year';
 

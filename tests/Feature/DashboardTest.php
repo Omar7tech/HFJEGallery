@@ -3,7 +3,11 @@
 use App\Filament\Widgets\BayteByCategoryChart;
 use App\Filament\Widgets\CatalogueStats;
 use App\Filament\Widgets\ContentGrowthChart;
+use App\Filament\Widgets\InboxStats;
+use App\Filament\Widgets\LatestMessages;
 use App\Filament\Widgets\LivingEditChoicesChart;
+use App\Filament\Widgets\MessagesByTopicChart;
+use App\Filament\Widgets\MessagesTrendChart;
 use App\Filament\Widgets\NeedsAttention;
 use App\Filament\Widgets\PhotoCoverageChart;
 use App\Filament\Widgets\ProjectsByCategoryChart;
@@ -36,6 +40,10 @@ test('every widget renders, empty and with content', function (string $widget) {
 
     Livewire::test($widget)->assertOk();
 })->with([
+    InboxStats::class,
+    MessagesTrendChart::class,
+    MessagesByTopicChart::class,
+    LatestMessages::class,
     CatalogueStats::class,
     ContentGrowthChart::class,
     PhotoCoverageChart::class,
@@ -47,12 +55,12 @@ test('every widget renders, empty and with content', function (string $widget) {
     NeedsAttention::class,
 ]);
 
-test('the overview counts unread messages and flags the overdue ones', function () {
+test('the inbox counts unread messages and flags the overdue ones', function () {
     ContactMessage::factory()->create();
     ContactMessage::factory()->create(['created_at' => now()->subDays(5)]);
     ContactMessage::factory()->read()->create();
 
-    Livewire::test(CatalogueStats::class)
+    Livewire::test(InboxStats::class)
         ->assertSee('Unread messages')
         ->assertSee('1 waiting over 2 days');
 });
