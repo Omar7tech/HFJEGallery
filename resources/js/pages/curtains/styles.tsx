@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import CurtainStyleCard from '@/components/curtain-style-card';
 import PageHeader from '@/components/page-header';
 import type { CurtainStyle } from '@/types';
@@ -10,13 +9,6 @@ const EAGER_CARDS = 4;
 export default function CurtainStyles({ styles }: { styles: CurtainStyle[] }) {
     return (
         <>
-            <Head title="Curtain Styles">
-                <meta
-                    name="description"
-                    content="Every curtain style HFJE makes, from soft sheers to complete light control."
-                />
-            </Head>
-
             <div className="@container px-5 pt-6 pb-20 max-md:pt-4 max-md:pb-12 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
                 <PageHeader
                     back={{ label: 'Curtains', href: '/curtains' }}

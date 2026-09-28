@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import LivingSpacePicker from '@/components/living-space-picker';
 import type { LivingSpace } from '@/types';
 import LivingMoodBoard from './mood-board';
@@ -34,7 +33,6 @@ export default function LivingEdit({
 
         return (
             <>
-                <Head title="Living Edit" />
                 <LivingMoodBoard
                     step={step}
                     space={space}
@@ -53,8 +51,6 @@ export default function LivingEdit({
 
     return (
         <>
-            <Head title="Living Edit" />
-
             <section className="w-full px-4 pt-9 pb-4 max-md:px-5 max-md:pt-6 md:px-8 lg:pt-[52px] lg:pr-7 lg:pl-0">
                 <LivingSpacePicker
                     spaces={spaces}

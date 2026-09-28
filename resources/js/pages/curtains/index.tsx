@@ -41,7 +41,7 @@ export default function Curtains({ styles, works, worksCount }: CurtainsProps) {
 
     return (
         <>
-            <Head title="Curtains & Textiles">
+            <Head>
                 {/* The film is the hero on its own, so start fetching it with
                     the page instead of waiting on the video element. */}
                 <link

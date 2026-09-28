@@ -1,4 +1,4 @@
-import { Head, router } from '@inertiajs/react';
+import { router } from '@inertiajs/react';
 import {
     Check,
     ChevronDown,
@@ -232,13 +232,6 @@ export default function BayteIndex({
 
     return (
         <>
-            <Head title={search ? `“${search}” · BAYTÉ` : 'BAYTÉ'}>
-                <meta
-                    name="description"
-                    content="BAYTÉ by HFJE: furniture designed for modern Lebanese homes."
-                />
-            </Head>
-
             <div className="@container px-5 pt-6 pb-20 max-md:pt-4 max-md:pb-12 md:px-8 md:pb-24 lg:pr-7 lg:pl-0">
                 <h1 className="sr-only">BAYTÉ by HFJE</h1>
 

@@ -17,7 +17,7 @@ export default function Home({
 }) {
     return (
         <>
-            <Head title="Home">
+            <Head>
                 <link
                     rel="preload"
                     as="image"

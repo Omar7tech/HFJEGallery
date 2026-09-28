@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Support\Seo\Seo;
 use Carbon\CarbonImmutable;
 use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\RateLimiter;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 
@@ -20,7 +22,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // One request resolves its page's SEO once, however many places print it.
+        $this->app->scoped(Seo::class);
     }
 
     /**
@@ -29,6 +32,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->configureDefaults();
+        $this->configureCanonicalUrls();
 
         FilamentAsset::register([
             Css::make('mood-board-slot-picker', resource_path('css/filament/mood-board-slot-picker.css'))->loadedOnRequest(),
@@ -51,6 +55,28 @@ class AppServiceProvider extends ServiceProvider
             Limit::perMinute(3)->by('minute:'.$request->ip()),
             Limit::perHour(10)->by('hour:'.$request->ip()),
         ]);
+    }
+
+    /**
+     * Build every URL on the configured domain, whatever host a request came in on.
+     *
+     * A visit through `www.`, plain `http://` or a preview hostname would
+     * otherwise print that host in its canonical, its Open Graph URL and its
+     * sitemap, and the same page would compete with itself in search.
+     */
+    protected function configureCanonicalUrls(): void
+    {
+        $url = (string) config('app.url');
+
+        if (blank($url) || $this->app->runningInConsole()) {
+            return;
+        }
+
+        URL::forceRootUrl($url);
+
+        if (str_starts_with($url, 'https://')) {
+            URL::forceScheme('https');
+        }
     }
 
     /**

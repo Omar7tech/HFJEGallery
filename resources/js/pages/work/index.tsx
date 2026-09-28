@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import WorkCategoryCard from '@/components/work-category-card';
 import type { WorkCategory } from '@/types';
 
@@ -12,13 +11,6 @@ export default function WorkIndex({
 }) {
     return (
         <>
-            <Head title="Work">
-                <meta
-                    name="description"
-                    content="Homes, apartments, restaurants and commercial spaces crafted by HFJE around the people who use them."
-                />
-            </Head>
-
             <div className="@container px-5 pt-6 pb-20 max-md:pb-12 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
                 <header className="flex flex-col gap-5 max-md:gap-3 @3xl:flex-row @3xl:items-end @3xl:justify-between">
                     <h1 className="font-display text-[clamp(2.25rem,8cqi,4.75rem)] leading-[1.05] text-ink">

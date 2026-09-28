@@ -6,6 +6,7 @@ use App\Http\Controllers\CurtainController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LivingEditController;
 use App\Http\Controllers\MoodBoardController;
+use App\Http\Controllers\SeoController;
 use App\Http\Controllers\WorkController;
 use App\Http\Middleware\HandleInertiaRequests;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -15,6 +16,11 @@ use Illuminate\Http\Middleware\AddLinkHeadersForPreloadedAssets;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Support\Facades\Route;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+
+// Crawl rules and sitemap, served by the app so their URLs follow the live
+// domain and the sitemap lists exactly what is published.
+Route::get('/robots.txt', [SeoController::class, 'robots'])->name('seo.robots');
+Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('seo.sitemap');
 
 Route::get('/', HomeController::class)->name('home');
 Route::inertia('/about', 'about/index')->name('about');

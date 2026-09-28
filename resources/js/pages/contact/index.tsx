@@ -1,4 +1,4 @@
-import { Head, useForm, usePage } from '@inertiajs/react';
+import { useForm, usePage } from '@inertiajs/react';
 import {
     ArrowRight,
     Check,
@@ -256,13 +256,6 @@ export default function Contact({ formToken }: { formToken: string }) {
 
     return (
         <>
-            <Head title="Contact">
-                <meta
-                    name="description"
-                    content="Tell HFJE about the space you want to transform: interiors, curtains, BAYTÉ furniture or the Living Edit."
-                />
-            </Head>
-
             <section className="@container w-full px-5 pt-8 pb-16 font-display max-md:pt-5 max-md:pb-10 md:px-12 md:pt-12 md:pb-20 lg:pr-16 lg:pl-0">
                 {/* Title on the left, the direct lines to the studio on the
                     right; the form takes the full width below. */}

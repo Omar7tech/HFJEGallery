@@ -21,6 +21,8 @@ declare module '@inertiajs/core' {
                 label: string;
                 url: string;
             }[];
+            /** The page's head tags, written on the server (see `serverHead`). */
+            head: string[];
             [key: string]: unknown;
         };
     }

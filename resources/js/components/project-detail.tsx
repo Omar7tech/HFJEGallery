@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { ArrowLeft, ArrowRight, CalendarDays, MapPin } from 'lucide-react';
 import MarqueeText from '@/components/marquee-text';
 import ProjectGallery from '@/components/project-gallery';
@@ -32,16 +32,6 @@ export default function ProjectDetail({
 
     return (
         <>
-            <Head title={`${project.name} · ${parent.name}`}>
-                <meta
-                    name="description"
-                    content={
-                        project.summary ?? `${project.name} crafted by HFJE.`
-                    }
-                />
-                <meta property="og:image" content={project.cover} />
-            </Head>
-
             <div className="@container px-5 pt-6 pb-20 max-md:pt-4 max-md:pb-12 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
                 <Link
                     href={parent.href}

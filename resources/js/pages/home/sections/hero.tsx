@@ -73,7 +73,7 @@ function ExploreButton({ className }: { className?: string }) {
     return (
         <button
             type="button"
-            className={`group flex w-full items-center justify-center rounded-full bg-brand px-8 py-4 text-sm font-semibold tracking-[0.2em] max-lg:rounded-xl max-lg:py-3.5 max-lg:font-medium max-lg:tracking-[0.02em] max-lg:normal-case max-lg:whitespace-nowrap text-brand-foreground uppercase transition-[background-color,letter-spacing] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand active:bg-brand-hover motion-reduce:transition-none sm:text-base lg:inline-flex lg:w-auto lg:justify-start lg:rounded-none lg:py-4 lg:pr-12 lg:pl-8 lg:hover:bg-brand-hover lg:hover:tracking-[0.26em] ${className ?? ''}`}
+            className={`group flex w-full items-center justify-center rounded-full bg-brand px-8 py-4 text-sm font-semibold tracking-[0.2em] text-brand-foreground uppercase transition-[background-color,letter-spacing] duration-300 ease-out focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand active:bg-brand-hover motion-reduce:transition-none max-lg:rounded-xl max-lg:py-3.5 max-lg:font-medium max-lg:tracking-[0.02em] max-lg:whitespace-nowrap max-lg:normal-case sm:text-base lg:inline-flex lg:w-auto lg:justify-start lg:rounded-none lg:py-4 lg:pr-12 lg:pl-8 lg:hover:bg-brand-hover lg:hover:tracking-[0.26em] ${className ?? ''}`}
         >
             Explore our work
             <span
@@ -152,8 +152,8 @@ function Hero() {
                 </div>
 
                 <p className="mt-5 max-w-md text-xl leading-snug text-ink sm:text-2xl">
-                    {yearsOfExperience()} years of craftsmanship, creating
-                    homes designed around the people who live in them.
+                    {yearsOfExperience()} years of craftsmanship, creating homes
+                    designed around the people who live in them.
                 </p>
 
                 <ExploreButton className="mt-6" />

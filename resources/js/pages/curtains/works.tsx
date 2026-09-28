@@ -1,4 +1,3 @@
-import { Head } from '@inertiajs/react';
 import PageHeader from '@/components/page-header';
 import ProjectGrid from '@/components/project-grid';
 import type { ProjectCard } from '@/types';
@@ -11,13 +10,6 @@ export default function CurtainWorks({
 }) {
     return (
         <>
-            <Head title="Curtain Projects">
-                <meta
-                    name="description"
-                    content="Made-to-measure curtains by HFJE, in homes and spaces across Lebanon."
-                />
-            </Head>
-
             <div className="@container px-5 pt-6 pb-20 max-md:pt-4 max-md:pb-12 md:px-8 md:pb-24 lg:pt-10 lg:pr-7 lg:pl-0">
                 <PageHeader
                     back={{ label: 'Curtains', href: '/curtains' }}

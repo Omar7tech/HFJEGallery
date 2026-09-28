@@ -8,11 +8,7 @@ import Process from './sections/process';
 export default function About() {
     return (
         <>
-            <Head title="About">
-                <meta
-                    name="description"
-                    content="HFJE is a family studio crafting interiors, curtains, textiles and furniture for the people who live with them."
-                />
+            <Head>
                 <link
                     rel="preload"
                     as="image"

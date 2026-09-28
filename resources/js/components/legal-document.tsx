@@ -1,5 +1,3 @@
-import { Head } from '@inertiajs/react';
-
 /** A paragraph, or a bulleted list of points, inside a section. */
 export type LegalBlock =
     { type: 'text'; text: string } | { type: 'list'; items: string[] };
@@ -50,8 +48,6 @@ export default function LegalDocument({
 }: LegalDocumentProps) {
     return (
         <>
-            <Head title={title} />
-
             <section className="@container w-full px-5 py-16 font-display md:px-12 md:py-24 lg:pr-16 lg:pl-0">
                 <p className="font-sans text-xs font-semibold tracking-[0.25em] text-brand uppercase">
                     Legal

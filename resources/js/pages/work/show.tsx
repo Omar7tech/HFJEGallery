@@ -1,4 +1,4 @@
-import { Head, Link } from '@inertiajs/react';
+import { Link } from '@inertiajs/react';
 import { ArrowLeft } from 'lucide-react';
 import FilterPill from '@/components/filter-pill';
 import MarqueeText from '@/components/marquee-text';
@@ -69,28 +69,11 @@ export default function WorkShow({
 
     const current = categories.find((item) => item.slug === category.slug);
     const tags = current?.tags ?? [];
-    const shownTagDetails = tags.find((tag) => tag.slug === shownTag);
     // The tag of the projects on screen, which lags the pills while loading.
     const activeTagName = tags.find((tag) => tag.slug === activeTag)?.name;
 
     return (
         <>
-            <Head
-                title={
-                    shownTagDetails
-                        ? `${shownTagDetails.name} · ${category.name} · Work`
-                        : `${category.name} · Work`
-                }
-            >
-                <meta
-                    name="description"
-                    content={
-                        category.description ??
-                        `${category.name} crafted by HFJE.`
-                    }
-                />
-            </Head>
-
             <div className="@container px-5 pt-6 pb-20 max-md:pt-3 max-md:pb-12 md:px-8 md:pb-24 lg:pr-7 lg:pl-0">
                 {/* Category photo with its name laid over the foot — the LCP
                     image, so it is fetched eagerly at high priority. */}

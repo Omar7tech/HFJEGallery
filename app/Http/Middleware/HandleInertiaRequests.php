@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Settings\GeneralSettings;
+use App\Support\Seo\Seo;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -49,6 +51,11 @@ class HandleInertiaRequests extends Middleware
                 'email' => filled($settings->email) ? $settings->email : null,
             ],
             'socials' => $settings->usableSocialLinks(),
+            // The page's whole head (title, meta, Open Graph, canonical and the
+            // schema.org graph), kept in the document by Inertia's `serverHead`
+            // on every visit. Always sent, so a partial reload (a search, a
+            // filter) retitles the page too.
+            'head' => Inertia::always(fn (): array => app(Seo::class)->headTags()),
         ];
     }
 }
