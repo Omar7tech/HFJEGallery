@@ -341,7 +341,7 @@ export function NavBar({ className }: { className?: string }) {
         dialog.showModal();
         setOpen(true);
         closeRef.current?.focus();
-        timeline.current?.timeScale(1).play();
+        timeline.current?.timeScale(1.2).play();
     };
 
     const closeMenu = useCallback(() => {
@@ -361,7 +361,7 @@ export function NavBar({ className }: { className?: string }) {
         }
 
         tl.eventCallback('onReverseComplete', finish);
-        tl.timeScale(1.6).reverse();
+        tl.timeScale(1.9).reverse();
     }, []);
 
     // A page picked in the menu loads behind the closed curtains; once it
