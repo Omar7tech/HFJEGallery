@@ -39,8 +39,9 @@ const SPRING = {
  * top-right, the product cutout in the middle and the wordmark at the foot.
  *
  * On a mouse it becomes a shallow 3D object — the card leans toward the
- * pointer while the product, badge and text sit on their own planes above it,
- * so they part in real parallax rather than sliding as one picture. A specular
+ * pointer while the product and text sit on their own planes above it, so they
+ * part in real parallax rather than sliding as one picture. The badge stays
+ * flat on the card, since it becomes the add-to-cart control. A specular
  * sheen tracks the cursor, and the contact shadow under the product swings
  * opposite the lean so the cutout reads as floating off the card. Touch and
  * reduced-motion visitors get the flat card.
@@ -141,8 +142,8 @@ export default function BayteProductCard({
                 className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white to-transparent opacity-0 transition-opacity duration-500 ease-out group-hover:opacity-90 motion-reduce:hidden"
             />
 
-            <div className="flex items-start justify-between gap-4 transition-transform duration-500 ease-out group-hover:translate-z-[16px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0">
-                <div className="min-w-0">
+            <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0 transition-transform duration-500 ease-out group-hover:translate-z-[16px] motion-reduce:transition-none motion-reduce:group-hover:translate-z-0">
                     <h3 className="text-xl leading-none text-ink">{name}</h3>
                     <p className="mt-2 text-xs leading-none text-ink/70">
                         {description}
@@ -156,19 +157,13 @@ export default function BayteProductCard({
                         aria-label={`View ${name}`}
                         className={cn(
                             badgeClassName,
-                            'transition-[background-color,transform,translate,rotate] duration-500 ease-out group-hover:translate-z-[30px] group-hover:rotate-90 hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none motion-reduce:group-hover:rotate-0',
+                            'transition-colors duration-300 ease-out hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand motion-reduce:transition-none',
                         )}
                     >
                         <Plus className="size-4" strokeWidth={2.5} />
                     </button>
                 ) : (
-                    <span
-                        aria-hidden="true"
-                        className={cn(
-                            badgeClassName,
-                            'transition-transform duration-500 ease-out group-hover:translate-z-[30px] group-hover:rotate-90 motion-reduce:transition-none motion-reduce:group-hover:rotate-0',
-                        )}
-                    >
+                    <span aria-hidden="true" className={badgeClassName}>
                         <Plus className="size-4" strokeWidth={2.5} />
                     </span>
                 )}
