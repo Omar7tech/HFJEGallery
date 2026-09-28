@@ -16,6 +16,8 @@ use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\View\PanelsRenderHook;
+use Illuminate\Contracts\View\View;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
@@ -37,6 +39,17 @@ class AdminPanelProvider extends PanelProvider
             // No topbar: the ink sidebar carries the logo, search and user
             // menu, and the page gets the full height (see the admin theme).
             ->topbar(false)
+            // The ⌘K palette replaces Filament's search box: it jumps to
+            // pages and records, creates, and switches the theme.
+            ->globalSearch(false)
+            ->renderHook(
+                PanelsRenderHook::SIDEBAR_NAV_START,
+                fn (): View => view('filament.components.command-palette-trigger'),
+            )
+            ->renderHook(
+                PanelsRenderHook::BODY_END,
+                fn (): ?View => filament()->auth()->check() ? view('filament.components.command-palette') : null,
+            )
             ->sidebarWidth('15rem')
             ->sidebarCollapsibleOnDesktop()
             ->profile()
