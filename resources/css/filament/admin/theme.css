@@ -69,18 +69,35 @@ html {
 /* Layout: paper, and the sheet on top of it                           */
 /* ------------------------------------------------------------------ */
 
+/*
+ * Two panels float on the paper: the sidebar and the work sheet, each a
+ * rounded card, with the same gap to the window edges and to each other.
+ */
 .fi-body {
+    --hf-gap: 0.625rem;
+    --hf-panel-radius: 18px;
+    --hf-panel-shadow:
+        0 0 0 1px var(--hf-line),
+        0 1px 2px rgb(26 22 20 / 0.04),
+        0 12px 32px -20px rgb(74 48 32 / 0.28);
     background-color: var(--hf-paper);
 }
 
-/* The work area fills the window, set off from the sidebar by a single
-   hairline rather than floating as a card beside it. */
+.dark .fi-body {
+    --hf-panel-shadow:
+        0 0 0 1px var(--hf-line),
+        0 12px 32px -18px rgb(0 0 0 / 0.6);
+}
+
+/* The sheet only floats on desktop; on a phone every pixel goes to the work. */
 .fi-body .fi-main-ctn {
-    min-height: 100dvh;
     background-color: var(--hf-sheet);
 
     @media (width >= 64rem) {
-        border-inline-start: 1px solid var(--hf-line);
+        margin: var(--hf-gap);
+        min-height: calc(100dvh - var(--hf-gap) * 2);
+        border-radius: var(--hf-panel-radius);
+        box-shadow: var(--hf-panel-shadow);
     }
 }
 
@@ -121,14 +138,40 @@ html {
 }
 
 /* ------------------------------------------------------------------ */
-/* Sidebar: warm paper, lit from the top                               */
+/* Sidebar: a floating card, lit from the top, warm at its foot        */
 /* ------------------------------------------------------------------ */
 
 .fi-body .fi-sidebar {
-    background-color: var(--hf-paper);
+    border-radius: var(--hf-panel-radius);
+    background-color: var(--hf-card);
     background-image:
-        radial-gradient(130% 55% at 0% 100%, var(--hf-glow), transparent 70%),
-        linear-gradient(180deg, var(--hf-paper-lit) 0%, var(--hf-paper) 42%);
+        radial-gradient(140% 50% at 0% 100%, var(--hf-glow), transparent 70%),
+        linear-gradient(180deg, var(--hf-paper-lit) 0%, var(--hf-card) 34%);
+    box-shadow: var(--hf-panel-shadow);
+
+    /* Desktop: sticky beside the sheet, inset by the same gap. */
+    @media (width >= 64rem) {
+        top: var(--hf-gap);
+        height: calc(100dvh - var(--hf-gap) * 2);
+        margin-block: var(--hf-gap);
+        margin-inline-start: var(--hf-gap);
+    }
+
+    /* Phone and tablet: the drawer floats too, and hides fully when shut. */
+    @media (width < 64rem) {
+        inset-block: var(--hf-gap);
+        inset-inline-start: var(--hf-gap);
+        height: calc(100dvh - var(--hf-gap) * 2);
+
+        &:not(.fi-sidebar-open) {
+            --tw-translate-x: calc(-100% - var(--hf-gap) * 2);
+        }
+    }
+}
+
+.fi-sidebar-close-overlay {
+    background-color: var(--hf-scrim);
+    backdrop-filter: blur(2px);
 }
 
 .fi-body:not(.fi-body-has-topbar) .fi-sidebar-header {
@@ -216,13 +259,20 @@ html {
     }
 }
 
-/* The current page: a small chip lifted off the paper. */
+/* The current page: a terracotta-tinted pill with a small bar at its edge. */
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn,
 .fi-sidebar-item.fi-active > .fi-sidebar-item-btn:hover {
-    background-color: var(--hf-chip);
-    box-shadow:
-        0 0 0 1px var(--hf-line),
-        0 1px 2px rgb(26 22 20 / 0.06);
+    background-color: var(--hf-accent-soft);
+
+    &::before {
+        content: '';
+        position: absolute;
+        inset-block: 0.5rem;
+        inset-inline-start: 0;
+        width: 3px;
+        border-radius: 0 3px 3px 0;
+        background-color: var(--hf-accent);
+    }
 
     & > .fi-icon {
         color: var(--hf-accent);
@@ -230,6 +280,7 @@ html {
 
     & > .fi-sidebar-item-label {
         color: var(--hf-text);
+        font-weight: 600;
     }
 }
 
@@ -284,10 +335,10 @@ html {
     }
 }
 
-/* Avatars wear a terracotta ring, set off by a gap of paper. */
+/* Avatars wear a terracotta ring, set off by a thin gap. */
 .fi-avatar {
     box-shadow:
-        0 0 0 2px var(--hf-paper),
+        0 0 0 2px var(--hf-card),
         0 0 0 3.5px var(--hf-accent);
 }
 
