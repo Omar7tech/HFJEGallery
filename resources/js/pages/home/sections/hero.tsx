@@ -9,17 +9,20 @@ import {
     useTransform,
 } from 'motion/react';
 import type { MotionStyle } from 'motion/react';
-import { useRef, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import type { PointerEvent, ReactNode } from 'react';
+import DayNightScene from '@/components/day-night-scene';
 import { yearsOfExperience } from '@/lib/experience';
 
 // How far through the pinned stretch the day→night swap completes (1 = the
 // hero unpins). The remainder holds on night before normal scroll resumes.
 const SWAP_END = 0.85;
 // Where the setting sun sits in the photo — night spreads out from this point.
-const SUN_ORIGIN = '92% 13%';
-// Final radius of the night reveal and the width of its soft edge, in vmax.
-// The radius has to clear the far corner of the (slightly oversized) scene.
+const SUN: [number, number] = [0.913, 0.13];
+const SUN_ORIGIN = `${SUN[0] * 100}% ${SUN[1] * 100}%`;
+// The CSS fallback's night reveal, used until (or instead of) the WebGL scene:
+// its final radius and the width of its soft edge, in vmax. The radius has to
+// clear the far corner of the (slightly oversized) scene.
 const REVEAL_RADIUS = 200;
 const REVEAL_FEATHER = 40;
 // Lazy, weighty follow for the pointer-driven depth tilt.
@@ -132,6 +135,8 @@ function Hero() {
     const pinRef = useRef<HTMLDivElement>(null);
     const mobileImageRef = useRef<HTMLDivElement>(null);
     const [dayLoaded, setDayLoaded] = useState(false);
+    const [sceneReady, setSceneReady] = useState(false);
+    const showScene = useCallback(() => setSceneReady(true), []);
     const { scrollYProgress } = useScroll({
         target: pinRef,
         offset: ['start start', 'end end'],
@@ -145,9 +150,11 @@ function Hero() {
 
     const mobileNightOpacity = useTransform(mobileProgress, [0, 1], [0, 1]);
 
-    // Night spreads out from the setting sun as a soft-edged circle rather than
-    // a flat crossfade. It follows the scroll both ways, so scrolling back up
-    // returns the room to daylight.
+    // Night spreads out from the setting sun rather than crossfading flat. It
+    // follows the scroll both ways, so scrolling back up returns the room to
+    // daylight. The WebGL scene draws it; the masked image below is the
+    // stand-in until that is ready, or for good where WebGL2 is missing.
+    const nightProgress = useTransform(scrollYProgress, [0, SWAP_END], [0, 1]);
     const revealRadius = useTransform(
         scrollYProgress,
         [0, SWAP_END],
@@ -161,8 +168,9 @@ function Hero() {
     // Slow push-in across the whole pin, like a camera easing into the room.
     const sceneScale = useTransform(scrollYProgress, [0, 1], [1, 1.08]);
 
-    // Pointer depth: the room tilts and slides one way while the copy drifts
-    // the other, so the text reads as floating in front of the photo.
+    // Pointer depth: the room tilts one way while the copy drifts the other,
+    // so the text reads as floating in front of the photo. The scene adds its
+    // own per-pixel slide on top, stronger for the floor than the skyline.
     const reduceMotion = useReducedMotion();
     const pointerX = useMotionValue(0);
     const pointerY = useMotionValue(0);
@@ -170,8 +178,6 @@ function Hero() {
     const tiltY = useSpring(pointerY, POINTER_SPRING);
     const sceneRotateY = useTransform(tiltX, [-0.5, 0.5], [-2.5, 2.5]);
     const sceneRotateX = useTransform(tiltY, [-0.5, 0.5], [2, -2]);
-    const sceneX = useTransform(tiltX, [-0.5, 0.5], [20, -20]);
-    const sceneY = useTransform(tiltY, [-0.5, 0.5], [14, -14]);
     const copyX = useTransform(tiltX, [-0.5, 0.5], [-12, 12]);
     const copyY = useTransform(tiltY, [-0.5, 0.5], [-8, 8]);
 
@@ -248,8 +254,6 @@ function Hero() {
                     {/* The room. Oversized so the tilt never exposes an edge. */}
                     <motion.div
                         style={{
-                            x: sceneX,
-                            y: sceneY,
                             rotateX: sceneRotateX,
                             rotateY: sceneRotateY,
                             scale: sceneScale,
@@ -269,22 +273,34 @@ function Hero() {
                             fetchPriority="high"
                             onLoad={() => setDayLoaded(true)}
                         />
-                        {/* Night — revealed through the growing mask. Fetched early at low
+                        {/* Night fallback — revealed through the growing mask, and dropped
+              once the WebGL scene has taken over. Fetched early at low
               priority so it's ready by the time the user scrolls, without
               stealing from the LCP. */}
-                        <motion.img
-                            style={{
-                                maskImage: nightMask,
-                                WebkitMaskImage: nightMask,
-                            }}
-                            className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                            src="/images/hero-night.webp"
-                            alt=""
-                            aria-hidden="true"
-                            loading="eager"
-                            decoding="async"
-                            draggable={false}
-                            fetchPriority="low"
+                        {!sceneReady && (
+                            <motion.img
+                                style={{
+                                    maskImage: nightMask,
+                                    WebkitMaskImage: nightMask,
+                                }}
+                                className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                                src="/images/hero-night.webp"
+                                alt=""
+                                aria-hidden="true"
+                                loading="eager"
+                                decoding="async"
+                                draggable={false}
+                                fetchPriority="low"
+                            />
+                        )}
+                        <DayNightScene
+                            daySrc="/images/hero-day.webp"
+                            nightSrc="/images/hero-night.webp"
+                            progress={nightProgress}
+                            pointerX={tiltX}
+                            pointerY={tiltY}
+                            sun={SUN}
+                            onReady={showScene}
                         />
                     </motion.div>
 
