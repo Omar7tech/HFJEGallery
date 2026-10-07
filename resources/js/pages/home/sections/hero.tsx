@@ -4,12 +4,12 @@ import type { MotionStyle } from 'motion/react';
 import { useRef, useState } from 'react';
 import { yearsOfExperience } from '@/lib/experience';
 
-// How far through the hero's own scroll-out the day→night swap completes
-// (1 = hero fully scrolled past). No pinning — it plays during normal scroll.
-const SWAP_END = 0.3;
+// How far through the pinned stretch the day→night swap completes (1 = the
+// hero unpins). The remainder holds on night before normal scroll resumes.
+const SWAP_END = 0.85;
 // Text recolors a touch later than the image, so it never changes while the
 // room is still clearly in daylight.
-const TEXT_START = 0.15;
+const TEXT_START = 0.4;
 
 /**
  * Shared "Crafted / Around Living." headline with the hand-drawn ellipse that
@@ -87,12 +87,12 @@ function ExploreButton({ className }: { className?: string }) {
 }
 
 function Hero() {
-    const ref = useRef<HTMLElement>(null);
+    const pinRef = useRef<HTMLDivElement>(null);
     const mobileImageRef = useRef<HTMLDivElement>(null);
     const [dayLoaded, setDayLoaded] = useState(false);
     const { scrollYProgress } = useScroll({
-        target: ref,
-        offset: ['start start', 'end start'],
+        target: pinRef,
+        offset: ['start start', 'end end'],
     });
     // Mobile tracks the image block itself (the desktop section is display:none
     // below lg, so its scroll progress can't be measured there).
@@ -103,7 +103,13 @@ function Hero() {
 
     // Reversible day → night crossfade: it follows the scroll position both ways,
     // so scrolling down turns it night and scrolling up returns it to daylight.
-    const nightOpacity = useTransform(scrollYProgress, [0, SWAP_END], [0, 1]);
+    // The range runs to 1 explicitly: Motion hands this opacity to a native
+    // scroll timeline, which would otherwise fade back to day after SWAP_END.
+    const nightOpacity = useTransform(
+        scrollYProgress,
+        [0, SWAP_END, 1],
+        [0, 1, 1],
+    );
     const mobileNightOpacity = useTransform(mobileProgress, [0, 1], [0, 1]);
     // Headline: dark → cream. Subtext: terracotta → white. Both track night.
     const headlineColor = useTransform(
@@ -160,59 +166,62 @@ function Hero() {
             </section>
 
             {/* Desktop: full-height photo with the day→night scroll crossfade and
-          text laid over it. */}
-            <section
-                ref={ref}
-                className="relative hidden w-full overflow-hidden rounded-bl-3xl bg-cream font-display lg:block lg:h-dvh lg:min-h-160"
+          text laid over it. The tall wrapper is the pin track — the photo
+          sticks for the extra 80dvh while the swap plays, then scrolls away. */}
+            <div
+                ref={pinRef}
+                className="hidden lg:block lg:h-[calc(max(100dvh,40rem)+80dvh)]"
             >
-                {/* Day (base) — LCP image: eager, high priority, fades in once decoded */}
-                <img
-                    className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${
-                        dayLoaded ? 'opacity-100' : 'opacity-0'
-                    }`}
-                    src="/images/hero-day.webp"
-                    alt="Living room with a cream bouclé sofa, lounge chairs and a glass coffee table overlooking the city at sunset"
-                    loading="eager"
-                    decoding="async"
-                    draggable={false}
-                    fetchPriority="high"
-                    onLoad={() => setDayLoaded(true)}
-                />
-                {/* Night — crossfades in on scroll. Fetched early at low priority so it's
+                <section className="sticky top-0 h-dvh min-h-160 w-full overflow-hidden rounded-bl-3xl bg-cream font-display">
+                    {/* Day (base) — LCP image: eager, high priority, fades in once decoded */}
+                    <img
+                        className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${
+                            dayLoaded ? 'opacity-100' : 'opacity-0'
+                        }`}
+                        src="/images/hero-day.webp"
+                        alt="Living room with a cream bouclé sofa, lounge chairs and a glass coffee table overlooking the city at sunset"
+                        loading="eager"
+                        decoding="async"
+                        draggable={false}
+                        fetchPriority="high"
+                        onLoad={() => setDayLoaded(true)}
+                    />
+                    {/* Night — crossfades in on scroll. Fetched early at low priority so it's
             ready by the time the user scrolls, without stealing from the LCP. */}
-                <motion.img
-                    style={{ opacity: nightOpacity }}
-                    className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                    src="/images/hero-night.webp"
-                    alt=""
-                    aria-hidden="true"
-                    loading="eager"
-                    decoding="async"
-                    draggable={false}
-                    fetchPriority="low"
-                />
-
-                {/* Overlay content */}
-                <div className="relative z-10 flex h-full flex-col items-end justify-between px-12 py-16 text-right lg:px-16">
-                    <Headline
-                        style={{ color: headlineColor }}
-                        className="text-6xl leading-[1.15]"
+                    <motion.img
+                        style={{ opacity: nightOpacity }}
+                        className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+                        src="/images/hero-night.webp"
+                        alt=""
+                        aria-hidden="true"
+                        loading="eager"
+                        decoding="async"
+                        draggable={false}
+                        fetchPriority="low"
                     />
 
-                    <motion.p
-                        style={{ color: subtextColor }}
-                        className="-translate-y-14 text-2xl font-medium"
-                    >
-                        {yearsOfExperience()} years of craftsmanship,
-                        <br />
-                        creating homes designed around
-                        <br />
-                        the people who live in them.
-                    </motion.p>
+                    {/* Overlay content */}
+                    <div className="relative z-10 flex h-full flex-col items-end justify-between px-12 py-16 text-right lg:px-16">
+                        <Headline
+                            style={{ color: headlineColor }}
+                            className="text-6xl leading-[1.15]"
+                        />
 
-                    <ExploreButton className="lg:-mr-16 lg:pr-20" />
-                </div>
-            </section>
+                        <motion.p
+                            style={{ color: subtextColor }}
+                            className="-translate-y-14 text-2xl font-medium"
+                        >
+                            {yearsOfExperience()} years of craftsmanship,
+                            <br />
+                            creating homes designed around
+                            <br />
+                            the people who live in them.
+                        </motion.p>
+
+                        <ExploreButton className="lg:-mr-16 lg:pr-20" />
+                    </div>
+                </section>
+            </div>
         </>
     );
 }
