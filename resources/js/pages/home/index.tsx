@@ -21,7 +21,7 @@ export default function Home({
                 <link
                     rel="preload"
                     as="image"
-                    href="/images/potted-plant-table-w2400.webp"
+                    href="/images/hero-day.webp"
                     fetchPriority="high"
                 />
             </Head>

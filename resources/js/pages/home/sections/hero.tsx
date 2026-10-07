@@ -132,8 +132,8 @@ function Hero() {
                 >
                     <img
                         className="absolute inset-0 h-full w-full object-cover"
-                        src="/images/potted-plant-table-w2400.webp"
-                        alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
+                        src="/images/hero-day.webp"
+                        alt="Living room with a cream bouclé sofa, lounge chairs and a glass coffee table overlooking the city at sunset"
                         loading="eager"
                         decoding="async"
                         draggable={false}
@@ -142,7 +142,7 @@ function Hero() {
                     <motion.img
                         style={{ opacity: mobileNightOpacity }}
                         className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                        src="/images/potted-plant-table-night-w1535.webp"
+                        src="/images/hero-night.webp"
                         alt=""
                         aria-hidden="true"
                         loading="eager"
@@ -170,8 +170,8 @@ function Hero() {
                     className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ease-out ${
                         dayLoaded ? 'opacity-100' : 'opacity-0'
                     }`}
-                    src="/images/potted-plant-table-w2400.webp"
-                    alt="Warm living room with a cream bouclé sofa, ottoman and brass floor lamp"
+                    src="/images/hero-day.webp"
+                    alt="Living room with a cream bouclé sofa, lounge chairs and a glass coffee table overlooking the city at sunset"
                     loading="eager"
                     decoding="async"
                     draggable={false}
@@ -183,7 +183,7 @@ function Hero() {
                 <motion.img
                     style={{ opacity: nightOpacity }}
                     className="pointer-events-none absolute inset-0 h-full w-full object-cover"
-                    src="/images/potted-plant-table-night-w1535.webp"
+                    src="/images/hero-night.webp"
                     alt=""
                     aria-hidden="true"
                     loading="eager"
