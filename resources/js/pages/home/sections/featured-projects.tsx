@@ -12,20 +12,20 @@ interface Project {
 const projects: Project[] = [
     {
         // Tall image — first column, full height.
-        src: '/images/gray-stylish-modular-sofa-brick-marble-background-rustic-living-room-w1600.webp',
-        alt: 'Rustic living room with a low modular sofa, arched mosaic niches and warm textiles',
+        src: '/images/classic-living-room-quilted-sectional-w1448.webp',
+        alt: 'Classic living room with a quilted cream sectional, layered curtains and a crystal chandelier',
         className: 'project-tall col-start-1 col-end-2 row-start-1 row-end-5',
     },
     {
         // Short banner — top-right, one row.
-        src: '/images/modern-living-room-interior-design (1)-w1600.webp',
-        alt: 'Double-height modern living room with a sectional sofa and a wood-burning fireplace',
+        src: '/images/majlis-seating-room-u-shaped-sofa-w1448.webp',
+        alt: 'Majlis seating room with a U-shaped cream sofa, draped curtain and a patterned rug',
         className: 'project-banner col-start-2 col-end-5 row-start-1 row-end-2',
     },
     {
         // Large image — bottom-right, fills the remaining rows.
-        src: '/images/modern-living-room-interior-design-w1600.webp',
-        alt: 'Sunlit contemporary lounge with a sectional sofa, low table and forest views',
+        src: '/images/warm-bedroom-quilted-bedding-w1448.webp',
+        alt: 'Warmly lit bedroom with quilted bedding, a dark wood headboard wall and pendant lamps',
         className: 'col-start-2 col-end-5 row-start-2 row-end-5',
     },
 ];
