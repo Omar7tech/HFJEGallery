@@ -27,8 +27,8 @@ function Experience() {
                 <SmartImage
                     className="aspect-3/2 w-full min-w-0 rounded-3xl @3xl:col-span-3 @3xl:aspect-4/3"
                     imgClassName="object-cover"
-                    src="/images/contemporary-house-interior-design-w1600.webp"
-                    alt="Sunlit contemporary living room with a large sectional sofa and floor-to-ceiling windows"
+                    src="/images/craftsman-workshop-woodworking-w1600.webp"
+                    alt="Craftsman working a piece of wood on a sunlit workshop bench"
                 />
 
                 {/* nested container so the heading scales to THIS column, not the viewport */}
