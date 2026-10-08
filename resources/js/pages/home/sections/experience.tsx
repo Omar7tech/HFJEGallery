@@ -22,42 +22,55 @@ function Experience() {
 
     return (
         <section className="@container/experience w-full px-5 py-16 font-display max-md:py-10 md:px-12 md:py-24 lg:pr-16 lg:pl-0">
-            {/* Image + intro */}
-            {/* From @3xl the intro sits inside the image, over a frosted right edge */}
-            <div className="grid gap-10 max-md:gap-6 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
+            {/* Image + intro — the intro sits inside the image, over a frosted edge:
+                bottom of the portrait image below @3xl, right of the wide one above */}
+            <div className="grid gap-4 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
+                <SmartImage
+                    className="col-start-1 row-start-1 aspect-4/5 w-full min-w-0 rounded-3xl @3xl:hidden"
+                    imgClassName="object-cover"
+                    src="/images/craftsman-workshop-woodworking-portrait-w1200.webp"
+                    alt="Craftsman working a piece of wood on a sunlit workshop bench"
+                >
+                    <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-x-0 bottom-0 h-[68%] bg-linear-to-b from-cream/0 via-cream/28 via-55% to-cream/42 mask-[linear-gradient(to_bottom,transparent,rgb(0_0_0/0.08)_12%,rgb(0_0_0/0.3)_26%,rgb(0_0_0/0.65)_40%,black_56%)] backdrop-blur-2xl"
+                    />
+                </SmartImage>
+
                 {/* min-height matches the old 3-column 4:3 image, so the block is no taller */}
                 <SmartImage
-                    className="aspect-3/2 w-full min-w-0 rounded-3xl @3xl:col-span-full @3xl:col-start-1 @3xl:row-start-1 @3xl:aspect-auto @3xl:min-h-[calc(45cqi-0.75rem)] @3xl:self-stretch"
-                    imgClassName="object-cover object-[36%_50%] @3xl:absolute @3xl:inset-0"
+                    className="hidden w-full min-w-0 rounded-3xl @3xl:col-span-full @3xl:col-start-1 @3xl:row-start-1 @3xl:block @3xl:min-h-[calc(45cqi-0.75rem)] @3xl:self-stretch"
+                    imgClassName="absolute inset-0 object-cover"
                     src="/images/craftsman-workshop-woodworking-w2400.webp"
                     alt="Craftsman working a piece of wood on a sunlit workshop bench"
                 >
                     <span
                         aria-hidden="true"
-                        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[70%] bg-linear-to-r from-cream/0 via-cream/28 via-55% to-cream/42 mask-[linear-gradient(to_right,transparent,rgb(0_0_0/0.08)_12%,rgb(0_0_0/0.3)_26%,rgb(0_0_0/0.65)_40%,black_56%)] backdrop-blur-2xl @3xl:block"
+                        className="pointer-events-none absolute inset-y-0 right-0 w-[70%] bg-linear-to-r from-cream/0 via-cream/28 via-55% to-cream/42 mask-[linear-gradient(to_right,transparent,rgb(0_0_0/0.08)_12%,rgb(0_0_0/0.3)_26%,rgb(0_0_0/0.65)_40%,black_56%)] backdrop-blur-2xl"
                     />
                 </SmartImage>
 
-                <div className="relative min-w-0 @3xl:col-span-2 @3xl:col-start-4 @3xl:row-start-1 @3xl:py-8 @3xl:pr-8 @3xl:text-right">
+                {/* below @3xl this wrapper dissolves: the copy overlays the image, the button drops under it */}
+                <div className="contents @3xl:relative @3xl:col-span-2 @3xl:col-start-4 @3xl:row-start-1 @3xl:block @3xl:min-w-0 @3xl:py-8 @3xl:pr-8 @3xl:text-right">
                     {/* nested container so the heading scales to THIS column, not the viewport */}
-                    <div className="@container">
-                        <h2 className="font-display text-[clamp(1.75rem,8cqi,3.25rem)] leading-[1.15] text-ink">
+                    <div className="@container relative col-start-1 row-start-1 min-w-0 self-end p-5 @3xl/experience:p-0">
+                        <h2 className="font-display text-[clamp(1.4rem,7cqi,1.75rem)] leading-[1.15] text-ink @3xl/experience:text-[clamp(1.75rem,8cqi,3.25rem)]">
                             {years} Years of Craftsmanship
                         </h2>
 
-                        <p className="mt-4 max-w-xl font-sans text-base leading-relaxed font-semibold text-ink max-md:mt-3 max-md:text-[15px] @3xl/experience:ml-auto">
+                        <p className="mt-2 max-w-xl font-sans text-sm leading-relaxed font-semibold text-ink @3xl/experience:mt-4 @3xl/experience:ml-auto @3xl/experience:text-base">
                             More than two decades of transforming houses into
                             homes through exceptional craftsmanship, premium
                             materials, and personalized design.
                         </p>
-
-                        <Link
-                            href="/contact"
-                            className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-5 max-md:w-full max-md:justify-center max-md:rounded-xl max-md:py-3 max-md:text-sm @3xl/experience:border-white @3xl/experience:bg-white @3xl/experience:hover:border-brand @3xl/experience:hover:bg-brand"
-                        >
-                            Get in touch
-                        </Link>
                     </div>
+
+                    <Link
+                        href="/contact"
+                        className="inline-flex justify-self-start rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:w-full max-md:justify-center max-md:rounded-xl max-md:py-3 max-md:text-sm @3xl/experience:mt-8 @3xl/experience:border-white @3xl/experience:bg-white @3xl/experience:hover:border-brand @3xl/experience:hover:bg-brand"
+                    >
+                        Get in touch
+                    </Link>
                 </div>
             </div>
 
