@@ -34,7 +34,7 @@ function Experience() {
                 >
                     <span
                         aria-hidden="true"
-                        className="pointer-events-none absolute inset-y-0 right-0 hidden w-3/5 bg-cream/75 mask-[linear-gradient(to_right,transparent,black_38%)] backdrop-blur-xl @3xl:block"
+                        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[70%] bg-linear-to-r from-cream/0 via-cream/45 via-55% to-cream/65 mask-[linear-gradient(to_right,transparent,rgb(0_0_0/0.08)_12%,rgb(0_0_0/0.3)_26%,rgb(0_0_0/0.65)_40%,black_56%)] backdrop-blur-2xl @3xl:block"
                     />
                 </SmartImage>
 
