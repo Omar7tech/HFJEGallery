@@ -21,7 +21,7 @@ function Experience() {
     ];
 
     return (
-        <section className="@container w-full px-5 py-16 font-display max-md:py-10 md:px-12 md:py-24 lg:pr-16 lg:pl-0">
+        <section className="@container/experience w-full px-5 py-16 font-display max-md:py-10 md:px-12 md:py-24 lg:pr-16 lg:pl-0">
             {/* Image + intro */}
             {/* From @3xl the intro sits inside the image, over a frosted right edge */}
             <div className="grid gap-10 max-md:gap-6 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
@@ -34,18 +34,18 @@ function Experience() {
                 >
                     <span
                         aria-hidden="true"
-                        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[70%] bg-linear-to-r from-cream/0 via-cream/45 via-55% to-cream/65 mask-[linear-gradient(to_right,transparent,rgb(0_0_0/0.08)_12%,rgb(0_0_0/0.3)_26%,rgb(0_0_0/0.65)_40%,black_56%)] backdrop-blur-2xl @3xl:block"
+                        className="pointer-events-none absolute inset-y-0 right-0 hidden w-[70%] bg-linear-to-r from-cream/0 via-cream/28 via-55% to-cream/42 mask-[linear-gradient(to_right,transparent,rgb(0_0_0/0.08)_12%,rgb(0_0_0/0.3)_26%,rgb(0_0_0/0.65)_40%,black_56%)] backdrop-blur-2xl @3xl:block"
                     />
                 </SmartImage>
 
-                <div className="relative min-w-0 @3xl:col-span-2 @3xl:col-start-4 @3xl:row-start-1 @3xl:py-8 @3xl:pr-8">
+                <div className="relative min-w-0 @3xl:col-span-2 @3xl:col-start-4 @3xl:row-start-1 @3xl:py-8 @3xl:pr-8 @3xl:text-right">
                     {/* nested container so the heading scales to THIS column, not the viewport */}
                     <div className="@container">
                         <h2 className="font-display text-[clamp(1.75rem,8cqi,3.25rem)] leading-[1.15] text-ink">
                             {years} Years of Craftsmanship
                         </h2>
 
-                        <p className="mt-4 max-w-xl font-sans text-base leading-relaxed font-semibold text-ink max-md:mt-3 max-md:text-[15px]">
+                        <p className="mt-4 max-w-xl font-sans text-base leading-relaxed font-semibold text-ink max-md:mt-3 max-md:text-[15px] @3xl/experience:ml-auto">
                             More than two decades of transforming houses into
                             homes through exceptional craftsmanship, premium
                             materials, and personalized design.
@@ -53,7 +53,7 @@ function Experience() {
 
                         <Link
                             href="/contact"
-                            className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-5 max-md:w-full max-md:justify-center max-md:rounded-xl max-md:py-3 max-md:text-sm lg:pr-20"
+                            className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-5 max-md:w-full max-md:justify-center max-md:rounded-xl max-md:py-3 max-md:text-sm @3xl/experience:border-white @3xl/experience:bg-white @3xl/experience:hover:border-brand @3xl/experience:hover:bg-brand"
                         >
                             Get in touch
                         </Link>
