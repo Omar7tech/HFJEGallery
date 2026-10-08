@@ -54,11 +54,11 @@ function Experience() {
                 <div className="contents @3xl:relative @3xl:col-span-2 @3xl:col-start-4 @3xl:row-start-1 @3xl:block @3xl:min-w-0 @3xl:py-8 @3xl:pr-8 @3xl:text-right">
                     {/* nested container so the heading scales to THIS column, not the viewport */}
                     <div className="@container relative col-start-1 row-start-1 min-w-0 self-end p-5 @3xl/experience:p-0">
-                        <h2 className="font-display text-[clamp(1.4rem,7cqi,1.75rem)] leading-[1.15] text-ink @3xl/experience:text-[clamp(1.75rem,8cqi,3.25rem)]">
+                        <h2 className="font-display text-[clamp(1.6rem,8.5cqi,2rem)] leading-[1.15] text-ink @3xl/experience:text-[clamp(1.75rem,8cqi,3.25rem)]">
                             {years} Years of Craftsmanship
                         </h2>
 
-                        <p className="mt-2 max-w-xl font-sans text-sm leading-relaxed font-semibold text-ink @3xl/experience:mt-4 @3xl/experience:ml-auto @3xl/experience:text-base">
+                        <p className="mt-2 max-w-[17rem] font-sans text-sm leading-snug font-semibold text-ink @3xl/experience:mt-4 @3xl/experience:ml-auto @3xl/experience:max-w-xl @3xl/experience:text-base @3xl/experience:leading-relaxed">
                             More than two decades of transforming houses into
                             homes through exceptional craftsmanship, premium
                             materials, and personalized design.
