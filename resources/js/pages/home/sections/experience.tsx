@@ -23,32 +23,41 @@ function Experience() {
     return (
         <section className="@container w-full px-5 py-16 font-display max-md:py-10 md:px-12 md:py-24 lg:pr-16 lg:pl-0">
             {/* Image + intro */}
+            {/* From @3xl the intro sits inside the image, over a frosted right edge */}
             <div className="grid gap-10 max-md:gap-6 @3xl:grid-cols-5 @3xl:items-end @3xl:gap-10">
+                {/* min-height matches the old 3-column 4:3 image, so the block is no taller */}
                 <SmartImage
-                    className="aspect-3/2 w-full min-w-0 rounded-3xl @3xl:col-span-3 @3xl:aspect-4/3"
-                    imgClassName="object-cover"
-                    src="/images/craftsman-workshop-woodworking-w1600.webp"
+                    className="aspect-3/2 w-full min-w-0 rounded-3xl @3xl:col-span-full @3xl:col-start-1 @3xl:row-start-1 @3xl:aspect-auto @3xl:min-h-[calc(45cqi-0.75rem)] @3xl:self-stretch"
+                    imgClassName="object-cover object-[36%_50%] @3xl:absolute @3xl:inset-0"
+                    src="/images/craftsman-workshop-woodworking-w2400.webp"
                     alt="Craftsman working a piece of wood on a sunlit workshop bench"
-                />
+                >
+                    <span
+                        aria-hidden="true"
+                        className="pointer-events-none absolute inset-y-0 right-0 hidden w-3/5 bg-cream/75 mask-[linear-gradient(to_right,transparent,black_38%)] backdrop-blur-xl @3xl:block"
+                    />
+                </SmartImage>
 
-                {/* nested container so the heading scales to THIS column, not the viewport */}
-                <div className="@container min-w-0 @3xl:col-span-2">
-                    <h2 className="font-display text-[clamp(1.75rem,8cqi,3.25rem)] leading-[1.15] text-ink">
-                        {years} Years of Craftsmanship
-                    </h2>
+                <div className="relative min-w-0 @3xl:col-span-2 @3xl:col-start-4 @3xl:row-start-1 @3xl:py-8 @3xl:pr-8">
+                    {/* nested container so the heading scales to THIS column, not the viewport */}
+                    <div className="@container">
+                        <h2 className="font-display text-[clamp(1.75rem,8cqi,3.25rem)] leading-[1.15] text-ink">
+                            {years} Years of Craftsmanship
+                        </h2>
 
-                    <p className="mt-4 max-w-xl font-sans text-base leading-relaxed font-semibold text-ink max-md:mt-3 max-md:text-[15px]">
-                        More than two decades of transforming houses into homes
-                        through exceptional craftsmanship, premium materials,
-                        and personalized design.
-                    </p>
+                        <p className="mt-4 max-w-xl font-sans text-base leading-relaxed font-semibold text-ink max-md:mt-3 max-md:text-[15px]">
+                            More than two decades of transforming houses into
+                            homes through exceptional craftsmanship, premium
+                            materials, and personalized design.
+                        </p>
 
-                    <Link
-                        href="/contact"
-                        className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-5 max-md:w-full max-md:justify-center max-md:rounded-xl max-md:py-3 max-md:text-sm lg:pr-20"
-                    >
-                        Get in touch
-                    </Link>
+                        <Link
+                            href="/contact"
+                            className="mt-8 inline-flex rounded-full border border-brand px-10 py-3 text-base font-medium text-brand transition-colors hover:bg-brand hover:text-brand-foreground focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-md:mt-5 max-md:w-full max-md:justify-center max-md:rounded-xl max-md:py-3 max-md:text-sm lg:pr-20"
+                        >
+                            Get in touch
+                        </Link>
+                    </div>
                 </div>
             </div>
 
